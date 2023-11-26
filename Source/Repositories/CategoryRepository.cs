@@ -58,11 +58,4 @@ public class CategoryRepository : IRepository<Category>
         _dbContext.Entry(entity).State = EntityState.Modified;
         await _dbContext.SaveChangesAsync();
     }
-
-    # pragma warning disable CS8603
-    public async Task<Category> GetWithMoviesAsync(int id)
-    {
-        return await _dbContext.Categories.Include(c => c.Movies)
-                            .FirstOrDefaultAsync(c => c.Id == id);
-    }
 }
