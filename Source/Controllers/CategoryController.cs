@@ -2,6 +2,7 @@ using Microsoft.AspNetCore.Mvc;
 using OpenMovies.DTOs;
 using OpenMovies.Models;
 using OpenMovies.Services;
+using OpenMovies.Utils;
 
 namespace OpenMovies.Controllers;
 
@@ -78,6 +79,22 @@ public class CategoryController : ControllerBase
         {
             await _categoryService.DeleteCategory(id);
             return NoContent();
+        }
+        catch (InvalidOperationException ex)
+        {
+            return NotFound(new { message = ex.Message });
+        }
+    }
+
+    [HttpGet("get-with-associated-movies/{id}")]
+    public async Task<IActionResult> GetWithAssociatedMovies(int id, int pageNumber = 1, int pageSize = 10)
+    {
+        try
+        {
+            var retrievedCategory = await _categoryService.GetCategoryWithMoviesByIdAsync(id);
+            var pagination = new Pagination<Movie>(retrievedCategory.Movies.ToList(), pageNumber, pageSize, HttpContext);
+
+            return Ok(pagination);
         }
         catch (InvalidOperationException ex)
         {
