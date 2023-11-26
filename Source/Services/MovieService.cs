@@ -26,6 +26,9 @@ public class MovieService
         if (movie == null)
             throw new InvalidOperationException($"Movie with ID '{id}' not found.");
 
+        #pragma warning disable CS8602
+        movie.Trailers.ForEach(t => t.Link = t.GenerateEmbeddedLink());
+
         return movie;
     }
 
