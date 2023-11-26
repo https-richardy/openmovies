@@ -10,10 +10,18 @@ namespace OpenMovies.Controllers;
 public class MovieController : ControllerBase
 {
     private readonly MovieService _movieService;
+    private readonly CategoryService _categoryService;
+    private readonly DirectorService _directorService;
 
-    public MovieController(MovieService movieService)
+
+    public MovieController(
+        MovieService movieService,
+        CategoryService categoryService,
+        DirectorService directorService)
     {
         _movieService = movieService;
+        _categoryService = categoryService;
+        _directorService = directorService;
     }
 
     [HttpGet]
@@ -23,13 +31,32 @@ public class MovieController : ControllerBase
         return Ok(movies);
     }
 
-    // [HttpPost]
-    // public async Task<IActionResult> Create(CreateMovieDTO data)
-    // {
-        // var movie = new Movie(data.Title, data.ReleaseDateOf, data.Synopsis, director, category);
+    [HttpPost]
+    public async Task<IActionResult> Create(CreateMovieDTO data)
+    {
+        try
+        {
+            if (!ModelState.IsValid)
+                return BadRequest(ModelState);
 
-        // await _movieService.CreateMovie(movie);
+            var director = await _directorService.GetDirectorById(data.DirectorId);
+            var category = await _categoryService.GetCategoryById(data.CategoryId);
 
-        // return StatusCode(201, movie);
-    // }
+            var movie = new Movie(data.Title, data.ReleaseDateOf, data.Synopsis, director, category);
+
+            if (data.Trailers != null && data.Trailers.Any())
+            {
+                var trailers = _movieService.CreateTrailers(data.Trailers, movie);
+                await _movieService.AddTrailersToMovie(movie, trailers);
+            }
+
+            await _movieService.CreateMovie(movie);
+
+            return StatusCode(201, movie);
+        }
+        catch (InvalidOperationException ex)
+        {
+            return NotFound(new { message = ex.Message });
+        }
+    }
 }
