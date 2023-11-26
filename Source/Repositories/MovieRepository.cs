@@ -48,7 +48,11 @@ public class MovieRepository : IRepository<Movie>
     public async Task<Movie> GetAsync(Expression<Func<Movie, bool>> predicate)
     {
         # pragma warning disable CS8603
-        return await _dbContext.Movies.FirstOrDefaultAsync(predicate);
+        return await _dbContext.Movies
+            .Include(m => m.Director)
+            .Include(m => m.Category)
+            .Include(m => m.Trailers)
+            .FirstOrDefaultAsync(predicate);
     }
 
     public async Task<Movie> GetByIdAsync(int id)
