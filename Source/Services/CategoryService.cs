@@ -52,13 +52,4 @@ public class CategoryService
 
         await _categoryRepository.DeleteAsync(category);
     }
-
-    public async Task<Category> GetCategoryWithMoviesByIdAsync(int id)
-    {
-        var category = await _categoryRepository.GetWithMoviesAsync(id);
-        if (category == null)
-            throw new InvalidOperationException($"Category with ID {id} not found.");
-
-        return category;
-    }
 }
