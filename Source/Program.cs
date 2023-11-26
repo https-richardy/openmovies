@@ -1,5 +1,6 @@
 using Microsoft.EntityFrameworkCore;
 using OpenMovies.Data;
+using OpenMovies.Repositories;
 
 var builder = WebApplication.CreateBuilder(args);
 var configuration = builder.Configuration;
@@ -14,6 +15,9 @@ builder.Services.AddDbContext<AppDbContext>(options =>
     options.UseSqlite(configuration.GetConnectionString("Default"));
 });
 
+builder.Services.AddScoped<MovieRepository>();
+builder.Services.AddScoped<DirectorRepository>();
+builder.Services.AddScoped<CategoryRepository>();
 
 var app = builder.Build();
 
