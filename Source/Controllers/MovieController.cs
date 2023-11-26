@@ -31,6 +31,20 @@ public class MovieController : ControllerBase
         return Ok(movies);
     }
 
+    [HttpGet("{id}")]
+    public async Task<IActionResult> GetById(int id)
+    {
+        try
+        {
+            var retrievedMovie = await _movieService.GetMovieById(id);
+            return Ok(retrievedMovie);
+        }
+        catch (InvalidOperationException ex)
+        {
+            return NotFound(new { message = ex.Message });
+        }
+    }
+
     [HttpPost]
     public async Task<IActionResult> Create(CreateMovieDTO data)
     {
