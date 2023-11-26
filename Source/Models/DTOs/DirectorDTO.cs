@@ -2,7 +2,7 @@ using System.ComponentModel.DataAnnotations;
 
 namespace OpenMovies.Models;
 
-public class CreateDirectorDTO
+public class DirectorDTO
 {
     [Required]
     public string FirstName { get; set; } = string.Empty;
