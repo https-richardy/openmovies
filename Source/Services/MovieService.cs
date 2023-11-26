@@ -59,4 +59,23 @@ public class MovieService
 
         await _movieRepository.DeleteAsync(movie);
     }
+
+    public List<Trailer> CreateTrailers(List<TrailerDTO> trailersDTOs, Movie movie)
+    {
+        var trailers = new List<Trailer>();
+
+        foreach (var trailerDTO in trailersDTOs)
+        {
+            var trailer = new Trailer(trailerDTO.Type, trailerDTO.Plataform, trailerDTO.Link, movie);
+            trailers.Add(trailer);
+        }
+
+        return trailers;
+    }
+
+    public async Task AddTrailersToMovie(Movie movie, List<Trailer> trailers)
+    {
+        movie.Trailers = trailers;
+        await _movieRepository.AddTrailersAsync(movie, trailers);
+    }
 }
