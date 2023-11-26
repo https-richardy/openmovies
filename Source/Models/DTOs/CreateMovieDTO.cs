@@ -19,6 +19,9 @@ public class CreateMovieDTO
 
     public List<TrailerDTO>? Trailers { get; set; } = new List<TrailerDTO>();
 
+    [Required]
     public int DirectorId { get; set; }
+
+    [Required]
     public int CategoryId { get; set; }
 }
