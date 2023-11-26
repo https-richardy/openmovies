@@ -1,3 +1,4 @@
+using System.Text.Json.Serialization;
 using OpenMovies.Models.Enums;
 
 namespace OpenMovies.Models;
@@ -6,6 +7,8 @@ public class Trailer : Entity
 {
     public TrailerType Type { get; set; }
     public TrailerPlataform Plataform { get; set; }
+
+    [JsonIgnore]
     public Movie Movie { get; set; }
     public string Link { get; set; } = string.Empty;
 

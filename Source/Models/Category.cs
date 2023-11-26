@@ -1,9 +1,13 @@
+using System.Text.Json.Serialization;
+
 namespace OpenMovies.Models;
 
 
 public class Category : Entity
 {
     public string Name { get; set; } = string.Empty;
+
+    [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
     public List<Movie> Movies { get; set; } = new List<Movie>();
 
     public Category() {  }  // Empty constructor for Entity Framework
