@@ -30,9 +30,7 @@ public class CategoryService
     {
         var category = await _categoryRepository.GetByIdAsync(id);
         if (category == null)
-        {
             throw new InvalidOperationException($"Category with ID {id} not found.");
-        }
 
         return category;
     }
@@ -53,5 +51,14 @@ public class CategoryService
             throw new InvalidOperationException("Category not found.");
 
         await _categoryRepository.DeleteAsync(category);
+    }
+
+    public async Task<Category> GetCategoryWithMoviesByIdAsync(int id)
+    {
+        var category = await _categoryRepository.GetWithMoviesAsync(id);
+        if (category == null)
+            throw new InvalidOperationException($"Category with ID {id} not found.");
+
+        return category;
     }
 }
