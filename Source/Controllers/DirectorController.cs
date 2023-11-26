@@ -37,6 +37,26 @@ public class DirectorController : ControllerBase
         }
     }
 
+    [HttpPost]
+    public async Task<IActionResult> Create(DirectorDTO data)
+    {
+        try
+        {
+            if (!ModelState.IsValid)
+                return BadRequest(ModelState);
+
+            var director = new Director(data.FirstName, data.LastName);
+            await _directorService.CreateDirector(director);
+
+            return StatusCode(201, director);
+        }
+        catch (InvalidOperationException ex)
+        {
+            return Conflict(new { message = ex.Message });
+        }
+    }
+
+
     [HttpPut("{id}")]
     public async Task<IActionResult> Update(int id, DirectorDTO data)
     {
