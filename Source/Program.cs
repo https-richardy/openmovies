@@ -21,6 +21,7 @@ builder.Services.AddScoped<DirectorRepository>();
 builder.Services.AddScoped<CategoryRepository>();
 
 builder.Services.AddScoped<MovieService>();
+builder.Services.AddScoped<DirectorService>();
 
 var app = builder.Build();
 
