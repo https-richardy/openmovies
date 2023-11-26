@@ -22,6 +22,7 @@ builder.Services.AddScoped<CategoryRepository>();
 
 builder.Services.AddScoped<MovieService>();
 builder.Services.AddScoped<DirectorService>();
+builder.Services.AddScoped<CategoryService>();
 
 var app = builder.Build();
 
