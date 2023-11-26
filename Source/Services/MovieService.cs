@@ -31,7 +31,7 @@ public class MovieService
 
     public async Task<IEnumerable<Movie>> GetAllMovies()
     {
-        return await _movieRepository.GetAllAsync(m => true);
+        return await _movieRepository.GetAllAsync();
     }
 
     public async Task CreateMovie(Movie movie)
