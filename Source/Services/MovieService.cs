@@ -3,14 +3,14 @@ using OpenMovies.Repositories;
 
 namespace OpenMovies.Services;
 
-public class MovieServices
+public class MovieService
 {
     private readonly MovieRepository _movieRepository;
     private readonly CategoryRepository _categoryRepository;
     private readonly DirectorRepository _directorRepository;
 
 
-    public MovieServices(
+    public MovieService(
         MovieRepository movieRepository,
         CategoryRepository categoryRepository,
         DirectorRepository directorRepository)
