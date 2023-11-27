@@ -1,3 +1,4 @@
+using FluentValidation;
 using Microsoft.AspNetCore.Mvc;
 using OpenMovies.DTOs;
 using OpenMovies.Models;
@@ -42,13 +43,14 @@ public class DirectorController : ControllerBase
     {
         try
         {
-            if (!ModelState.IsValid)
-                return BadRequest(ModelState);
-
             var director = new Director(data.FirstName, data.LastName);
             await _directorService.CreateDirector(director);
 
             return StatusCode(201, director);
+        }
+        catch (ValidationException ex)
+        {
+            return BadRequest(new { errors = ex.Errors });
         }
         catch (InvalidOperationException ex)
         {
@@ -62,9 +64,6 @@ public class DirectorController : ControllerBase
     {
         try
         {
-            if (!ModelState.IsValid)
-                return BadRequest(ModelState);
-
             var retrievedDirector = await _directorService.GetDirectorById(id);
     
             retrievedDirector.FirstName = data.FirstName;
@@ -73,6 +72,10 @@ public class DirectorController : ControllerBase
             await _directorService.UpdateDirector(retrievedDirector);
 
             return NoContent();
+        }
+        catch (ValidationException ex)
+        {
+            return BadRequest(new { errors = ex.Errors });
         }
         catch (InvalidOperationException ex)
         {

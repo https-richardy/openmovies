@@ -1,3 +1,4 @@
+using FluentValidation;
 using Microsoft.AspNetCore.Mvc;
 using OpenMovies.DTOs;
 using OpenMovies.Models;
@@ -46,13 +47,10 @@ public class MovieController : ControllerBase
     }
 
     [HttpPost]
-    public async Task<IActionResult> Create(CreateMovieDTO data)
+    public async Task<IActionResult> Create(MovieDTO data)
     {
         try
         {
-            if (!ModelState.IsValid)
-                return BadRequest(ModelState);
-
             var director = await _directorService.GetDirectorById(data.DirectorId);
             var category = await _categoryService.GetCategoryById(data.CategoryId);
 
@@ -67,6 +65,47 @@ public class MovieController : ControllerBase
             await _movieService.CreateMovie(movie);
 
             return StatusCode(201, movie);
+        }
+        catch (ValidationException ex)
+        {
+            return BadRequest(new { errors = ex.Errors });
+        }
+        catch (InvalidOperationException ex)
+        {
+            return NotFound(new { message = ex.Message });
+        }
+    }
+
+    [HttpPut("{id}")]
+    public async Task<IActionResult> Update(int id, MovieDTO data)
+    {
+        try
+        {
+            var existingMovie = await _movieService.GetMovieById(id);
+            Console.WriteLine(data.DirectorId);
+            existingMovie.Title = data.Title;
+            existingMovie.ReleaseDateOf = data.ReleaseDateOf;
+            existingMovie.Synopsis = data.Synopsis;
+
+            var director = await _directorService.GetDirectorById(data.DirectorId);
+            var category = await _categoryService.GetCategoryById(data.CategoryId);
+
+            existingMovie.Director = director;
+            existingMovie.Category = category;
+
+            if (data.Trailers != null && data.Trailers.Any())
+            {
+                var trailers = _movieService.CreateTrailers(data.Trailers, existingMovie);
+                await _movieService.AddTrailersToMovie(existingMovie, trailers);
+            }
+
+            await _movieService.UpdateMovie(existingMovie);
+
+            return NoContent();
+        }
+        catch (ValidationException ex)
+        {
+            return BadRequest(new { errors = ex.Errors });
         }
         catch (InvalidOperationException ex)
         {

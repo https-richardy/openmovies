@@ -1,3 +1,4 @@
+using FluentValidation;
 using Microsoft.AspNetCore.Mvc;
 using OpenMovies.DTOs;
 using OpenMovies.Models;
@@ -47,9 +48,13 @@ public class CategoryController : ControllerBase
 
             return StatusCode(201, category);
         }
+        catch (ValidationException ex)
+        {
+            return BadRequest(new { errors = ex.Errors });
+        }
         catch (InvalidOperationException ex)
         {
-            return BadRequest(new { message = ex.Message });
+            return Conflict(new { message = ex.Message });
         }
     }
 
@@ -65,9 +70,9 @@ public class CategoryController : ControllerBase
 
             return NoContent();
         }
-        catch (InvalidOperationException ex)
+        catch (ValidationException ex)
         {
-            return BadRequest(new { message = ex.Message });
+            return BadRequest(new { errors = ex.Errors });
         }
     }
 
