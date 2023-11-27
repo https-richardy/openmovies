@@ -82,7 +82,7 @@ public class MovieController : ControllerBase
         try
         {
             var existingMovie = await _movieService.GetMovieById(id);
-            Console.WriteLine(data.DirectorId);
+
             existingMovie.Title = data.Title;
             existingMovie.ReleaseDateOf = data.ReleaseDateOf;
             existingMovie.Synopsis = data.Synopsis;
