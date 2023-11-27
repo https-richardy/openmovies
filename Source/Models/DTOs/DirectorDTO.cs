@@ -1,12 +1,7 @@
-using System.ComponentModel.DataAnnotations;
-
-namespace OpenMovies.Models;
+namespace OpenMovies.DTOs;
 
 public class DirectorDTO
 {
-    [Required]
     public string FirstName { get; set; } = string.Empty;
-
-    [Required]
     public string LastName { get; set;} = string.Empty;
 }
