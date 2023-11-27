@@ -1,5 +1,7 @@
+using FluentValidation;
 using OpenMovies.Models;
 using OpenMovies.Repositories;
+using OpenMovies.Validators;
 
 namespace OpenMovies.Services;
 
@@ -14,6 +16,12 @@ public class DirectorService
 
     public async Task CreateDirector(Director director)
     {
+        var validation = new DirectorValidation();
+        var validationResult = await validation.ValidateAsync(director);
+
+        if (!validationResult.IsValid)
+            throw new ValidationException("Validation failed.", validationResult.Errors);
+
         var existingDirector = await _directorRepository.GetAsync(d => d.FirstName == director.FirstName && d.LastName == director.LastName);
         if (existingDirector != null)
             throw new InvalidOperationException("A director with the same name already exists.");
@@ -37,6 +45,12 @@ public class DirectorService
 
     public async Task UpdateDirector(Director director)
     {
+        var validation = new DirectorValidation();
+        var validationResult = await validation.ValidateAsync(director);
+
+        if (!validationResult.IsValid)
+            throw new ValidationException("Validation failed.", validationResult.Errors);
+
         var existingDirector = await _directorRepository.GetByIdAsync(director.Id);
         if (existingDirector == null)
             throw new InvalidOperationException("Director not found.");

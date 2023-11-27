@@ -1,5 +1,7 @@
+using FluentValidation;
 using OpenMovies.Models;
 using OpenMovies.Repositories;
+using OpenMovies.Validators;
 
 namespace OpenMovies.Services;
 
@@ -14,6 +16,12 @@ public class CategoryService
 
     public async Task CreateCategory(Category category)
     {
+        var validation = new CategoryValidation();
+        var validationResult = await validation.ValidateAsync(category);
+
+        if (!validationResult.IsValid)
+            throw new ValidationException("Validation failed.", validationResult.Errors);
+
         var existingCategory = await _categoryRepository.GetAsync(c => c.Name == category.Name);
         if (existingCategory != null)
             throw new InvalidOperationException("A category with the same name already exists.");
@@ -37,6 +45,12 @@ public class CategoryService
 
     public async Task UpdateCategory(Category category)
     {
+        var validation = new CategoryValidation();
+        var validationResult = await validation.ValidateAsync(category);
+
+        if (!validationResult.IsValid)
+            throw new ValidationException("Validation failed.", validationResult.Errors);
+
         var existingCategory = await _categoryRepository.GetByIdAsync(category.Id);
         if (existingCategory == null)
             throw new InvalidOperationException("Category not found.");
