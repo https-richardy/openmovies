@@ -10,6 +10,10 @@ var configuration = builder.Configuration;
 builder.Services.AddControllers()
     .AddJsonOptions(options =>
     {
+        /* 
+            The following line is added to prevent issues related to circular references
+            during JSON serialization. It instructs the JsonSerializer to ignore cycles.
+        */
         options.JsonSerializerOptions.ReferenceHandler = ReferenceHandler.IgnoreCycles;
     });
 
