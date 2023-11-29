@@ -109,6 +109,11 @@ public class MovieService
         await _movieRepository.UpdateAsync(existingMovie);
     }
 
+    public async Task<IEnumerable<Movie>> SearchMovies(string? name = null, int? releaseYear = null, int? categoryId = null)
+    {
+        return await _movieRepository.SearchAsync(name, releaseYear, categoryId);
+    }
+
     public List<Trailer> CreateTrailers(List<TrailerDTO> trailersDTOs, Movie movie)
     {
         var trailers = new List<Trailer>();
