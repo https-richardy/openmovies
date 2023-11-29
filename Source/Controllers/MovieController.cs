@@ -126,4 +126,14 @@ public class MovieController : ControllerBase
             return NotFound(new { message = ex.Message });
         }
     }
+
+    [HttpGet]
+    public async Task<IActionResult> Search(
+        [FromQuery] string? name = null,
+        [FromQuery] int? releaseYear = null,
+        [FromQuery] int? categoryId = null)
+        {
+            var movies = await _movieService.SearchMovies(name, releaseYear, categoryId);
+            return Ok(movies);
+        }
 }
