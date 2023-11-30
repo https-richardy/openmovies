@@ -2,10 +2,8 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace OpenMovies.Models;
 
-public class Cover : Entity
+public class Cover
 {
-    public string Title { get; set; } = string.Empty;
-
     [NotMapped]
     public IFormFile FileContent { get; set; }
 
