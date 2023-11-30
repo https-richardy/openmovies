@@ -127,7 +127,7 @@ public class MovieController : ControllerBase
         }
     }
 
-    [HttpGet]
+    [HttpGet("search")]
     public async Task<IActionResult> Search(
         [FromQuery] string? name = null,
         [FromQuery] int? releaseYear = null,
