@@ -13,16 +13,19 @@ public class MovieController : ControllerBase
     private readonly MovieService _movieService;
     private readonly CategoryService _categoryService;
     private readonly DirectorService _directorService;
+    private readonly IWebHostEnvironment _hostEnvironment;
 
 
     public MovieController(
         MovieService movieService,
         CategoryService categoryService,
-        DirectorService directorService)
+        DirectorService directorService,
+        IWebHostEnvironment hostEnvironment)
     {
         _movieService = movieService;
         _categoryService = categoryService;
         _directorService = directorService;
+        _hostEnvironment = hostEnvironment;
     }
 
     [HttpGet]
@@ -47,7 +50,7 @@ public class MovieController : ControllerBase
     }
 
     [HttpPost]
-    public async Task<IActionResult> Create(MovieDTO data)
+    public async Task<IActionResult> Create([FromForm] MovieDTO data, [FromForm] Cover cover)
     {
         try
         {
@@ -60,6 +63,20 @@ public class MovieController : ControllerBase
             {
                 var trailers = _movieService.CreateTrailers(data.Trailers, movie);
                 await _movieService.AddTrailersToMovie(movie, trailers);
+            }
+
+            if (cover.FileContent != null)
+            {
+                string wwwRootPath = _hostEnvironment.WebRootPath;
+                string fileName = Guid.NewGuid().ToString() + Path.GetExtension(cover.FileContent.FileName);
+                string path = Path.Combine(wwwRootPath, "images", fileName);
+
+                using (var fileStream = new FileStream(path, FileMode.Create))
+                {
+                    await cover.FileContent.CopyToAsync(fileStream);
+                }
+
+                movie.CoverImagePath = Path.Combine("images", fileName);
             }
 
             await _movieService.CreateMovie(movie);
