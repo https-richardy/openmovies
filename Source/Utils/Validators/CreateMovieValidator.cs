@@ -18,10 +18,6 @@ public class MovieValidation : AbstractValidator<Movie>
             .NotEmpty().WithMessage("The synopsis cannot be empty.")
             .Length(60, 1000).WithMessage("The synopsis must be between 60 and 1000 characters.");
 
-        RuleFor(movie => movie.Trailers)
-            .Must(trailers => trailers != null && trailers.Count > 0)
-            .WithMessage("At least one trailer must be provided.");
-
         RuleFor(movie => movie.Director.Id)
             .GreaterThan(0).WithMessage("The director ID must be greater than zero.");
 
