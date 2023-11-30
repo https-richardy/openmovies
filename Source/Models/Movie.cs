@@ -16,7 +16,7 @@ public class Movie : Entity
     public Director Director { get; set; }
     public Category Category { get; set; }
 
-    public string CoverImagePath { get; set; }
+    public string CoverImagePath { get; set; } = string.Empty;
 
     # pragma warning disable CS8618
     public Movie() {  } // Empty constructor for Entity Framework
