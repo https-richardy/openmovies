@@ -10,11 +10,9 @@ namespace OpenMovies.Extensions;
 
 public static class JwtExtension
 {
-    public static IConfiguration Configuration { get; set; }
-
-    public static void AddBearerJwt(this IServiceCollection services)
+    public static void AddBearerJwt(this IServiceCollection services, IConfiguration configuration)
     {
-        var secretKey = Encoding.ASCII.GetBytes(Configuration["Jwt:SecretKey"]);
+        var secretKey = Encoding.ASCII.GetBytes(configuration["Jwt:SecretKey"]);
 
         services.AddScoped<JwtService>();
         services.AddScoped<AuthService>();
