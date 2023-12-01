@@ -31,7 +31,7 @@ builder.Services.AddIdentity<IdentityUser, IdentityRole>()
     .AddEntityFrameworkStores<AppDbContext>()
     .AddDefaultTokenProviders();
 
-builder.Services.AddBearerJwt();
+builder.Services.AddBearerJwt(configuration);
 
 builder.Services.AddScoped<MovieRepository>();
 builder.Services.AddScoped<DirectorRepository>();
