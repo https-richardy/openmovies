@@ -26,9 +26,9 @@ public class Pagination<TEntity>
             .ToList();
     }
 
-    public Pagination(List<TEntity> data, int pageNumber, int pageSize, HttpContext httpContext)
+    public Pagination(IEnumerable<TEntity> data, int pageNumber, int pageSize, HttpContext httpContext)
     {
-        Count = data.Count;
+        Count = data.Count();
 
         int totalPages = (int)Math.Ceiling(Count / (double)pageSize);
         Next = CalculateNextUrl(httpContext.Request.Path, pageNumber, totalPages);
