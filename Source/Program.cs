@@ -1,4 +1,5 @@
 using System.Text.Json.Serialization;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using OpenMovies.Data;
 using OpenMovies.Repositories;
@@ -24,6 +25,10 @@ builder.Services.AddDbContext<AppDbContext>(options =>
 {
     options.UseSqlite(configuration.GetConnectionString("Default"));
 });
+
+builder.Services.AddIdentity<IdentityUser, IdentityRole>()
+    .AddEntityFrameworkStores<AppDbContext>()
+    .AddDefaultTokenProviders();
 
 builder.Services.AddScoped<MovieRepository>();
 builder.Services.AddScoped<DirectorRepository>();
