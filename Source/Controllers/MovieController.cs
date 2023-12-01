@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Mvc;
 using OpenMovies.DTOs;
 using OpenMovies.Models;
 using OpenMovies.Services;
+using OpenMovies.Utils;
 
 namespace OpenMovies.Controllers;
 
@@ -29,10 +30,19 @@ public class MovieController : ControllerBase
     }
 
     [HttpGet]
-    public async Task<IActionResult> GetAll()
+    public async Task<IActionResult> GetAll([FromQuery] int pageNumber = 1, [FromQuery] int pageSize = 10)
     {
-        var movies = await _movieService.GetAllMovies();
-        return Ok(movies);
+        try
+        {
+            var movies = await _movieService.GetAllMovies();
+            var pagination = new Pagination<Movie>(movies, pageNumber, pageSize, HttpContext);
+
+            return Ok(pagination);
+        }
+        catch (Exception ex)
+        {
+            return StatusCode(500, new { message = ex.Message });
+        }
     }
 
     [HttpGet("{id}")]
@@ -148,9 +158,20 @@ public class MovieController : ControllerBase
     public async Task<IActionResult> Search(
         [FromQuery] string? name = null,
         [FromQuery] int? releaseYear = null,
-        [FromQuery] int? categoryId = null)
+        [FromQuery] int? categoryId = null,
+        [FromQuery] int pageNumber = 1,
+        [FromQuery] int pageSize = 10)
         {
-            var movies = await _movieService.SearchMovies(name, releaseYear, categoryId);
-            return Ok(movies);
+            try
+            {
+                var movies = await _movieService.SearchMovies(name, releaseYear, categoryId);
+                var pagination = new Pagination<Movie>(movies, pageNumber, pageSize, HttpContext);
+
+                return Ok(pagination);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, new { message = ex.Message });
+            }
         }
 }
