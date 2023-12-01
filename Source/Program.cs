@@ -4,6 +4,7 @@ using Microsoft.EntityFrameworkCore;
 using OpenMovies.Data;
 using OpenMovies.Repositories;
 using OpenMovies.Services;
+using OpenMovies.Extensions;
 
 var builder = WebApplication.CreateBuilder(args);
 var configuration = builder.Configuration;
@@ -29,6 +30,8 @@ builder.Services.AddDbContext<AppDbContext>(options =>
 builder.Services.AddIdentity<IdentityUser, IdentityRole>()
     .AddEntityFrameworkStores<AppDbContext>()
     .AddDefaultTokenProviders();
+
+builder.Services.AddBearerJwt();
 
 builder.Services.AddScoped<MovieRepository>();
 builder.Services.AddScoped<DirectorRepository>();
