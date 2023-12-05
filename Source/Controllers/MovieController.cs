@@ -11,16 +11,16 @@ namespace OpenMovies.Controllers;
 [Route("api/movies")]
 public class MovieController : ControllerBase
 {
-    private readonly MovieService _movieService;
-    private readonly CategoryService _categoryService;
-    private readonly DirectorService _directorService;
+    private readonly IMovieService _movieService;
+    private readonly ICategoryService _categoryService;
+    private readonly IDirectorService _directorService;
     private readonly IWebHostEnvironment _hostEnvironment;
 
 
     public MovieController(
-        MovieService movieService,
+        IMovieService movieService,
         CategoryService categoryService,
-        DirectorService directorService,
+        IDirectorService directorService,
         IWebHostEnvironment hostEnvironment)
     {
         _movieService = movieService;
@@ -60,7 +60,8 @@ public class MovieController : ControllerBase
     }
 
     [HttpPost]
-    public async Task<IActionResult> Create([FromForm] MovieDTO data, [FromForm] Cover cover)
+    [Consumes("multipart/form-data")]
+    public async Task<IActionResult> Create(MovieDTO data)
     {
         try
         {
@@ -75,15 +76,15 @@ public class MovieController : ControllerBase
                 await _movieService.AddTrailersToMovie(movie, trailers);
             }
 
-            if (cover.FileContent != null)
+            if (data.Cover != null)
             {
                 string wwwRootPath = _hostEnvironment.WebRootPath;
-                string fileName = Guid.NewGuid().ToString() + Path.GetExtension(cover.FileContent.FileName);
+                string fileName = Guid.NewGuid().ToString() + Path.GetExtension(data.Cover.FileName);
                 string path = Path.Combine(wwwRootPath, "images", fileName);
 
                 using (var fileStream = new FileStream(path, FileMode.Create))
                 {
-                    await cover.FileContent.CopyToAsync(fileStream);
+                    await data.Cover.CopyToAsync(fileStream);
                 }
 
                 movie.CoverImagePath = Path.Combine("images", fileName);
