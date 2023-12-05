@@ -44,7 +44,7 @@ public class CategoryRepositoryTests : IAsyncLifetime
             new Category { Id = 2, Name = "Drama" }
         };
 
-        _dbContext.Categories.AddRange(categories);
+        await _dbContext.Categories.AddRangeAsync(categories);
         await _dbContext.SaveChangesAsync();
 
         var result = await categoryRepository.GetAllAsync();
