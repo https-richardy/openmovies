@@ -1,5 +1,6 @@
 global using Xunit;
 global using Moq;
+global using FluentValidation;
 global using Microsoft.EntityFrameworkCore;
 
 global using OpenMovies.Controllers;
