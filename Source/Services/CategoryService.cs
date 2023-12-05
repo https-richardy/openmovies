@@ -5,7 +5,7 @@ using OpenMovies.Validators;
 
 namespace OpenMovies.Services;
 
-public class CategoryService
+public class CategoryService : ICategoryService
 {
     private readonly ICategoryRepository _categoryRepository;
 

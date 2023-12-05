@@ -5,7 +5,7 @@ using OpenMovies.Validators;
 
 namespace OpenMovies.Services;
 
-public class DirectorService
+public class DirectorService : IDirectorService
 {
     private readonly DirectorRepository _directorRepository;
 
