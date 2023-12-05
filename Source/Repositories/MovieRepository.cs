@@ -78,19 +78,13 @@ public class MovieRepository : IMovieRepository
         IQueryable<Movie> query = _dbContext.Movies.Include(m => m.Director).Include(m => m.Category).Include(m => m.Trailers);
 
         if (!string.IsNullOrEmpty(name))
-        {
-            query = query.Where(m => m.Title.ToLower().Contains(name));
-        }
+            query = query.Where(m => m.Title.ToLower().Contains(name.ToLower()));
 
         if (releaseYear.HasValue)
-        {
             query = query.Where(m => m.ReleaseDateOf.Year == releaseYear);
-        }
 
         if (categoryId.HasValue)
-        {
             query = query.Where(m => m.Category.Id == categoryId);
-        }
 
         return await query.ToListAsync();
     }
