@@ -1,5 +1,7 @@
 # pragma warning disable CS8618
 
+namespace OpenMovies.Repositories.Tests;
+
 public class DirectorRepositoryTests : IAsyncLifetime
 {
     private DbContextOptions<AppDbContext> _options;
