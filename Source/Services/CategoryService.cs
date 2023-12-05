@@ -7,9 +7,9 @@ namespace OpenMovies.Services;
 
 public class CategoryService
 {
-    private readonly CategoryRepository _categoryRepository;
+    private readonly ICategoryRepository _categoryRepository;
 
-    public CategoryService(CategoryRepository categoryRepository)
+    public CategoryService(ICategoryRepository categoryRepository)
     {
         _categoryRepository = categoryRepository;
     }
