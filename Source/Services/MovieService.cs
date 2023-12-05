@@ -8,15 +8,15 @@ namespace OpenMovies.Services;
 
 public class MovieService
 {
-    private readonly MovieRepository _movieRepository;
-    private readonly CategoryRepository _categoryRepository;
-    private readonly DirectorRepository _directorRepository;
+    private readonly IMovieRepository _movieRepository;
+    private readonly ICategoryRepository _categoryRepository;
+    private readonly IDirectorRepository _directorRepository;
 
 
     public MovieService(
-        MovieRepository movieRepository,
-        CategoryRepository categoryRepository,
-        DirectorRepository directorRepository)
+        IMovieRepository movieRepository,
+        ICategoryRepository categoryRepository,
+        IDirectorRepository directorRepository)
     {
         _movieRepository = movieRepository;
         _categoryRepository = categoryRepository;
@@ -37,7 +37,7 @@ public class MovieService
 
     public async Task<IEnumerable<Movie>> GetAllMovies()
     {
-        return await _movieRepository.GetAllAsync();
+        return await _movieRepository.GetAllMoviesAsync();
     }
 
     public async Task CreateMovie(Movie movie)
