@@ -5,7 +5,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace OpenMovies.Repositories;
 
-public class DirectorRepository : IRepository<Director>
+public class DirectorRepository : IDirectorRepository
 {
     private readonly AppDbContext _dbContext;
 
@@ -31,12 +31,8 @@ public class DirectorRepository : IRepository<Director>
         return await _dbContext.Directors.ToListAsync();
     }
 
-    # pragma warning disable CS8625
-    public async Task<IEnumerable<Director>> GetAllAsync(Expression<Func<Director, bool>> predicate = null)
+    public async Task<IEnumerable<Director>> GetAllAsync(Expression<Func<Director, bool>> predicate)
     {
-        if (predicate == null)
-            return await _dbContext.Directors.ToListAsync();
-
         return await _dbContext.Directors.Where(predicate).ToListAsync();
     }
 

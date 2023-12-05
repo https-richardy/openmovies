@@ -5,7 +5,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace OpenMovies.Repositories;
 
-public class CategoryRepository : IRepository<Category>
+public class CategoryRepository : ICategoryRepository
 {
     private readonly AppDbContext _dbContext;
 
@@ -31,12 +31,8 @@ public class CategoryRepository : IRepository<Category>
         return await _dbContext.Categories.ToListAsync();
     }
 
-    # pragma warning disable CS8625
-    public async Task<IEnumerable<Category>> GetAllAsync(Expression<Func<Category, bool>> predicate = null)
+    public async Task<IEnumerable<Category>> GetAllAsync(Expression<Func<Category, bool>> predicate)
     {
-        if (predicate == null)
-            return await _dbContext.Categories.ToListAsync();
-
         return await _dbContext.Categories.Where(predicate).ToListAsync();
     }
 
