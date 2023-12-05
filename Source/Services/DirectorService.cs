@@ -7,9 +7,9 @@ namespace OpenMovies.Services;
 
 public class DirectorService : IDirectorService
 {
-    private readonly DirectorRepository _directorRepository;
+    private readonly IDirectorRepository _directorRepository;
 
-    public DirectorService(DirectorRepository directorRepository)
+    public DirectorService(IDirectorRepository directorRepository)
     {
         _directorRepository = directorRepository;
     }
