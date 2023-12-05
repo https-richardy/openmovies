@@ -19,7 +19,7 @@ public class MovieController : ControllerBase
 
     public MovieController(
         IMovieService movieService,
-        CategoryService categoryService,
+        ICategoryService categoryService,
         IDirectorService directorService,
         IWebHostEnvironment hostEnvironment)
     {
