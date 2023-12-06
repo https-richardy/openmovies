@@ -61,7 +61,7 @@ public class MovieController : ControllerBase
 
     [HttpPost]
     [Consumes("multipart/form-data")]
-    public async Task<IActionResult> Create(MovieDTO data)
+    public async Task<IActionResult> Create([FromForm, FromBody] MovieDTO data)
     {
         try
         {
@@ -70,7 +70,7 @@ public class MovieController : ControllerBase
 
             var movie = new Movie(data.Title, data.ReleaseDateOf, data.Synopsis, director, category);
 
-            if (data.Trailers != null && data.Trailers.Any())
+            if (data.Trailers != null)
             {
                 var trailers = _movieService.CreateTrailers(data.Trailers, movie);
                 await _movieService.AddTrailersToMovie(movie, trailers);
@@ -105,7 +105,7 @@ public class MovieController : ControllerBase
     }
 
     [HttpPut("{id}")]
-    public async Task<IActionResult> Update(int id, MovieDTO data)
+    public async Task<IActionResult> Update(int id, [FromForm] MovieDTO data)
     {
         try
         {
@@ -121,10 +121,24 @@ public class MovieController : ControllerBase
             existingMovie.Director = director;
             existingMovie.Category = category;
 
-            if (data.Trailers != null && data.Trailers.Any())
+            if (data.Trailers != null)
             {
                 var trailers = _movieService.CreateTrailers(data.Trailers, existingMovie);
                 await _movieService.AddTrailersToMovie(existingMovie, trailers);
+            }
+
+            if (data.Cover != null)
+            {
+                string wwwRootPath = _hostEnvironment.WebRootPath;
+                string fileName = Guid.NewGuid().ToString() + Path.GetExtension(data.Cover.FileName);
+                string path = Path.Combine(wwwRootPath, "images", fileName);
+
+                using (var fileStream = new FileStream(path, FileMode.Create))
+                {
+                    await data.Cover.CopyToAsync(fileStream);
+                }
+
+                existingMovie.CoverImagePath = Path.Combine("images", fileName);
             }
 
             await _movieService.UpdateMovie(existingMovie);
