@@ -1,3 +1,5 @@
+# pragma warning disable CS8618
+
 using Microsoft.AspNetCore.Mvc;
 
 namespace OpenMovies.DTOs;
