@@ -1,23 +1,3 @@
-/*
-    Create:
-        Testar se a chamada para o método Create com dados válidos retorna um resultado de criação bem-sucedido (201 Created) e se o diretor é criado corretamente.
-        Testar se a chamada para o método Create com dados inválidos (erro de validação) retorna um resultado de BadRequest (400 Bad Request).
-        Testar se a chamada para o método Create com dados inválidos (diretor já existente) retorna um resultado de conflito (409 Conflict).
-*/
-
-/*
-    Update:
-        Testar se a chamada para o método Update com dados válidos e um ID existente retorna um resultado sem conteúdo (204 No Content) e se o diretor é atualizado corretamente.
-        Testar se a chamada para o método Update com dados inválidos (erro de validação) retorna um resultado de BadRequest (400 Bad Request).
-        Testar se a chamada para o método Update com um ID inexistente retorna um resultado não encontrado (404 Not Found).
-*/
-
-/*
-    Delete:
-        Testar se a chamada para o método Delete com um ID válido retorna um resultado sem conteúdo (204 No Content).
-        Testar se a chamada para o método Delete com um ID inexistente retorna um resultado não encontrado (404 Not Found).
-*/
-
 namespace OpenMovies.Controllers.Tests;
 
 public class DirectorControllerTests
