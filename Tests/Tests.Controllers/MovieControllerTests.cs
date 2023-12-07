@@ -1,10 +1,3 @@
-/* 
-    Search:
-    Testar se a chamada para o método Search com parâmetros válidos retorna um resultado bem-sucedido (200 OK) e se os dados são paginados corretamente.
-
-    Testar se a chamada para o método Search com parâmetros inválidos (erro interno) retorna um resultado de erro interno do servidor (500 Internal Server Error).
-*/
-
 namespace OpenMovies.Controllers.Tests;
 
 public class MovieControllerTests
