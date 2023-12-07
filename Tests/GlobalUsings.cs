@@ -1,10 +1,13 @@
 global using Xunit;
 global using Moq;
+
 global using FluentValidation;
-global using Microsoft.EntityFrameworkCore;
 global using AutoFixture;
+
+global using Microsoft.EntityFrameworkCore;
 global using Microsoft.AspNetCore.Hosting;
 global using Microsoft.AspNetCore.Mvc;
+global using Microsoft.AspNetCore.Http;
 
 global using OpenMovies.Controllers;
 global using OpenMovies.Repositories;
