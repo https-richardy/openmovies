@@ -2,6 +2,7 @@ global using Xunit;
 global using Moq;
 
 global using FluentValidation;
+global using FluentValidation.Results;
 global using AutoFixture;
 
 global using Microsoft.EntityFrameworkCore;
