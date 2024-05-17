@@ -8,7 +8,6 @@ public class MovieServiceTests
     private readonly Fixture _fixture;
     private readonly Mock<IMovieRepository> _movieRepositoryMock;
     private readonly Mock<ICategoryRepository> _categoryRepositoryMock;
-    private readonly Mock<IDirectorRepository> _directorRepositoryMock;
     private readonly MovieService _movieService;
 
     public MovieServiceTests()
@@ -18,18 +17,17 @@ public class MovieServiceTests
 
         _movieRepositoryMock = new Mock<IMovieRepository>();
         _categoryRepositoryMock = new Mock<ICategoryRepository>();
-        _directorRepositoryMock = new Mock<IDirectorRepository>();
 
         _movieService = new MovieService(
             _movieRepositoryMock.Object,
-            _categoryRepositoryMock.Object,
-            _directorRepositoryMock.Object);
+            _categoryRepositoryMock.Object
+            );
     }
 
     [Fact]
     public async Task GetMovieById_ValidId_ReturnsMovieWithEmbeddedTrailers()
     {
-        var movie = new Movie("Movie 1", DateTime.Now, "Synopsis", It.IsAny<Director>(), It.IsAny<Category>());
+        var movie = new Movie("Movie 1", DateTime.Now, "Synopsis", It.IsAny<Category>());
         var trailers = new List<Trailer>()
         {
             new Trailer(TrailerType.Official, TrailerPlataform.Youtube, "https://youtube.com/watch?v=example", movie)
@@ -79,14 +77,10 @@ public class MovieServiceTests
     {
         var validSynopsis = new string('x', 60);
         var category = new Category { Id = 1, Name = "Action" };
-        var director = new Director { Id = 1, FirstName = "John", LastName = "Doe" };
 
-        var movie = new Movie("Valid Title", DateTime.Now, validSynopsis, director, category);
+        var movie = new Movie("Valid Title", DateTime.Now, validSynopsis, category);
         _movieRepositoryMock.Setup(repo => repo.GetAsync(It.IsAny<Expression<Func<Movie, bool>>>()))
             .ReturnsAsync((Movie)null);
-
-        _directorRepositoryMock.Setup(repo => repo.GetAsync(It.IsAny<Expression<Func<Director, bool>>>()))
-            .ReturnsAsync(_fixture.Create<Director>());
 
         _categoryRepositoryMock.Setup(repo => repo.GetAsync(It.IsAny<Expression<Func<Category, bool>>>()))
             .ReturnsAsync(_fixture.Create<Category>());
@@ -115,10 +109,9 @@ public class MovieServiceTests
     {
         var validSynopsis = new string('x', 60);
         var category = new Category { Id = 1, Name = "Action" };
-        var director = new Director { Id = 1, FirstName = "John", LastName = "Doe" };
 
-        var movie = new Movie("Existing Movie", DateTime.Now, validSynopsis, director, category);
-        var newMovie = new Movie("Existing Movie", DateTime.Now, validSynopsis, director, category);
+        var movie = new Movie("Existing Movie", DateTime.Now, validSynopsis, category);
+        var newMovie = new Movie("Existing Movie", DateTime.Now, validSynopsis, category);
 
         _movieRepositoryMock.Setup(repo => repo.GetAsync(It.IsAny<Expression<Func<Movie, bool>>>()))
             .ReturnsAsync(movie);
@@ -131,15 +124,11 @@ public class MovieServiceTests
     {
         var validSynopsis = new string('x', 60);
         var category = new Category { Id = 1, Name = "Action" };
-        var director = new Director { Id = 1, FirstName = "John", LastName = "Doe" };
 
-        var movie = new Movie("Existing Movie", DateTime.Now, validSynopsis, director, category);
+        var movie = new Movie("Existing Movie", DateTime.Now, validSynopsis, category);
 
         _movieRepositoryMock.Setup(repo => repo.GetAsync(It.IsAny<Expression<Func<Movie, bool>>>()))
             .ReturnsAsync((Movie)null);
-
-        _directorRepositoryMock.Setup(repo => repo.GetAsync(It.IsAny<Expression<Func<Director, bool>>>()))
-            .ReturnsAsync((Director)null);
 
         await Assert.ThrowsAsync<InvalidOperationException>(async () => await _movieService.CreateMovie(movie));
     }
@@ -149,15 +138,11 @@ public class MovieServiceTests
     {
         var validSynopsis = new string('x', 60);
         var category = new Category { Id = 1, Name = "Action" };
-        var director = new Director { Id = 1, FirstName = "John", LastName = "Doe" };
 
-        var movie = new Movie("Existing Movie", DateTime.Now, validSynopsis, director, category);
+        var movie = new Movie("Existing Movie", DateTime.Now, validSynopsis, category);
 
         _movieRepositoryMock.Setup(repo => repo.GetAsync(It.IsAny<Expression<Func<Movie, bool>>>()))
             .ReturnsAsync((Movie)null);
-
-        _directorRepositoryMock.Setup(repo => repo.GetAsync(It.IsAny<Expression<Func<Director, bool>>>()))
-            .ReturnsAsync(_fixture.Create<Director>());
 
         _categoryRepositoryMock.Setup(repo => repo.GetAsync(It.IsAny<Expression<Func<Category, bool>>>()))
             .ReturnsAsync((Category)null);
@@ -191,20 +176,18 @@ public class MovieServiceTests
     {
         var validSynopsis = new string('x', 60);
         var category = new Category { Id = 1, Name = "Action" };
-        var director = new Director { Id = 1, FirstName = "John", LastName = "Doe" };
 
-        var movie = new Movie("Existing Movie", DateTime.Now, validSynopsis, director, category);
+        var movie = new Movie("Existing Movie", DateTime.Now, validSynopsis, category);
 
         var updatedMovie = movie;
         updatedMovie.Title = "updated";
 
         _movieRepositoryMock.Setup(repo => repo.GetAsync(It.IsAny<Expression<Func<Movie, bool>>>()))
             .ReturnsAsync(movie);
+
         _movieRepositoryMock.Setup(repo => repo.UpdateAsync(movie))
             .Returns(Task.CompletedTask);
 
-        _directorRepositoryMock.Setup(repo => repo.GetAsync(It.IsAny<Expression<Func<Director, bool>>>()))
-            .ReturnsAsync(_fixture.Create<Director>());
         _categoryRepositoryMock.Setup(repo => repo.GetAsync(It.IsAny<Expression<Func<Category, bool>>>()))
             .ReturnsAsync(_fixture.Create<Category>());
 
@@ -226,9 +209,8 @@ public class MovieServiceTests
     {
         var validSynopsis = new string('x', 60);
         var category = new Category { Id = 1, Name = "Action" };
-        var director = new Director { Id = 1, FirstName = "John", LastName = "Doe" };
 
-        var nonExistingMovie = new Movie("Existing Movie", DateTime.Now, validSynopsis, director, category);
+        var nonExistingMovie = new Movie("Existing Movie", DateTime.Now, validSynopsis, category);
         _movieRepositoryMock.Setup(repo => repo.GetAsync(It.IsAny<Expression<Func<Movie, bool>>>()))
             .ReturnsAsync((Movie)null);
 
@@ -240,13 +222,9 @@ public class MovieServiceTests
     {
         var validSynopsis = new string('x', 60);
         var category = new Category { Id = 1, Name = "Action" };
-        var director = new Director { Id = 1, FirstName = "John", LastName = "Doe" };
 
-        var existingMovie = new Movie("Existing Movie", DateTime.Now, validSynopsis, director, category);
+        var existingMovie = new Movie("Existing Movie", DateTime.Now, validSynopsis, category);
         var updatedMovie = existingMovie;
-
-        _directorRepositoryMock.Setup(repo => repo.GetAsync(It.IsAny<Expression<Func<Director, bool>>>()))
-            .ReturnsAsync((Director)null);
 
         await Assert.ThrowsAsync<InvalidOperationException>(() => _movieService.UpdateMovie(updatedMovie));
     }
@@ -256,9 +234,8 @@ public class MovieServiceTests
     {
         var validSynopsis = new string('x', 60);
         var category = new Category { Id = 1, Name = "Action" };
-        var director = new Director { Id = 1, FirstName = "John", LastName = "Doe" };
 
-        var existingMovie = new Movie("Existing Movie", DateTime.Now, validSynopsis, director, category);
+        var existingMovie = new Movie("Existing Movie", DateTime.Now, validSynopsis, category);
         var updatedMovie = existingMovie;
 
         _categoryRepositoryMock.Setup(repo => repo.GetAsync(It.IsAny<Expression<Func<Category, bool>>>()))

@@ -13,19 +13,16 @@ public class MovieController : ControllerBase
 {
     private readonly IMovieService _movieService;
     private readonly ICategoryService _categoryService;
-    private readonly IDirectorService _directorService;
     private readonly IWebHostEnvironment _hostEnvironment;
 
 
     public MovieController(
         IMovieService movieService,
         ICategoryService categoryService,
-        IDirectorService directorService,
         IWebHostEnvironment hostEnvironment)
     {
         _movieService = movieService;
         _categoryService = categoryService;
-        _directorService = directorService;
         _hostEnvironment = hostEnvironment;
     }
 
@@ -65,10 +62,9 @@ public class MovieController : ControllerBase
     {
         try
         {
-            var director = await _directorService.GetDirectorById(data.DirectorId);
             var category = await _categoryService.GetCategoryById(data.CategoryId);
 
-            var movie = new Movie(data.Title, data.ReleaseDateOf, data.Synopsis, director, category);
+            var movie = new Movie(data.Title, data.ReleaseDateOf, data.Synopsis, category);
 
             if (data.Trailers != null)
             {
@@ -115,10 +111,8 @@ public class MovieController : ControllerBase
             existingMovie.ReleaseDateOf = data.ReleaseDateOf;
             existingMovie.Synopsis = data.Synopsis;
 
-            var director = await _directorService.GetDirectorById(data.DirectorId);
             var category = await _categoryService.GetCategoryById(data.CategoryId);
 
-            existingMovie.Director = director;
             existingMovie.Category = category;
 
             if (data.Trailers != null)

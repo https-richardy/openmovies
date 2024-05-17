@@ -10,17 +10,14 @@ public class MovieService : IMovieService
 {
     private readonly IMovieRepository _movieRepository;
     private readonly ICategoryRepository _categoryRepository;
-    private readonly IDirectorRepository _directorRepository;
 
 
     public MovieService(
         IMovieRepository movieRepository,
-        ICategoryRepository categoryRepository,
-        IDirectorRepository directorRepository)
+        ICategoryRepository categoryRepository)
     {
         _movieRepository = movieRepository;
         _categoryRepository = categoryRepository;
-        _directorRepository = directorRepository;
     }
 
     public async Task<Movie> GetMovieById(int id)
@@ -51,10 +48,6 @@ public class MovieService : IMovieService
         var existingMovie = await _movieRepository.GetAsync(m => m.Title == movie.Title);
         if (existingMovie != null)
             throw new InvalidOperationException("A film with the same title already exists.");
-
-        var director = await _directorRepository.GetAsync(d => d.Id == movie.Director.Id);
-        if (director == null)
-            throw new InvalidOperationException("The film's director could not be found.");
 
         var category = await _categoryRepository.GetAsync(c => c.Id == movie.Category.Id);
         if (category == null)
@@ -91,10 +84,6 @@ public class MovieService : IMovieService
                 throw new InvalidOperationException("A film with the updated title already exists.");
         }
 
-        var director = await _directorRepository.GetAsync(d => d.Id == updatedMovie.Director.Id);
-        if (director == null)
-            throw new InvalidOperationException("The film's director could not be found.");
-
         var category = await _categoryRepository.GetAsync(c => c.Id == updatedMovie.Category.Id);
         if (category == null)
             throw new InvalidOperationException("The movie category was not found.");
@@ -102,7 +91,6 @@ public class MovieService : IMovieService
         existingMovie.Title = updatedMovie.Title;
         existingMovie.ReleaseDateOf = updatedMovie.ReleaseDateOf;
         existingMovie.Synopsis = updatedMovie.Synopsis;
-        existingMovie.Director = director;
         existingMovie.Category = category;
         existingMovie.Trailers = updatedMovie.Trailers;
 

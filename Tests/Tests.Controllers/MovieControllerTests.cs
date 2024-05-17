@@ -6,7 +6,6 @@ public class MovieControllerTests
     private readonly Fixture _fixture;
     private readonly Mock<IMovieService> _movieService;
     private readonly Mock<ICategoryService> _categoryService;
-    private readonly Mock<IDirectorService> _directorService;
     private readonly Mock<IWebHostEnvironment> _hostEnvironment;
 
     public MovieControllerTests()
@@ -16,7 +15,6 @@ public class MovieControllerTests
 
         _movieService = new Mock<IMovieService>();
         _categoryService = new Mock<ICategoryService>();
-        _directorService = new Mock<IDirectorService>();
         _hostEnvironment = new Mock<IWebHostEnvironment>();
 
         var httpContext = new DefaultHttpContext();
@@ -24,7 +22,6 @@ public class MovieControllerTests
         _controller = new MovieController(
             _movieService.Object,
             _categoryService.Object,
-            _directorService.Object,
             _hostEnvironment.Object);
 
         _controller.ControllerContext.HttpContext = httpContext;
@@ -86,11 +83,7 @@ public class MovieControllerTests
     {
         var movieDTO = new Mock<MovieDTO>().Object;
 
-        var director = _fixture.Create<Director>();
         var category = _fixture.Create<Category>();
-
-        _directorService.Setup(service => service.GetDirectorById(movieDTO.DirectorId))
-            .ReturnsAsync(director);
 
         _categoryService.Setup(service => service.GetCategoryById(movieDTO.CategoryId))
             .ReturnsAsync(category);
@@ -108,9 +101,6 @@ public class MovieControllerTests
 
         var validationErrors = new List<ValidationFailure> { new ValidationFailure("Property", "Error message") };
 
-        _directorService.Setup(service => service.GetDirectorById(movieDTO.DirectorId))
-            .ReturnsAsync(_fixture.Create<Director>());
-
         _categoryService.Setup(service => service.GetCategoryById(movieDTO.CategoryId))
             .ReturnsAsync(_fixture.Create<Category>());
 
@@ -126,9 +116,6 @@ public class MovieControllerTests
     {
         var movieDTO = new Mock<MovieDTO>().Object;
         var existingMovie = _fixture.Create<Movie>();
-
-        _directorService.Setup(service => service.GetDirectorById(movieDTO.DirectorId))
-            .ReturnsAsync(_fixture.Create<Director>());
 
         _categoryService.Setup(service => service.GetCategoryById(movieDTO.CategoryId))
             .ReturnsAsync(_fixture.Create<Category>());

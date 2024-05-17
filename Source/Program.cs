@@ -34,11 +34,9 @@ builder.Services.AddIdentity<IdentityUser, IdentityRole>()
 builder.Services.AddBearerJwt(configuration);
 
 builder.Services.AddScoped<IMovieRepository, MovieRepository>();
-builder.Services.AddScoped<IDirectorRepository, DirectorRepository>();
 builder.Services.AddScoped<ICategoryRepository, CategoryRepository>();
 
 builder.Services.AddScoped<IMovieService, MovieService>();
-builder.Services.AddScoped<IDirectorService, DirectorService>();
 builder.Services.AddScoped<ICategoryService, CategoryService>();
 
 var app = builder.Build();

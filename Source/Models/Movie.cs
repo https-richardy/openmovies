@@ -12,8 +12,6 @@ public class Movie : Entity
 
     [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
     public List<Trailer>? Trailers { get; set; } = new List<Trailer>();
-
-    public Director Director { get; set; }
     public Category Category { get; set; }
 
     public string CoverImagePath { get; set; } = string.Empty;
@@ -22,13 +20,12 @@ public class Movie : Entity
     public Movie() {  } // Empty constructor for Entity Framework
 
     # pragma warning restore
-    public Movie(string title, DateTime releaseDateOf, string synopsis, Director director, Category category)
+    public Movie(string title, DateTime releaseDateOf, string synopsis, Category category)
     {
         Title = title;
         ReleaseDateOf = releaseDateOf;
         ReleaseYear = releaseDateOf.Year;
         Synopsis = synopsis;
-        Director = director;
         Category = category;
     }
 }

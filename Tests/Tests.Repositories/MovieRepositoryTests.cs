@@ -27,10 +27,9 @@ public class MovieRepositoryTests : IAsyncLifetime
     public async Task AddAsync_ShouldAddMovieInDatabase()
     {
         var movieRepository = new MovieRepository(_dbContext);
-        var director = new Director("John", "Doe");
 
         var category = new Category("Action");
-        var movie = new Movie("Movie Title", DateTime.Now, "Synopsis", director, category);
+        var movie = new Movie("Movie Title", DateTime.Now, "Synopsis", category);
 
         await movieRepository.AddAsync(movie);
         var result = await _dbContext.Movies.FirstOrDefaultAsync(m => m.Id == movie.Id);
@@ -43,13 +42,12 @@ public class MovieRepositoryTests : IAsyncLifetime
     public async Task GetAllMoviesAsync_ShouldReturnAllMovies()
     {
         var movieRepository = new MovieRepository(_dbContext);
-        var director = new Director("John", "Doe");
 
         var category = new Category("Action");
         var movies = new List<Movie>
         {
-            new Movie("Movie 1", DateTime.Now, "Synopsis 1", director, category),
-            new Movie("Movie 2", DateTime.Now, "Synopsis 2", director, category)
+            new Movie("Movie 1", DateTime.Now, "Synopsis 1", category),
+            new Movie("Movie 2", DateTime.Now, "Synopsis 2", category)
         };
 
         await _dbContext.Movies.AddRangeAsync(movies);
@@ -65,10 +63,9 @@ public class MovieRepositoryTests : IAsyncLifetime
     public async Task GetByIdAsync_ShouldReturnMovieById()
     {
         var movieRepository = new MovieRepository(_dbContext);
-        var director = new Director("John", "Doe");
 
         var category = new Category("Action");
-        var movie = new Movie("Movie Title", DateTime.Now, "Synopsis", director, category);
+        var movie = new Movie("Movie Title", DateTime.Now, "Synopsis", category);
 
         await _dbContext.Movies.AddAsync(movie);
         await _dbContext.SaveChangesAsync();
@@ -83,13 +80,12 @@ public class MovieRepositoryTests : IAsyncLifetime
     public async Task GetAllMoviesAsync_WithPredicate_ShouldReturnFilteredMovies()
     {
         var movieRepository = new MovieRepository(_dbContext);
-        var director = new Director("John", "Doe");
 
         var category = new Category("Action");
         var movies = new List<Movie>
         {
-            new Movie("Movie 1", DateTime.Now, "Synopsis 1", director, category),
-            new Movie("Movie 2", DateTime.Now, "Synopsis 2", director, category)
+            new Movie("Movie 1", DateTime.Now, "Synopsis 1", category),
+            new Movie("Movie 2", DateTime.Now, "Synopsis 2", category)
         };
 
         _dbContext.Movies.AddRange(movies);
@@ -106,10 +102,9 @@ public class MovieRepositoryTests : IAsyncLifetime
     public async Task UpdateAsync_ShouldUpdateMovie()
     {
         var movieRepository = new MovieRepository(_dbContext);
-        var director = new Director("John", "Doe");
 
         var category = new Category("Action");
-        var movie = new Movie("Movie Title", DateTime.Now, "Synopsis", director, category);
+        var movie = new Movie("Movie Title", DateTime.Now, "Synopsis", category);
 
         await _dbContext.Movies.AddAsync(movie);
         await _dbContext.SaveChangesAsync();
@@ -127,10 +122,9 @@ public class MovieRepositoryTests : IAsyncLifetime
     public async Task AddTrailersAsync_ShouldAddTrailersToMovie()
     {
         var movieRepository = new MovieRepository(_dbContext);
-        var director = new Director("John", "Doe");
 
         var category = new Category("Action");
-        var movie = new Movie("Movie Title", DateTime.Now, "Synopsis", director, category);
+        var movie = new Movie("Movie Title", DateTime.Now, "Synopsis", category);
 
         await _dbContext.Movies.AddAsync(movie);
         await _dbContext.SaveChangesAsync();
@@ -152,13 +146,12 @@ public class MovieRepositoryTests : IAsyncLifetime
     public async Task SearchAsync_ShouldReturnFilteredMovies()
     {
         var movieRepository = new MovieRepository(_dbContext);
-        var director = new Director("John", "Doe");
 
         var category = new Category("Action");
         var movies = new List<Movie>
         {
-            new Movie("Movie 1", DateTime.Now, "Synopsis", director, category),
-            new Movie("Movie 2", DateTime.Now, "Synopsis", director, category)
+            new Movie("Movie 1", DateTime.Now, "Synopsis", category),
+            new Movie("Movie 2", DateTime.Now, "Synopsis", category)
         };
 
         await _dbContext.Movies.AddRangeAsync(movies);
@@ -174,10 +167,9 @@ public class MovieRepositoryTests : IAsyncLifetime
     public async Task DeleteAsync_ShouldRemoveMovieFromDatabase()
     {
         var movieRepository = new MovieRepository(_dbContext);
-        var director = new Director("John", "Doe");
 
         var category = new Category("Action");
-        var movie = new Movie("Movie Title", DateTime.Now, "Synopsis", director, category);
+        var movie = new Movie("Movie Title", DateTime.Now, "Synopsis", category);
 
         await _dbContext.Movies.AddAsync(movie);
         await _dbContext.SaveChangesAsync();
@@ -192,10 +184,9 @@ public class MovieRepositoryTests : IAsyncLifetime
     public async Task GetAsync_ShouldRetrieveMovieBasedOnPredicate()
     {
         var movieRepository = new MovieRepository(_dbContext);
-        var director = new Director("John", "Doe");
 
         var category = new Category("Action");
-        var movie = new Movie("Movie Title", DateTime.Now, "Synopsis", director, category);
+        var movie = new Movie("Movie Title", DateTime.Now, "Synopsis", category);
 
         await _dbContext.Movies.AddAsync(movie);
         await _dbContext.SaveChangesAsync();
@@ -210,13 +201,12 @@ public class MovieRepositoryTests : IAsyncLifetime
     public async Task SearchAsync_WithReleaseYear_ShouldReturnFilteredMovies()
     {
         var movieRepository = new MovieRepository(_dbContext);
-        var director = new Director("John", "Doe");
 
         var category = new Category("Action");
         var movies = new List<Movie>
         {
-            new Movie("Movie 1", new DateTime(2022, 1, 1), "Synopsis 1", director, category),
-            new Movie("Movie 2", new DateTime(2022, 1, 1), "Synopsis 2", director, category)
+            new Movie("Movie 1", new DateTime(2022, 1, 1), "Synopsis 1", category),
+            new Movie("Movie 2", new DateTime(2022, 1, 1), "Synopsis 2", category)
         };
 
         await _dbContext.Movies.AddRangeAsync(movies);
@@ -232,13 +222,12 @@ public class MovieRepositoryTests : IAsyncLifetime
     public async Task SearchAsync_WithCategory_ShouldReturnFilteredMovies()
     {
         var movieRepository = new MovieRepository(_dbContext);
-        var director = new Director("John", "Doe");
 
         var category = new Category("Action");
         var movies = new List<Movie>
         {
-            new Movie("Movie 1", DateTime.Now, "Synopsis 1", director, category),
-            new Movie("Movie 2", DateTime.Now, "Synopsis 2", director, category)
+            new Movie("Movie 1", DateTime.Now, "Synopsis 1", category),
+            new Movie("Movie 2", DateTime.Now, "Synopsis 2", category)
         };
 
         await _dbContext.Movies.AddRangeAsync(movies);
