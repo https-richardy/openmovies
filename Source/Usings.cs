@@ -1,4 +1,5 @@
 global using Microsoft.AspNetCore.Mvc;
+global using Microsoft.EntityFrameworkCore;
 
 global using OpenMovies.WebApi.Models;
 global using OpenMovies.WebApi.Models.InputModels;
