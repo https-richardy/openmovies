@@ -1,10 +1,6 @@
 using System.Text.Json.Serialization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
-using OpenMovies.Data;
-using OpenMovies.Repositories;
-using OpenMovies.Services;
-using OpenMovies.Extensions;
 
 var builder = WebApplication.CreateBuilder(args);
 var configuration = builder.Configuration;
