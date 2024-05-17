@@ -6,7 +6,7 @@ using System.Text;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.IdentityModel.Tokens;
 
-namespace OpenMovies.Services;
+namespace OpenMovies.WebApi.Services;
 
 public class JwtService
 {

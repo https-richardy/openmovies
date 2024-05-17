@@ -4,9 +4,8 @@ using System.Text;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
 using OpenMovies.Services;
-using OpenMovies.Controllers;
 
-namespace OpenMovies.Extensions;
+namespace OpenMovies.WebApi.Extensions;
 
 public static class JwtExtension
 {
@@ -30,7 +29,5 @@ public static class JwtExtension
                 ValidateAudience = false,
                 ClockSkew = TimeSpan.FromMinutes(5)
             });
-
-        services.AddControllers().AddApplicationPart(typeof(AccountController).Assembly);
     }
 }

@@ -1,10 +1,8 @@
 using System.Security.Claims;
 using Microsoft.AspNetCore.Identity;
-using Microsoft.AspNetCore.Mvc;
 using OpenMovies.DTOs;
-using OpenMovies.Services;
 
-namespace OpenMovies.Controllers;
+namespace OpenMovies.WebApi.Controllers;
 
 [ApiController]
 [Route("api/accounts")]

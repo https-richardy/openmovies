@@ -1,11 +1,9 @@
 using FluentValidation;
-using Microsoft.AspNetCore.Mvc;
 using OpenMovies.DTOs;
-using OpenMovies.Models;
 using OpenMovies.Services;
 using OpenMovies.Utils;
 
-namespace OpenMovies.Controllers;
+namespace OpenMovies.WebApi.Controllers;
 
 [ApiController]
 [Route("api/movies")]

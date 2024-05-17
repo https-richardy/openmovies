@@ -1,7 +1,6 @@
 using System.Linq.Expressions;
-using OpenMovies.Models;
 
-namespace OpenMovies.Repositories;
+namespace OpenMovies.WebApi.Data.Repositories;
 
 public interface IMovieRepository
 {

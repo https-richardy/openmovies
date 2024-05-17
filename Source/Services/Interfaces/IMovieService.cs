@@ -1,7 +1,4 @@
-using OpenMovies.DTOs;
-using OpenMovies.Models;
-
-namespace OpenMovies.Services;
+namespace OpenMovies.WebApi.Services;
 
 public interface IMovieService
 {

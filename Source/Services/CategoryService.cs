@@ -1,9 +1,7 @@
 using FluentValidation;
-using OpenMovies.Models;
-using OpenMovies.Repositories;
 using OpenMovies.Validators;
 
-namespace OpenMovies.Services;
+namespace OpenMovies.WebApi.Services;
 
 public class CategoryService : ICategoryService
 {

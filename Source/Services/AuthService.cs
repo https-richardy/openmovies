@@ -1,7 +1,7 @@
 using Microsoft.AspNetCore.Identity;
 using OpenMovies.DTOs;
 
-namespace OpenMovies.Services;
+namespace OpenMovies.WebApi.Services;
 
 public class AuthService
 {

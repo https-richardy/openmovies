@@ -1,6 +1,4 @@
-using OpenMovies.Models;
-
-namespace OpenMovies.Services;
+namespace OpenMovies.WebApi.Services;
 
 public interface ICategoryService
 {
