@@ -1,26 +1,28 @@
-namespace OpenMovies.Models;
+namespace OpenMovies.WebApi.Models;
 
-
-public class Movie : Entity
+public sealed class Movie : Entity
 {
-    public string Title { get; set; } = string.Empty;
-    public DateTime ReleaseDateOf { get; set; }
+    public string Title { get; set; }
+    public string Synopsis { get; set; }
+    public string ImagePath { get; set; }
     public int ReleaseYear { get; set; }
-    public string Synopsis { get; set; } = string.Empty;
+
     public Category Category { get; set; }
 
-    public string CoverImagePath { get; set; } = string.Empty;
+    public Movie()
+    {
+        /*
+            Default parameterless constructor included due to Entity Framework Core not setting navigation properties
+            when using constructors. For more information, see: https://learn.microsoft.com/pt-br/ef/core/modeling/constructors
+        */
+    }
 
-    # pragma warning disable CS8618
-    public Movie() {  } // Empty constructor for Entity Framework
-
-    # pragma warning restore
-    public Movie(string title, DateTime releaseDateOf, string synopsis, Category category)
+    public Movie(string title, string synopsis, string imagePath, int releaseYear, Category category)
     {
         Title = title;
-        ReleaseDateOf = releaseDateOf;
-        ReleaseYear = releaseDateOf.Year;
         Synopsis = synopsis;
+        ImagePath = imagePath;
+        ReleaseYear = releaseYear;
         Category = category;
     }
 }
