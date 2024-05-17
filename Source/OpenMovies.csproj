@@ -5,6 +5,13 @@
     <Nullable>enable</Nullable>
     <ImplicitUsings>enable</ImplicitUsings>
     <InvariantGlobalization>true</InvariantGlobalization>
+    <!--
+      Disabling CS8618 warnings due to need to use object initializers
+      (https://learn.microsoft.com/en-us/dotnet/csharp/programming-guide/classes-and-structs/object-and-collection-initializers).
+      Many classes require an empty constructor to work correctly with EF Core, as described in
+      https://learn.microsoft.com/pt-br/ef/core/modeling/constructors.
+     -->
+    <NoWarn>CS8618</NoWarn>
   </PropertyGroup>
 
   <ItemGroup>
