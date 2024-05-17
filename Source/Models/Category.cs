@@ -1,12 +1,17 @@
 namespace OpenMovies.WebApi.Models;
 
-public class Category : Entity
+public sealed class Category : Entity
 {
-    public string Name { get; set; } = string.Empty;
+    public string Name { get; set; }
 
-    public Category() {  }  // Empty constructor for Entity Framework
+    public Category()
+    {
+        /*
+            Default parameterless constructor included due to Entity Framework Core not setting navigation properties
+            when using constructors. For more information, see: https://learn.microsoft.com/pt-br/ef/core/modeling/constructors
+        */
+    }
 
-    # pragma warning restore
     public Category(string name)
     {
         Name = name;
