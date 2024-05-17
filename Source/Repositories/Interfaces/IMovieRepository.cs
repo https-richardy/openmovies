@@ -16,5 +16,4 @@ public interface IMovieRepository
     Task DeleteAsync(Movie movie);
 
     Task<IEnumerable<Movie>> SearchAsync(string? name = null, int? releaseYear = null, int? categoryId = null);
-    Task AddTrailersAsync(Movie movie, List<Trailer> trailers);
 }

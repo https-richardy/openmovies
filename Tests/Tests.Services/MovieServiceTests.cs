@@ -25,29 +25,6 @@ public class MovieServiceTests
     }
 
     [Fact]
-    public async Task GetMovieById_ValidId_ReturnsMovieWithEmbeddedTrailers()
-    {
-        var movie = new Movie("Movie 1", DateTime.Now, "Synopsis", It.IsAny<Category>());
-        var trailers = new List<Trailer>()
-        {
-            new Trailer(TrailerType.Official, TrailerPlataform.Youtube, "https://youtube.com/watch?v=example", movie)
-        };
-
-        movie.Trailers = trailers;
-
-        _movieRepositoryMock.Setup(repo => repo.GetAsync(It.IsAny<Expression<Func<Movie, bool>>>()))
-            .ReturnsAsync(movie);
-
-        var result = await _movieService.GetMovieById(1);
-
-        Assert.NotNull(result);
-
-        # pragma warning disable CS8604, xUnit2000
-        Assert.Single(result.Trailers);
-        Assert.Equal(movie.Trailers.First().Link, "https://www.youtube.com/embed/example");
-    }
-
-    [Fact]
     public async Task GetAllMovies_ReturnsAllMovies()
     {
         var expectedMovies = _fixture.CreateMany<Movie>().ToList();
@@ -242,37 +219,5 @@ public class MovieServiceTests
             .ReturnsAsync((Category)null);
 
         await Assert.ThrowsAsync<InvalidOperationException>(() => _movieService.UpdateMovie(updatedMovie));
-    }
-
-    [Fact]
-    public void CreateTrailers_SuccessfulCreation()
-    {
-        var movie = _fixture.Create<Movie>();
-        var trailerDTOs = _fixture.CreateMany<TrailerDTO>().ToList();
-
-        var trailers = _movieService.CreateTrailers(trailerDTOs, movie);
-
-        Assert.NotNull(trailers);
-        Assert.Equal(trailerDTOs.Count, trailers.Count);
-
-        for (int i = 0; i < trailerDTOs.Count; i++)
-        {
-            Assert.Equal(trailerDTOs[i].Type, trailers[i].Type);
-            Assert.Equal(trailerDTOs[i].Plataform, trailers[i].Plataform);
-            Assert.Equal(trailerDTOs[i].Link, trailers[i].Link);
-            Assert.Equal(movie, trailers[i].Movie);
-        }
-    }
-
-    [Fact]
-    public async Task AddTrailersToMovie_SuccessfulAddition()
-    {
-        var movie = _fixture.Create<Movie>();
-        var trailers = _fixture.CreateMany<Trailer>().ToList();
-
-        await _movieService.AddTrailersToMovie(movie, trailers);
-
-        _movieRepositoryMock.Verify(repo => repo.AddTrailersAsync(movie, trailers), Times.Once);
-        Assert.Equal(trailers, movie.Trailers);
     }
 }

@@ -1,5 +1,3 @@
-using System.Text.Json.Serialization;
-
 namespace OpenMovies.Models;
 
 
@@ -9,9 +7,6 @@ public class Movie : Entity
     public DateTime ReleaseDateOf { get; set; }
     public int ReleaseYear { get; set; }
     public string Synopsis { get; set; } = string.Empty;
-
-    [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
-    public List<Trailer>? Trailers { get; set; } = new List<Trailer>();
     public Category Category { get; set; }
 
     public string CoverImagePath { get; set; } = string.Empty;

@@ -26,9 +26,6 @@ public class MovieService : IMovieService
         if (movie == null)
             throw new InvalidOperationException($"Movie with ID '{id}' not found.");
 
-        #pragma warning disable CS8602
-        movie.Trailers.ForEach(t => t.Link = t.GenerateEmbeddedLink());
-
         return movie;
     }
 
@@ -92,7 +89,6 @@ public class MovieService : IMovieService
         existingMovie.ReleaseDateOf = updatedMovie.ReleaseDateOf;
         existingMovie.Synopsis = updatedMovie.Synopsis;
         existingMovie.Category = category;
-        existingMovie.Trailers = updatedMovie.Trailers;
 
         await _movieRepository.UpdateAsync(existingMovie);
     }
@@ -100,24 +96,5 @@ public class MovieService : IMovieService
     public async Task<IEnumerable<Movie>> SearchMovies(string? name = null, int? releaseYear = null, int? categoryId = null)
     {
         return await _movieRepository.SearchAsync(name, releaseYear, categoryId);
-    }
-
-    public List<Trailer> CreateTrailers(List<TrailerDTO> trailersDTOs, Movie movie)
-    {
-        var trailers = new List<Trailer>();
-
-        foreach (var trailerDTO in trailersDTOs)
-        {
-            var trailer = new Trailer(trailerDTO.Type, trailerDTO.Plataform, trailerDTO.Link, movie);
-            trailers.Add(trailer);
-        }
-
-        return trailers;
-    }
-
-    public async Task AddTrailersToMovie(Movie movie, List<Trailer> trailers)
-    {
-        movie.Trailers = trailers;
-        await _movieRepository.AddTrailersAsync(movie, trailers);
     }
 }

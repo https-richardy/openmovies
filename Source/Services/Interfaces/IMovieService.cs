@@ -11,6 +11,4 @@ public interface IMovieService
     Task DeleteMovie(int movieId);
     Task UpdateMovie(Movie updatedMovie);
     Task<IEnumerable<Movie>> SearchMovies(string? name = null, int? releaseYear = null, int? categoryId = null);
-    List<Trailer> CreateTrailers(List<TrailerDTO> trailerDTOs, Movie movie);
-    Task AddTrailersToMovie(Movie movie, List<Trailer> trailers);
 }

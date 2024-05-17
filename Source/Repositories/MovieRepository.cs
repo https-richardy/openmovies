@@ -30,7 +30,6 @@ public class MovieRepository : IMovieRepository
     {
         return await _dbContext.Movies
         .Include(m => m.Category)
-        .Include(m => m.Trailers)
         .ToListAsync();
     }
 
@@ -45,7 +44,7 @@ public class MovieRepository : IMovieRepository
         # pragma warning disable CS8603
         return await _dbContext.Movies
             .Include(m => m.Category)
-            .Include(m => m.Trailers)
+
             .FirstOrDefaultAsync(predicate);
     }
 
@@ -61,21 +60,11 @@ public class MovieRepository : IMovieRepository
         await _dbContext.SaveChangesAsync();
     }
 
-    #pragma warning disable CS8602
-    public async Task AddTrailersAsync(Movie movie, List<Trailer> trailers)
-    {
-        if (movie == null)
-            throw new ArgumentNullException(nameof(movie));
-
-        movie.Trailers.AddRange(trailers);
-        await _dbContext.SaveChangesAsync();
-    }
-
     public async Task<IEnumerable<Movie>> SearchAsync(string? name = null, int? releaseYear = null, int? categoryId = null)
     {
         IQueryable<Movie> query = _dbContext.Movies
             .Include(m => m.Category)
-            .Include(m => m.Trailers);
+;
 
         if (!string.IsNullOrEmpty(name))
             query = query.Where(m => m.Title.ToLower().Contains(name.ToLower()));

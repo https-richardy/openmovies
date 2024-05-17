@@ -66,12 +66,6 @@ public class MovieController : ControllerBase
 
             var movie = new Movie(data.Title, data.ReleaseDateOf, data.Synopsis, category);
 
-            if (data.Trailers != null)
-            {
-                var trailers = _movieService.CreateTrailers(data.Trailers, movie);
-                await _movieService.AddTrailersToMovie(movie, trailers);
-            }
-
             if (data.Cover != null)
             {
                 string wwwRootPath = _hostEnvironment.WebRootPath;
@@ -114,12 +108,6 @@ public class MovieController : ControllerBase
             var category = await _categoryService.GetCategoryById(data.CategoryId);
 
             existingMovie.Category = category;
-
-            if (data.Trailers != null)
-            {
-                var trailers = _movieService.CreateTrailers(data.Trailers, existingMovie);
-                await _movieService.AddTrailersToMovie(existingMovie, trailers);
-            }
 
             if (data.Cover != null)
             {

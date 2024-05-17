@@ -119,30 +119,6 @@ public class MovieRepositoryTests : IAsyncLifetime
     }
 
     [Fact]
-    public async Task AddTrailersAsync_ShouldAddTrailersToMovie()
-    {
-        var movieRepository = new MovieRepository(_dbContext);
-
-        var category = new Category("Action");
-        var movie = new Movie("Movie Title", DateTime.Now, "Synopsis", category);
-
-        await _dbContext.Movies.AddAsync(movie);
-        await _dbContext.SaveChangesAsync();
-
-        var trailers = new List<Trailer>
-        {
-            new Trailer(TrailerType.Official, TrailerPlataform.Youtube, "youtube-link", movie),
-            new Trailer(TrailerType.Teaser, TrailerPlataform.Vimeo, "vimeo-link", movie)
-        };
-
-        await movieRepository.AddTrailersAsync(movie, trailers);
-        var retrievedMovie = await movieRepository.GetByIdAsync(movie.Id);
-
-        Assert.NotNull(retrievedMovie);
-        Assert.Equal(2, retrievedMovie.Trailers.Count);
-    }
-
-    [Fact]
     public async Task SearchAsync_ShouldReturnFilteredMovies()
     {
         var movieRepository = new MovieRepository(_dbContext);
