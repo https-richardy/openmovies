@@ -4,6 +4,8 @@ public static class ServicesExtension
 {
     public static void ConfigureServices(this IServiceCollection services, IConfiguration configuration)
     {
+        services.ConfigureWebApplication();
+
         services.AddDataPersistence(configuration);
         services.AddApplicationServices();
 
