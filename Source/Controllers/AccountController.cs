@@ -1,7 +1,3 @@
-using System.Security.Claims;
-using Microsoft.AspNetCore.Identity;
-using OpenMovies.DTOs;
-
 namespace OpenMovies.WebApi.Controllers;
 
 [ApiController]
@@ -18,24 +14,28 @@ public class AccountController : ControllerBase
     }
 
     [HttpPost("register")]
-    public async Task<ActionResult> Register(RegisterRequest request)
+    public async Task<ActionResult> RegisterAsync(AccountRegistrationRequest request)
     {
         if (!ModelState.IsValid)
             return BadRequest(ModelState);
 
-        var user = await CreateUserAsync(request);
+        var user = TinyMapper.Map<IdentityUser>(request);
+        var result = await _userManager.CreateAsync(user, request.Password);
+
+        if (!result.Succeeded)
+            return BadRequest(new { message = "Failed to create the user.", erros = result.Errors });
 
         if (user == null)
             return BadRequest(new { message = "Failed to create the user." });
 
-        await _userManager.AddClaimAsync(user, new Claim(ClaimTypes.Role,"Common"));
+        await _userManager.AddToRoleAsync(user, Role.CommonUser);
 
         var token = await _jwt.GenerateTokenResponseAsync(user);
         return StatusCode(201, token);
     }
 
     [HttpPost("authenticate")]
-    public async Task<ActionResult> Authenticate(AuthenticateRequest request)
+    public async Task<ActionResult> AuthenticateAsync(AuthenticationRequest request)
     {
         if (!ModelState.IsValid)
             return BadRequest(ModelState);
@@ -47,17 +47,5 @@ public class AccountController : ControllerBase
 
         var token = await _jwt.GenerateTokenResponseAsync(user);
         return Ok(token);
-    }
-
-    private async Task<IdentityUser?> CreateUserAsync(RegisterRequest request)
-    {
-        var user = new IdentityUser
-        {
-            UserName = request.UserName,
-            Email = request.Email
-        };
-
-        var result = await _userManager.CreateAsync(user, request.Password);
-        return result.Succeeded ? user : null;
     }
 }
