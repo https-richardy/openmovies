@@ -50,7 +50,7 @@ public sealed class AccountService : IAccountService
         if (!result.Succeeded)
             return AccountRegistrationResponse.FailureResponse("Failed to create user.");
 
-        await _userManager.AddToRoleAsync(newUser, Role.CommonUser);
+        await _userManager.AddClaimAsync(newUser, new Claim(ClaimTypes.Role, Role.CommonUser));
 
         return AccountRegistrationResponse.SuccessResponse();
     }
