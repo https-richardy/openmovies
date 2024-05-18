@@ -8,6 +8,7 @@ global using System.Security.Claims;
 
 /* add global usage directives for the Microsoft namespaces here */
 global using Microsoft.AspNetCore.Mvc;
+global using Microsoft.AspNetCore.Authentication.JwtBearer;
 global using Microsoft.EntityFrameworkCore;
 global using Microsoft.IdentityModel.Tokens;
 global using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
