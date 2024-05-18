@@ -14,3 +14,4 @@ global using OpenMovies.WebApi.Services;
 global using OpenMovies.WebApi.Services.Exceptions;
 
 global using Nelibur.ObjectMapper;
+global using FluentValidation;
