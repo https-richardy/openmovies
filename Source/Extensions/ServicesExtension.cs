@@ -9,5 +9,7 @@ public static class ServicesExtension
 
         services.ConfigureIdentity();
         services.AddBearerJwt(configuration);
+
+        services.AddMapping();
     }
 }
