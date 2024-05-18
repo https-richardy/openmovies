@@ -1,8 +1,3 @@
-using FluentValidation;
-using OpenMovies.DTOs;
-using OpenMovies.Services;
-using OpenMovies.Utils;
-
 namespace OpenMovies.WebApi.Controllers;
 
 [ApiController]
@@ -11,17 +6,16 @@ public class MovieController : ControllerBase
 {
     private readonly IMovieService _movieService;
     private readonly ICategoryService _categoryService;
-    private readonly IWebHostEnvironment _hostEnvironment;
-
+    private readonly IFileUploadService _fileUploadService;
 
     public MovieController(
         IMovieService movieService,
         ICategoryService categoryService,
-        IWebHostEnvironment hostEnvironment)
+        IFileUploadService fileUploadService)
     {
         _movieService = movieService;
         _categoryService = categoryService;
-        _hostEnvironment = hostEnvironment;
+        _fileUploadService = fileUploadService;
     }
 
     [HttpGet]
@@ -55,36 +49,23 @@ public class MovieController : ControllerBase
     }
 
     [HttpPost]
-    [Consumes("multipart/form-data")]
-    public async Task<IActionResult> Create([FromForm, FromBody] MovieDTO data)
+    public async Task<IActionResult> Create(MovieCreationRequest request)
     {
         try
         {
-            var category = await _categoryService.GetCategoryById(data.CategoryId);
+            var category = await _categoryService.GetCategoryById(request.CategoryId);
 
-            var movie = new Movie(data.Title, data.ReleaseDateOf, data.Synopsis, category);
+            var movie = TinyMapper.Map<Movie>(request);
 
-            if (data.Cover != null)
+            if (request.Cover != null)
             {
-                string wwwRootPath = _hostEnvironment.WebRootPath;
-                string fileName = Guid.NewGuid().ToString() + Path.GetExtension(data.Cover.FileName);
-                string path = Path.Combine(wwwRootPath, "images", fileName);
-
-                using (var fileStream = new FileStream(path, FileMode.Create))
-                {
-                    await data.Cover.CopyToAsync(fileStream);
-                }
-
-                movie.CoverImagePath = Path.Combine("images", fileName);
+                var imagePath = await _fileUploadService.UploadFileAsync(request.Cover);
+                movie.ImagePath = imagePath;
             }
 
             await _movieService.CreateMovie(movie);
 
             return StatusCode(201, movie);
-        }
-        catch (ValidationException ex)
-        {
-            return BadRequest(new { errors = ex.Errors });
         }
         catch (InvalidOperationException ex)
         {
@@ -93,41 +74,26 @@ public class MovieController : ControllerBase
     }
 
     [HttpPut("{id}")]
-    public async Task<IActionResult> Update(int id, [FromForm] MovieDTO data)
+    public async Task<IActionResult> Update(int id, UpdateMovieRequest request)
     {
         try
         {
             var existingMovie = await _movieService.GetMovieById(id);
+            existingMovie = TinyMapper.Map<Movie>(request);
 
-            existingMovie.Title = data.Title;
-            existingMovie.ReleaseDateOf = data.ReleaseDateOf;
-            existingMovie.Synopsis = data.Synopsis;
-
-            var category = await _categoryService.GetCategoryById(data.CategoryId);
+            var category = await _categoryService.GetCategoryById(request.CategoryId);
 
             existingMovie.Category = category;
 
-            if (data.Cover != null)
+            if (request.Cover != null)
             {
-                string wwwRootPath = _hostEnvironment.WebRootPath;
-                string fileName = Guid.NewGuid().ToString() + Path.GetExtension(data.Cover.FileName);
-                string path = Path.Combine(wwwRootPath, "images", fileName);
-
-                using (var fileStream = new FileStream(path, FileMode.Create))
-                {
-                    await data.Cover.CopyToAsync(fileStream);
-                }
-
-                existingMovie.CoverImagePath = Path.Combine("images", fileName);
+                var imagePath = await _fileUploadService.UploadFileAsync(request.Cover);
+                existingMovie.ImagePath = imagePath;
             }
 
             await _movieService.UpdateMovie(existingMovie);
 
             return NoContent();
-        }
-        catch (ValidationException ex)
-        {
-            return BadRequest(new { errors = ex.Errors });
         }
         catch (InvalidOperationException ex)
         {
@@ -156,17 +122,17 @@ public class MovieController : ControllerBase
         [FromQuery] int? categoryId = null,
         [FromQuery] int pageNumber = 1,
         [FromQuery] int pageSize = 10)
+    {
+        try
         {
-            try
-            {
-                var movies = await _movieService.SearchMovies(name, releaseYear, categoryId);
-                var pagination = new Pagination<Movie>(movies, pageNumber, pageSize, HttpContext);
+            var movies = await _movieService.SearchMovies(name, releaseYear, categoryId);
+            var pagination = new Pagination<Movie>(movies, pageNumber, pageSize, HttpContext);
 
-                return Ok(pagination);
-            }
-            catch (Exception ex)
-            {
-                return StatusCode(500, new { message = ex.Message });
-            }
+            return Ok(pagination);
         }
+        catch (Exception ex)
+        {
+            return StatusCode(500, new { message = ex.Message });
+        }
+    }
 }
