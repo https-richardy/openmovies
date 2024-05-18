@@ -4,6 +4,9 @@ public static class WebApplicationExtension
 {
     public static void ConfigureWebApplication(this IServiceCollection services)
     {
+        services.AddEndpointsApiExplorer();
+        services.AddSwaggerGen();
+
         services.AddControllers()
             .AddJsonOptions(options =>
             {
