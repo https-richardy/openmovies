@@ -24,8 +24,8 @@ public class MovieRepository : IMovieRepository
     public async Task<IEnumerable<Movie>> GetAllMoviesAsync()
     {
         return await _dbContext.Movies
-        .Include(m => m.Category)
-        .ToListAsync();
+            .Include(m => m.Category)
+            .ToListAsync();
     }
 
     public async Task<IEnumerable<Movie>> GetAllMoviesAsync(Expression<Func<Movie, bool>> predicate)
@@ -39,7 +39,6 @@ public class MovieRepository : IMovieRepository
         # pragma warning disable CS8603
         return await _dbContext.Movies
             .Include(m => m.Category)
-
             .FirstOrDefaultAsync(predicate);
     }
 
@@ -58,8 +57,7 @@ public class MovieRepository : IMovieRepository
     public async Task<IEnumerable<Movie>> SearchAsync(string? name = null, int? releaseYear = null, int? categoryId = null)
     {
         IQueryable<Movie> query = _dbContext.Movies
-            .Include(m => m.Category)
-;
+            .Include(m => m.Category);
 
         if (!string.IsNullOrEmpty(name))
             query = query.Where(m => m.Title.ToLower().Contains(name.ToLower()));
