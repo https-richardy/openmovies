@@ -19,7 +19,7 @@ public class MovieController : ControllerBase
     }
 
     [HttpGet]
-    public async Task<IActionResult> GetAll([FromQuery] int pageNumber = 1, [FromQuery] int pageSize = 10)
+    public async Task<IActionResult> GetAllMoviesAsync([FromQuery] int pageNumber = 1, [FromQuery] int pageSize = 10)
     {
         try
         {
@@ -35,7 +35,7 @@ public class MovieController : ControllerBase
     }
 
     [HttpGet("{id}")]
-    public async Task<IActionResult> GetById(int id)
+    public async Task<IActionResult> GetMovieByIdAsync(int id)
     {
         try
         {
@@ -49,7 +49,7 @@ public class MovieController : ControllerBase
     }
 
     [HttpPost]
-    public async Task<IActionResult> Create(MovieCreationRequest request)
+    public async Task<IActionResult> CreateMovieAsync(MovieCreationRequest request)
     {
         try
         {
@@ -74,7 +74,7 @@ public class MovieController : ControllerBase
     }
 
     [HttpPut("{id}")]
-    public async Task<IActionResult> Update(int id, UpdateMovieRequest request)
+    public async Task<IActionResult> UpdateMovieAsync(int id, UpdateMovieRequest request)
     {
         try
         {
@@ -102,7 +102,7 @@ public class MovieController : ControllerBase
     }
 
     [HttpDelete("{id}")]
-    public async Task<IActionResult> Delete(int id)
+    public async Task<IActionResult> DeleteMovieAsync(int id)
     {
         try
         {
@@ -116,7 +116,7 @@ public class MovieController : ControllerBase
     }
 
     [HttpGet("search")]
-    public async Task<IActionResult> Search(
+    public async Task<IActionResult> SearchMovieAsync(
         [FromQuery] string? name = null,
         [FromQuery] int? releaseYear = null,
         [FromQuery] int? categoryId = null,
