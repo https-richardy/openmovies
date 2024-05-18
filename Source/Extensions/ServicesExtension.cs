@@ -10,6 +10,8 @@ public static class ServicesExtension
         services.ConfigureIdentity();
         services.AddJwtBearer(configuration);
 
+        services.AddMediator();
+
         services.AddMapping();
         services.AddValidation();
     }
