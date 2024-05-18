@@ -37,10 +37,19 @@ public sealed class AccountService : IAccountService
         return successfulAuthenticationResponse;
     }
 
-    public async Task CreateUserAsync(AccountRegistrationRequest request)
+    public async Task<AccountRegistrationResponse> RegisterUserAsync(AccountRegistrationRequest request)
     {
-        var user = TinyMapper.Map<IdentityUser>(request);
+        var existingUser = await _userManager.FindByEmailAsync(request.Email);
 
-        var result = await _userManager.CreateAsync(user, password: request.Password);
+        if (existingUser != null)
+            return AccountRegistrationResponse.FailureResponse("Email address is already registered.");
+
+        var newUser = TinyMapper.Map<IdentityUser>(request);
+        var result = await _userManager.CreateAsync(newUser, request.Password);
+
+        if (!result.Succeeded)
+            return AccountRegistrationResponse.FailureResponse("Failed to create user.");
+
+        return AccountRegistrationResponse.SuccessResponse();
     }
 }
