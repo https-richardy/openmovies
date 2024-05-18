@@ -1,6 +1,6 @@
 namespace OpenMovies.WebApi.Models.InputModels;
 
-public record AccountRegistrationRequest
+public record AccountRegistrationRequest : IRequest<AccountRegistrationResponse>
 {
     public string UserName { get; set; }
     public string Email { get; set; }
