@@ -42,7 +42,7 @@ public sealed class AccountService : IAccountService
         var existingUser = await _userManager.FindByEmailAsync(request.Email);
 
         if (existingUser != null)
-            return AccountRegistrationResponse.FailureResponse("Email address is already registered.");
+            throw new UserAlreadyExistsException("Email address is already registered.");
 
         var newUser = TinyMapper.Map<IdentityUser>(request);
         var result = await _userManager.CreateAsync(newUser, request.Password);
