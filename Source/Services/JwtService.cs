@@ -1,11 +1,5 @@
 #pragma warning disable CS8618, CS8601, CS8603, CS8604
 
-using System.IdentityModel.Tokens.Jwt;
-using System.Security.Claims;
-using System.Text;
-using Microsoft.AspNetCore.Identity;
-using Microsoft.IdentityModel.Tokens;
-
 namespace OpenMovies.WebApi.Services;
 
 public class JwtService
