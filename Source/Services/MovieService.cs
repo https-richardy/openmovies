@@ -5,7 +5,6 @@ public class MovieService : IMovieService
     private readonly IMovieRepository _movieRepository;
     private readonly ICategoryRepository _categoryRepository;
 
-
     public MovieService(
         IMovieRepository movieRepository,
         ICategoryRepository categoryRepository)
