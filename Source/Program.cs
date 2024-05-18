@@ -1,56 +1,28 @@
-using System.Text.Json.Serialization;
-using Microsoft.AspNetCore.Identity;
-using Microsoft.EntityFrameworkCore;
-
-var builder = WebApplication.CreateBuilder(args);
-var configuration = builder.Configuration;
-
-builder.Services.AddControllers()
-    .AddJsonOptions(options =>
+internal class Program
+{
+    private static void Main(string[] args)
     {
-        /* 
-            The following line is added to prevent issues related to circular references
-            during JSON serialization. It instructs the JsonSerializer to ignore cycles.
-        */
-        options.JsonSerializerOptions.ReferenceHandler = ReferenceHandler.IgnoreCycles;
-    });
+        var builder = WebApplication.CreateBuilder(args);
+        var configuration = builder.Configuration;
 
-builder.Services.AddEndpointsApiExplorer();
-builder.Services.AddSwaggerGen();
+        builder.Services.ConfigureServices(configuration);
 
-builder.Services.AddDbContext<AppDbContext>(options =>
-{
-    options.UseSqlite(configuration.GetConnectionString("Default"));
-});
+        var app = builder.Build();
 
-builder.Services.AddIdentity<IdentityUser, IdentityRole>()
-    .AddEntityFrameworkStores<AppDbContext>()
-    .AddDefaultTokenProviders();
+        if (app.Environment.IsDevelopment())
+        {
+            app.UseSwagger();
+            app.UseSwaggerUI();
+        }
 
-builder.Services.AddBearerJwt(configuration);
+        app.UseCors(x => x.AllowAnyOrigin().AllowAnyHeader());
+        app.UseHttpsRedirection();
 
-builder.Services.AddScoped<IMovieRepository, MovieRepository>();
-builder.Services.AddScoped<ICategoryRepository, CategoryRepository>();
+        app.UseAuthorization();
+        app.MapControllers();
 
-builder.Services.AddScoped<IMovieService, MovieService>();
-builder.Services.AddScoped<ICategoryService, CategoryService>();
+        app.UseStaticFiles();
 
-var app = builder.Build();
-
-if (app.Environment.IsDevelopment())
-{
-    app.UseSwagger();
-    app.UseSwaggerUI();
+        app.Run();
+    }
 }
-
-app.UseCors(x => x.AllowAnyOrigin().AllowAnyHeader());
-
-app.UseHttpsRedirection();
-
-app.UseAuthorization();
-
-app.MapControllers();
-
-app.UseStaticFiles();
-
-app.Run();
