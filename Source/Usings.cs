@@ -28,6 +28,7 @@ global using OpenMovies.WebApi.Services.Exceptions;
 global using OpenMovies.WebApi.Operations.Commands.Handlers;
 global using OpenMovies.WebApi.Identity;
 global using OpenMovies.WebApi.Utils;
+global using OpenMovies.WebApi.Exceptions;
 global using OpenMovies.WebApi.Validators;
 
 /* add global usage directives for third-party namespaces here */
