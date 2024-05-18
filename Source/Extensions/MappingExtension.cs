@@ -10,5 +10,12 @@ public static class MappingExtension
             config.Bind(source => source.Synopsis, target => target.Synopsis);
             config.Bind(source => source.ReleaseYear, target => target.ReleaseYear);
         });
+
+        TinyMapper.Bind<UpdateMovieRequest, Movie>(config =>
+        {
+            config.Bind(source => source.Title, target => target.Title);
+            config.Bind(source => source.Synopsis, target => target.Synopsis);
+            config.Bind(source => source.ReleaseYear, target => target.ReleaseYear);
+        });
     }
 }
