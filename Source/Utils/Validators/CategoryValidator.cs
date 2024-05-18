@@ -1,7 +1,4 @@
-using FluentValidation;
-using OpenMovies.Models;
-
-namespace OpenMovies.Validators;
+namespace OpenMovies.WebApi.Validators;
 
 public class CategoryValidation : AbstractValidator<Category>
 {

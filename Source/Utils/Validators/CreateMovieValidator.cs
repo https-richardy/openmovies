@@ -1,7 +1,4 @@
-using FluentValidation;
-using OpenMovies.Models;
-
-namespace OpenMovies.Validators;
+namespace OpenMovies.WebApi.Validators;
 
 public class MovieValidation : AbstractValidator<Movie>
 {
@@ -11,7 +8,7 @@ public class MovieValidation : AbstractValidator<Movie>
             .NotEmpty().WithMessage("The title cannot be empty.")
             .Length(3, 100).WithMessage("The title must be between 3 and 100 characters.");
 
-        RuleFor(movie => movie.ReleaseDateOf)
+        RuleFor(movie => movie.ReleaseYear)
             .NotEmpty().WithMessage("The release date cannot be empty.");
 
         RuleFor(movie => movie.Synopsis)
