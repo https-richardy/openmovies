@@ -1,5 +1,4 @@
 /* add global usage directives for the System namespaces here */
-
 global using System.Text;
 global using System.Text.Json;
 global using System.Text.Json.Serialization;
@@ -17,6 +16,7 @@ global using Microsoft.AspNetCore.Identity;
 /* add global usage directives for application namespaces here */
 global using OpenMovies.WebApi.Models;
 global using OpenMovies.WebApi.Models.InputModels;
+global using OpenMovies.WebApi.Models.ViewModels;
 global using OpenMovies.WebApi.Data;
 global using OpenMovies.WebApi.Data.Repositories;
 global using OpenMovies.WebApi.Extensions;
