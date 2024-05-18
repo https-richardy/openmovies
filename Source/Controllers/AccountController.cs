@@ -4,48 +4,31 @@ namespace OpenMovies.WebApi.Controllers;
 [Route("api/accounts")]
 public class AccountController : ControllerBase
 {
-    private readonly UserManager<IdentityUser> _userManager;
-    private readonly AuthService _jwt;
+    private readonly IMediator _mediator;
 
-    public AccountController(UserManager<IdentityUser> userManager, AuthService jwt)
+    public AccountController(IMediator mediator)
     {
-        _userManager = userManager;
-        _jwt = jwt;
+        _mediator = mediator;
     }
 
     [HttpPost("register")]
     public async Task<ActionResult> RegisterAsync(AccountRegistrationRequest request)
     {
-        if (!ModelState.IsValid)
-            return BadRequest(ModelState);
-
-        var user = TinyMapper.Map<IdentityUser>(request);
-        var result = await _userManager.CreateAsync(user, request.Password);
-
-        if (!result.Succeeded)
-            return BadRequest(new { message = "Failed to create the user.", erros = result.Errors });
-
-        if (user == null)
-            return BadRequest(new { message = "Failed to create the user." });
-
-        await _userManager.AddToRoleAsync(user, Role.CommonUser);
-
-        var token = await _jwt.GenerateTokenResponseAsync(user);
-        return StatusCode(201, token);
+        try
+        {
+            var response = await _mediator.Send(request);
+            return StatusCode((int)HttpStatusCode.Created, response);
+        }
+        catch (UserAlreadyExistsException exception)
+        {
+            return Conflict(exception.Message);
+        }
     }
 
     [HttpPost("authenticate")]
     public async Task<ActionResult> AuthenticateAsync(AuthenticationRequest request)
     {
-        if (!ModelState.IsValid)
-            return BadRequest(ModelState);
-
-        var user = await _userManager.FindByEmailAsync(request.Email);
-
-        if (user == null || !await _userManager.CheckPasswordAsync(user, request.Password))
-            return BadRequest(new { message = "Invalid credentials." });
-
-        var token = await _jwt.GenerateTokenResponseAsync(user);
-        return Ok(token);
+        var response = await _mediator.Send(request);
+        return Ok(response);
     }
 }
