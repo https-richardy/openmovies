@@ -1,6 +1,3 @@
-using FluentValidation;
-using OpenMovies.Validators;
-
 namespace OpenMovies.WebApi.Services;
 
 public class MovieService : IMovieService
@@ -83,7 +80,7 @@ public class MovieService : IMovieService
             throw new InvalidOperationException("The movie category was not found.");
 
         existingMovie.Title = updatedMovie.Title;
-        existingMovie.ReleaseDateOf = updatedMovie.ReleaseDateOf;
+        existingMovie.ReleaseYear = updatedMovie.ReleaseYear;
         existingMovie.Synopsis = updatedMovie.Synopsis;
         existingMovie.Category = category;
 
