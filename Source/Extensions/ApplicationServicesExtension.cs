@@ -7,6 +7,8 @@ public static class ApplicationServicesExtension
         services.AddScoped<IMovieService, MovieService>();
         services.AddScoped<ICategoryService, CategoryService>();
 
+        services.AddScoped<IAccountService, AccountService>();
+
         services.AddFileUploadService(options =>
         {
             options.AllowedExtensions = new string[] { ".jpeg", ".jpg", ".png"};
