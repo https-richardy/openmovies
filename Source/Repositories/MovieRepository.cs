@@ -1,6 +1,3 @@
-using System.Linq.Expressions;
-using Microsoft.EntityFrameworkCore;
-
 namespace OpenMovies.WebApi.Data.Repositories;
 
 public class MovieRepository : IMovieRepository
@@ -68,7 +65,7 @@ public class MovieRepository : IMovieRepository
             query = query.Where(m => m.Title.ToLower().Contains(name.ToLower()));
 
         if (releaseYear.HasValue)
-            query = query.Where(m => m.ReleaseDateOf.Year == releaseYear);
+            query = query.Where(m => m.ReleaseYear == releaseYear);
 
         if (categoryId.HasValue)
             query = query.Where(m => m.Category.Id == categoryId);
