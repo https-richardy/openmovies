@@ -1,7 +1,6 @@
 #pragma warning disable CS8603
-using OpenMovies.Models;
 
-namespace OpenMovies.Utils;
+namespace OpenMovies.WebApi.Utils;
 
 public class Pagination<TEntity>
     where TEntity : Entity
