@@ -1,5 +1,3 @@
-using System.Linq.Expressions;
-
 namespace OpenMovies.WebApi.Data.Repositories;
 
 public interface IMovieRepository
