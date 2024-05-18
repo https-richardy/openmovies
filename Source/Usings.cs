@@ -30,3 +30,4 @@ global using OpenMovies.WebApi.Validators;
 /* add global usage directives for third-party namespaces here */
 global using Nelibur.ObjectMapper;
 global using FluentValidation;
+global using MediatR;
