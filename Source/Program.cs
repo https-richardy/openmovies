@@ -1,3 +1,5 @@
+using OpenMovies.WebApi.Middlewares;
+
 internal class Program
 {
     private static void Main(string[] args)
@@ -22,6 +24,8 @@ internal class Program
         app.MapControllers();
 
         app.UseStaticFiles();
+
+        app.UseValidationExceptionHandler();
 
         app.Run();
     }
