@@ -23,5 +23,10 @@ public static class MappingExtension
             config.Bind(source => source.UserName, target => target.UserName);
             config.Bind(source => source.Email, target => target.Email);
         });
+
+        TinyMapper.Bind<AuthenticationRequest, IdentityUser>(config =>
+        {
+            config.Bind(source => source.Email, target => target.Email);
+        });
     }
 }
