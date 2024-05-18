@@ -1,7 +1,3 @@
-using System.Linq.Expressions;
-
-using Microsoft.EntityFrameworkCore;
-
 namespace OpenMovies.WebApi.Data.Repositories;
 
 public class CategoryRepository : ICategoryRepository
