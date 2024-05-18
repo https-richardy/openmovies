@@ -1,4 +1,5 @@
 global using System.Text.Json.Serialization;
+global using System.Linq.Expressions;
 
 global using Microsoft.AspNetCore.Mvc;
 global using Microsoft.EntityFrameworkCore;
