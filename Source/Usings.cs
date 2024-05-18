@@ -13,6 +13,7 @@ global using OpenMovies.WebApi.Extensions;
 global using OpenMovies.WebApi.Services;
 global using OpenMovies.WebApi.Services.Exceptions;
 global using OpenMovies.WebApi.Utils;
+global using OpenMovies.WebApi.Validators;
 
 global using Nelibur.ObjectMapper;
 global using FluentValidation;
