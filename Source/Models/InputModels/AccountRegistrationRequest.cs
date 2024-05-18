@@ -1,4 +1,4 @@
-namespace OpenMovies.WebApi.Models.ViewModels;
+namespace OpenMovies.WebApi.Models.InputModels;
 
 public record AccountRegistrationRequest
 {
