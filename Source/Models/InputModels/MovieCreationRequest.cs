@@ -10,5 +10,5 @@ public sealed record MovieCreationRequest
     public int CategoryId { get; set; }
 
     public IFormFile Cover { get; set; }
-    public TimeSpan Duration { get; set; }
+    public Duration Duration { get; set; }
 }
