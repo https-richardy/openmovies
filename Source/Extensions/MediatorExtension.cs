@@ -10,5 +10,6 @@ public static class MediatorExtension
         });
 
         services.AddScoped<IRequestHandler<AccountRegistrationRequest, AccountRegistrationResponse>, AccountRegistrationHandler>();
+        services.AddScoped<IRequestHandler<AuthenticationRequest, AuthenticationResponse>, AuthenticationRequestHandler>();
     }
 }
