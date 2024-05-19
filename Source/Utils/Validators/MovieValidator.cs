@@ -1,8 +1,8 @@
 namespace OpenMovies.WebApi.Validators;
 
-public class MovieValidation : AbstractValidator<Movie>, IValidator<Movie>
+public class MovieValidator : AbstractValidator<Movie>, IValidator<Movie>
 {
-    public MovieValidation()
+    public MovieValidator()
     {
         RuleFor(movie => movie.Title)
             .NotEmpty().WithMessage("The title cannot be empty.")
