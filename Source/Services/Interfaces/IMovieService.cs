@@ -2,10 +2,10 @@ namespace OpenMovies.WebApi.Services;
 
 public interface IMovieService
 {
-    Task<Movie> GetMovieById(int id);
-    Task<IEnumerable<Movie>> GetAllMovies();
-    Task CreateMovie(Movie movie);
-    Task DeleteMovie(int movieId);
-    Task UpdateMovie(Movie updatedMovie);
-    Task<IEnumerable<Movie>> SearchMovies(string? name = null, int? releaseYear = null, int? categoryId = null);
+    Task<Movie> GetMovieByIdAsync(int id);
+    Task<IEnumerable<Movie>> GetAllMoviesAsync();
+    Task CreateMovieAsync(Movie movie);
+    Task DeleteMovieAsync(int movieId);
+    Task UpdateMovieAsync(Movie updatedMovie);
+    Task<IEnumerable<Movie>> SearchMoviesAsync(string? name = null, int? releaseYear = null, int? categoryId = null);
 }
