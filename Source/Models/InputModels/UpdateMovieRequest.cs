@@ -8,4 +8,5 @@ public sealed record UpdateMovieRequest
 
     public MovieCategory Category { get; set; }
     public IFormFile Cover { get; set; }
+    public Duration Duration { get; set; }
 }
