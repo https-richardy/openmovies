@@ -9,9 +9,6 @@ public static class ApplicationServicesExtension
 
         services.AddScoped<IAccountService, AccountService>();
 
-        services.AddFileUploadService(options =>
-        {
-            options.AllowedExtensions = new string[] { ".jpeg", ".jpg", ".png"};
-        });
+        services.AddFileUploadService();
     }
 }
