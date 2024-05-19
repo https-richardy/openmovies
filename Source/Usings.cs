@@ -18,6 +18,7 @@ global using Microsoft.AspNetCore.Identity;
 
 /* add global usage directives for application namespaces here */
 global using OpenMovies.WebApi.Models;
+global using OpenMovies.WebApi.Models.Enums;
 global using OpenMovies.WebApi.Models.InputModels;
 global using OpenMovies.WebApi.Models.ViewModels;
 global using OpenMovies.WebApi.Data;
