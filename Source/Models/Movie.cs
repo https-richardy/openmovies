@@ -8,7 +8,7 @@ public sealed class Movie : Entity
     public string VideoSource { get; set; }
     public int ReleaseYear { get; set; }
 
-    public Category Category { get; set; }
+    public MovieCategory Category { get; set; }
     public TimeSpan Duration { get; set; }
 
     public Movie()
@@ -19,7 +19,7 @@ public sealed class Movie : Entity
         */
     }
 
-    public Movie(string title, string synopsis, string imagePath, string videoSource, int releaseYear, Category category, TimeSpan duration)
+    public Movie(string title, string synopsis, string imagePath, string videoSource, int releaseYear, MovieCategory category, TimeSpan duration)
     {
         Title = title;
         Synopsis = synopsis;
