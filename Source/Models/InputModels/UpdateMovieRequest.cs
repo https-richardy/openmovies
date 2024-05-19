@@ -4,6 +4,7 @@ public sealed record UpdateMovieRequest
 {
     public string Title { get; set; }
     public string Synopsis { get; set; }
+    public string VideoSource { get; set; }
     public int ReleaseYear { get; set; }
 
     public MovieCategory Category { get; set; }
