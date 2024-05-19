@@ -1,6 +1,6 @@
 namespace OpenMovies.WebApi.Services;
 
-public class MovieService : IMovieService
+public sealed class MovieService : IMovieService
 {
     private readonly IMovieRepository _movieRepository;
 
@@ -25,10 +25,6 @@ public class MovieService : IMovieService
 
     public async Task CreateMovieAsync(Movie movie)
     {
-        var existingMovie = await _movieRepository.GetAsync(m => m.Title == movie.Title);
-        if (existingMovie != null)
-            throw new InvalidOperationException("A film with the same title already exists.");
-
         await _movieRepository.AddAsync(movie);
     }
 
@@ -46,13 +42,6 @@ public class MovieService : IMovieService
         var existingMovie = await _movieRepository.GetAsync(m => m.Id == updatedMovie.Id);
         if (existingMovie == null)
             throw new InvalidOperationException($"Movie with ID '{updatedMovie.Id}' not found.");
-
-        if (existingMovie.Title != updatedMovie.Title)
-        {
-            var movieWithSameTitle = await _movieRepository.GetAsync(m => m.Title == updatedMovie.Title);
-            if (movieWithSameTitle != null)
-                throw new InvalidOperationException("A film with the updated title already exists.");
-        }
 
         await _movieRepository.UpdateAsync(existingMovie);
     }
