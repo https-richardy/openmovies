@@ -6,5 +6,7 @@ public static class ValidationExtension
     {
         services.AddScoped<IValidator<AccountRegistrationRequest>, AccountRegistrationValidator>();
         services.AddScoped<IValidator<AuthenticationRequest>, AuthenticationRequestValidator>();
+
+        services.AddScoped<IValidator<Movie>, MovieValidator>();
     }
 }
