@@ -66,7 +66,7 @@ public class MovieRepository : IMovieRepository
             query = query.Where(m => m.ReleaseYear == releaseYear);
 
         if (categoryId.HasValue)
-            query = query.Where(m => m.Category.Id == categoryId);
+            query = query.Where(movie => (int)movie.Category == categoryId);
 
         return await query.ToListAsync();
     }
