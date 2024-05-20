@@ -11,6 +11,5 @@ public static class DataPersistenceExtension
         });
 
         services.AddScoped<IMovieRepository, MovieRepository>();
-        services.AddScoped<ICategoryRepository, CategoryRepository>();
     }
 }
