@@ -4,11 +4,13 @@ public sealed class MovieCreationHandler : IRequestHandler<MovieCreationRequest,
 {
     private readonly IMovieService _movieService;
     private readonly IValidator<Movie> _validator;
+    private readonly IFileUploadService _fileUploadService;
 
-    public MovieCreationHandler(IMovieService movieService, IValidator<Movie> validator)
+    public MovieCreationHandler(IMovieService movieService, IValidator<Movie> validator, IFileUploadService fileUploadService)
     {
         _movieService = movieService;
         _validator = validator;
+        _fileUploadService = fileUploadService;
     }
 
     public async Task<MovieCreationResponse> Handle(MovieCreationRequest request, CancellationToken cancellationToken)
@@ -18,6 +20,12 @@ public sealed class MovieCreationHandler : IRequestHandler<MovieCreationRequest,
 
         if (!validationResult.IsValid)
             throw new ValidationException(validationResult.Errors);
+
+        if (request.Cover != null)
+        {
+            var imagePath = await _fileUploadService.UploadFileAsync(request.Cover);
+            movie.ImagePath = imagePath;
+        }
 
         await _movieService.CreateMovieAsync(movie);
 
