@@ -3,6 +3,7 @@ namespace OpenMovies.WebApi.Services;
 public class FileUploadService : IFileUploadService
 {
     private readonly FileUploadOptions _options;
+    private const string _uploadsFolder = "uploads";
 
     /// <summary>
     /// Initializes a new instance of the <see cref="FileUploadService"/> class with default options.
@@ -27,7 +28,7 @@ public class FileUploadService : IFileUploadService
         */
         _options = new FileUploadOptions
         {
-            UploadsDirectory = Path.Combine(webHostEnvironment.WebRootPath, "uploads"),
+            UploadsDirectory = Path.Combine(webHostEnvironment.WebRootPath, _uploadsFolder),
         };
     }
 
@@ -82,6 +83,6 @@ public class FileUploadService : IFileUploadService
             await file.CopyToAsync(stream);
         }
 
-        return filePath;
+        return Path.Combine(_uploadsFolder, fileName);
     }
 }
