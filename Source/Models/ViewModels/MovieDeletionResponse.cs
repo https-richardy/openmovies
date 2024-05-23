@@ -9,7 +9,7 @@ public sealed class MovieDeletionResponse
     public static MovieDeletionResponse SuccessResponse() => new MovieDeletionResponse
     {
         Success = true,
-        Message = "Movie created successfully."
+        Message = "Movie deleted successfully."
     };
 
     public static MovieDeletionResponse FailureResponse(string message) => new MovieDeletionResponse
