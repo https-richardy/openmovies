@@ -5,33 +5,21 @@ namespace OpenMovies.WebApi.Controllers;
 public class MovieController : ControllerBase
 {
     private readonly IMovieService _movieService;
-    private readonly ICategoryService _categoryService;
-    private readonly IFileUploadService _fileUploadService;
+    private readonly IMediator _mediator;
 
     public MovieController(
         IMovieService movieService,
-        ICategoryService categoryService,
-        IFileUploadService fileUploadService)
+        IMediator mediator)
     {
         _movieService = movieService;
-        _categoryService = categoryService;
-        _fileUploadService = fileUploadService;
+        _mediator = mediator;
     }
 
     [HttpGet]
     public async Task<IActionResult> GetAllMoviesAsync([FromQuery] int pageNumber = 1, [FromQuery] int pageSize = 10)
     {
-        try
-        {
-            var movies = await _movieService.GetAllMovies();
-            var pagination = new Pagination<Movie>(movies, pageNumber, pageSize, HttpContext);
-
-            return Ok(pagination);
-        }
-        catch (Exception ex)
-        {
-            return StatusCode(500, new { message = ex.Message });
-        }
+        var movies = await _movieService.GetAllMoviesAsync();
+        return Ok(movies);
     }
 
     [HttpGet("{id}")]
@@ -39,7 +27,7 @@ public class MovieController : ControllerBase
     {
         try
         {
-            var retrievedMovie = await _movieService.GetMovieById(id);
+            var retrievedMovie = await _movieService.GetMovieByIdAsync(id);
             return Ok(retrievedMovie);
         }
         catch (InvalidOperationException ex)
@@ -51,26 +39,8 @@ public class MovieController : ControllerBase
     [HttpPost]
     public async Task<IActionResult> CreateMovieAsync(MovieCreationRequest request)
     {
-        try
-        {
-            var category = await _categoryService.GetCategoryById(request.CategoryId);
-
-            var movie = TinyMapper.Map<Movie>(request);
-
-            if (request.Cover != null)
-            {
-                var imagePath = await _fileUploadService.UploadFileAsync(request.Cover);
-                movie.ImagePath = imagePath;
-            }
-
-            await _movieService.CreateMovie(movie);
-
-            return StatusCode(201, movie);
-        }
-        catch (InvalidOperationException ex)
-        {
-            return NotFound(new { message = ex.Message });
-        }
+        var response = await _mediator.Send(request);
+        return StatusCode((int)HttpStatusCode.Created, response);
     }
 
     [HttpPut("{id}")]
@@ -78,20 +48,10 @@ public class MovieController : ControllerBase
     {
         try
         {
-            var existingMovie = await _movieService.GetMovieById(id);
+            var existingMovie = await _movieService.GetMovieByIdAsync(id);
             existingMovie = TinyMapper.Map<Movie>(request);
 
-            var category = await _categoryService.GetCategoryById(request.CategoryId);
-
-            existingMovie.Category = category;
-
-            if (request.Cover != null)
-            {
-                var imagePath = await _fileUploadService.UploadFileAsync(request.Cover);
-                existingMovie.ImagePath = imagePath;
-            }
-
-            await _movieService.UpdateMovie(existingMovie);
+            await _movieService.UpdateMovieAsync(existingMovie);
 
             return NoContent();
         }
@@ -102,12 +62,12 @@ public class MovieController : ControllerBase
     }
 
     [HttpDelete("{id}")]
-    public async Task<IActionResult> DeleteMovieAsync(int id)
+    public async Task<IActionResult> DeleteMovieAsync(MovieDeletionRequest request)
     {
         try
         {
-            await _movieService.DeleteMovie(id);
-            return NoContent();
+            var response = await _mediator.Send(request.MovieId);
+            return Ok(response);
         }
         catch (InvalidOperationException ex)
         {
@@ -119,16 +79,12 @@ public class MovieController : ControllerBase
     public async Task<IActionResult> SearchMovieAsync(
         [FromQuery] string? name = null,
         [FromQuery] int? releaseYear = null,
-        [FromQuery] int? categoryId = null,
-        [FromQuery] int pageNumber = 1,
-        [FromQuery] int pageSize = 10)
+        [FromQuery] int? categoryId = null)
     {
         try
         {
-            var movies = await _movieService.SearchMovies(name, releaseYear, categoryId);
-            var pagination = new Pagination<Movie>(movies, pageNumber, pageSize, HttpContext);
-
-            return Ok(pagination);
+            var movies = await _movieService.SearchMoviesAsync(name, releaseYear, categoryId);
+            return Ok(movies);
         }
         catch (Exception ex)
         {
