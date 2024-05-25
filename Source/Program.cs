@@ -2,7 +2,7 @@ using OpenMovies.WebApi.Middlewares;
 
 internal class Program
 {
-    private static void Main(string[] args)
+    private static async Task Main(string[] args)
     {
         var builder = WebApplication.CreateBuilder(args);
         var configuration = builder.Configuration;
@@ -26,6 +26,8 @@ internal class Program
         app.UseStaticFiles();
 
         app.UseValidationExceptionHandler();
+
+        await Initialization.InitializeAsync(app.Services);
 
         app.Run();
     }
