@@ -1,6 +1,6 @@
 namespace OpenMovies.WebApi.Models.InputModels;
 
-public sealed record MovieDeletionRequest : IRequest<MovieDeletionResponse>
+public sealed record MovieDeletionRequest : IRequest<OperationResult>
 {
     public int MovieId { get; set; }
 }

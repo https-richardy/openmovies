@@ -1,6 +1,6 @@
 namespace OpenMovies.WebApi.Models.InputModels;
 
-public sealed record MovieCreationRequest : IRequest<MovieCreationResponse>
+public sealed record MovieCreationRequest : IRequest<OperationResult>
 {
     public string Title { get; set; }
     public string Synopsis { get; set; }
