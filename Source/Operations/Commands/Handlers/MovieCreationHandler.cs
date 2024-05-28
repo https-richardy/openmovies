@@ -1,6 +1,6 @@
 namespace OpenMovies.WebApi.Operations.Commands.Handlers;
 
-public sealed class MovieCreationHandler : IRequestHandler<MovieCreationRequest, MovieCreationResponse>
+public sealed class MovieCreationHandler : IRequestHandler<MovieCreationRequest, OperationResult>
 {
     private readonly IMovieService _movieService;
     private readonly IValidator<Movie> _validator;
@@ -13,7 +13,7 @@ public sealed class MovieCreationHandler : IRequestHandler<MovieCreationRequest,
         _fileUploadService = fileUploadService;
     }
 
-    public async Task<MovieCreationResponse> Handle(MovieCreationRequest request, CancellationToken cancellationToken)
+    public async Task<OperationResult> Handle(MovieCreationRequest request, CancellationToken cancellationToken)
     {
         var movie = TinyMapper.Map<Movie>(request);
         var validationResult = await _validator.ValidateAsync(movie);
@@ -29,6 +29,6 @@ public sealed class MovieCreationHandler : IRequestHandler<MovieCreationRequest,
 
         await _movieService.CreateMovieAsync(movie);
 
-        return MovieCreationResponse.SuccessResponse();
+        return OperationResult.SuccessResponse("Movie created successfully.");
     }
 }
