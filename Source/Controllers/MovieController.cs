@@ -25,15 +25,8 @@ public class MovieController : ControllerBase
     [HttpGet("{id}")]
     public async Task<IActionResult> GetMovieByIdAsync(int id)
     {
-        try
-        {
-            var retrievedMovie = await _movieService.GetMovieByIdAsync(id);
-            return Ok(retrievedMovie);
-        }
-        catch (InvalidOperationException ex)
-        {
-            return NotFound(new { message = ex.Message });
-        }
+        var retrievedMovie = await _movieService.GetMovieByIdAsync(id);
+        return Ok(retrievedMovie);
     }
 
     [HttpPost]
@@ -46,33 +39,17 @@ public class MovieController : ControllerBase
     [HttpPut("{id}")]
     public async Task<IActionResult> UpdateMovieAsync(int id, UpdateMovieRequest request)
     {
-        try
-        {
-            var existingMovie = await _movieService.GetMovieByIdAsync(id);
-            existingMovie = TinyMapper.Map<Movie>(request);
+        var existingMovie = await _movieService.GetMovieByIdAsync(id);
+        await _movieService.UpdateMovieAsync(existingMovie);
 
-            await _movieService.UpdateMovieAsync(existingMovie);
-
-            return NoContent();
-        }
-        catch (InvalidOperationException ex)
-        {
-            return NotFound(new { message = ex.Message });
-        }
+        return NoContent();
     }
 
     [HttpDelete("{id}")]
     public async Task<IActionResult> DeleteMovieAsync(MovieDeletionRequest request)
     {
-        try
-        {
-            var response = await _mediator.Send(request.MovieId);
-            return Ok(response);
-        }
-        catch (InvalidOperationException ex)
-        {
-            return NotFound(new { message = ex.Message });
-        }
+        var response = await _mediator.Send(request.MovieId);
+        return Ok(response);
     }
 
     [HttpGet("search")]
@@ -81,14 +58,7 @@ public class MovieController : ControllerBase
         [FromQuery] int? releaseYear = null,
         [FromQuery] int? categoryId = null)
     {
-        try
-        {
-            var movies = await _movieService.SearchMoviesAsync(name, releaseYear, categoryId);
-            return Ok(movies);
-        }
-        catch (Exception ex)
-        {
-            return StatusCode(500, new { message = ex.Message });
-        }
+        var movies = await _movieService.SearchMoviesAsync(name, releaseYear, categoryId);
+        return Ok(movies);
     }
 }
