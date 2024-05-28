@@ -13,5 +13,6 @@ public static class MediatorExtension
         services.AddScoped<IRequestHandler<AuthenticationRequest, AuthenticationResponse>, AuthenticationRequestHandler>();
 
         services.AddScoped<IRequestHandler<MovieCreationRequest, OperationResult>, MovieCreationHandler>();
+        services.AddScoped<IRequestHandler<MovieDeletionRequest, OperationResult>, MovieDeletionHandler>();
     }
 }
