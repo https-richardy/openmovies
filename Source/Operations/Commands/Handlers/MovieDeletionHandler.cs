@@ -1,6 +1,6 @@
 namespace OpenMovies.WebApi.Operations.Commands.Handlers;
 
-public sealed class MovieDeletionHandler : IRequestHandler<MovieDeletionRequest, MovieDeletionResponse>
+public sealed class MovieDeletionHandler : IRequestHandler<MovieDeletionRequest, OperationResult>
 {
     private readonly IMovieService _movieService;
 
@@ -9,16 +9,16 @@ public sealed class MovieDeletionHandler : IRequestHandler<MovieDeletionRequest,
         _movieService = movieService;
     }
 
-    public async Task<MovieDeletionResponse> Handle(MovieDeletionRequest request, CancellationToken cancellationToken)
+    public async Task<OperationResult> Handle(MovieDeletionRequest request, CancellationToken cancellationToken)
     {
         try
         {
             await _movieService.DeleteMovieAsync(request.MovieId);
-            return MovieDeletionResponse.SuccessResponse();
+            return OperationResult.SuccessResponse("Movie deleted successfully.");
         }
         catch (InvalidOperationException exception)
         {
-            return MovieDeletionResponse.FailureResponse(exception.Message);
+            return OperationResult.FailureResponse(exception.Message);
         }
     }
 }
