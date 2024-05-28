@@ -7,6 +7,7 @@ public record AuthenticationResponse : OperationResult
     public static new AuthenticationResponse SuccessResponse(string token) => new AuthenticationResponse
     {
         Success = true,
+        Message = "authenticated successfully.",
         Token = token
     };
 
