@@ -13,7 +13,7 @@ public sealed class MovieService : IMovieService
     {
         var movie = await _movieRepository.GetAsync(m => m.Id == id);
         if (movie == null)
-            throw new InvalidOperationException($"Movie with ID '{id}' not found.");
+            throw new ObjectDoesNotExistException($"Movie with ID '{id}' not found.");
 
         return movie;
     }
@@ -32,7 +32,7 @@ public sealed class MovieService : IMovieService
     {
         var movie = await _movieRepository.GetAsync(m => m.Id == movieId);
         if (movie == null)
-            throw new InvalidOperationException($"Movie with ID '{movieId}' not found.");
+            throw new ObjectDoesNotExistException($"Movie with ID '{movieId}' not found.");
 
         await _movieRepository.DeleteAsync(movie);
     }
@@ -41,7 +41,7 @@ public sealed class MovieService : IMovieService
     {
         var existingMovie = await _movieRepository.GetAsync(m => m.Id == updatedMovie.Id);
         if (existingMovie == null)
-            throw new InvalidOperationException($"Movie with ID '{updatedMovie.Id}' not found.");
+            throw new ObjectDoesNotExistException($"Movie with ID '{updatedMovie.Id}' not found.");
 
         await _movieRepository.UpdateAsync(existingMovie);
     }
