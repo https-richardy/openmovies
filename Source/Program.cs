@@ -26,6 +26,7 @@ internal class Program
         app.UseStaticFiles();
 
         app.UseValidationExceptionHandler();
+        app.UseObjectDoesNotExistExceptionHandler();
 
         await Initialization.InitializeAsync(app.Services);
 
