@@ -17,12 +17,12 @@ public sealed class AccountService : IAccountService
         var user = await _userManager.FindByEmailAsync(request.Email);
 
         if (user == null)
-            return AuthenticationResponse.FailureResponse("User does not exist.");
+            throw new ObjectDoesNotExistException("User does not exist.");
 
         var passwordIsCorrect = await _userManager.CheckPasswordAsync(user, request.Password);
 
         if (!passwordIsCorrect)
-            return AuthenticationResponse.FailureResponse();
+            return AuthenticationResponse.InvalidCredentialsResponse();
 
         var claimsIdentity = new ClaimsIdentity(new[]
         {
