@@ -37,7 +37,7 @@ public sealed class AccountService : IAccountService
         return successfulAuthenticationResponse;
     }
 
-    public async Task<AccountRegistrationResponse> RegisterUserAsync(AccountRegistrationRequest request)
+    public async Task<OperationResult> RegisterUserAsync(AccountRegistrationRequest request)
     {
         var existingUser = await _userManager.FindByEmailAsync(request.Email);
 
@@ -48,10 +48,10 @@ public sealed class AccountService : IAccountService
         var result = await _userManager.CreateAsync(newUser, request.Password);
 
         if (!result.Succeeded)
-            return AccountRegistrationResponse.FailureResponse("Failed to create user.");
+            return OperationResult.FailureResponse("Failed to create user.");
 
         await _userManager.AddClaimAsync(newUser, new Claim(ClaimTypes.Role, Role.CommonUser));
 
-        return AccountRegistrationResponse.SuccessResponse();
+        return OperationResult.SuccessResponse("User created successfully.");
     }
 }
