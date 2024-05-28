@@ -1,6 +1,6 @@
 namespace OpenMovies.WebApi.Operations.Commands.Handlers;
 
-public sealed class AccountRegistrationHandler : IRequestHandler<AccountRegistrationRequest, AccountRegistrationResponse>
+public sealed class AccountRegistrationHandler : IRequestHandler<AccountRegistrationRequest, OperationResult>
 {
     private readonly IAccountService _accountService;
     private readonly IValidator<AccountRegistrationRequest> _validator;
@@ -11,7 +11,7 @@ public sealed class AccountRegistrationHandler : IRequestHandler<AccountRegistra
         _validator = validator;
     }
 
-    public async Task<AccountRegistrationResponse> Handle(AccountRegistrationRequest request, CancellationToken cancellationToken)
+    public async Task<OperationResult> Handle(AccountRegistrationRequest request, CancellationToken cancellationToken)
     {
         var validationResult = await _validator.ValidateAsync(request);
 
