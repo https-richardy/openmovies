@@ -2,7 +2,6 @@
 
 namespace OpenMovies.WebApi.Extensions;
 
-
 /*
    BootstrapExtension serves the purpose of initializing essential configurations
    during the application startup. Specifically, it ensures the existence of a
