@@ -23,10 +23,5 @@ public sealed class EpisodeEntityConfiguration : IEntityTypeConfiguration<Episod
 
         builder.Property(episode => episode.SeasonNumber)
             .IsRequired();
-
-        builder.HasOne(episode => episode.Media)
-            .WithMany()
-            .HasForeignKey(episode => episode.Media.Id)
-            .OnDelete(DeleteBehavior.Cascade);
     }
 }
