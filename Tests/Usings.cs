@@ -12,6 +12,7 @@ global using System.Security.Claims;
 
 global using Microsoft.AspNetCore.Http;
 global using Microsoft.AspNetCore.Identity;
+global using Microsoft.EntityFrameworkCore;
 
 /* add global usage directives for application namespaces here */
 
