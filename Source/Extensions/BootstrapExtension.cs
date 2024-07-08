@@ -44,6 +44,9 @@ public static class BootstrapExtension
                 Console.WriteLine("super-admin user not found. Let's create a new one.");
                 Console.ResetColor();
 
+                Console.Write("Enter an username: ");
+                var username = Console.ReadLine();
+
                 Console.Write("Enter an email: ");
                 var email = Console.ReadLine();
 
@@ -52,7 +55,7 @@ public static class BootstrapExtension
 
                 var superAdminUser = new IdentityUser
                 {
-                    UserName = email,
+                    UserName = username,
                     Email = email,
                 };
 
