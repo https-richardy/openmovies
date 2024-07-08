@@ -9,5 +9,7 @@ public static class DataPersistenceExtension
         {
             options.UseSqlite(connectionString);
         });
+
+        services.AddScoped<IMovieRepository, MovieRepository>();
     }
 }
