@@ -4,11 +4,11 @@ namespace OpenMovies.WebApi.Services;
 /// Provides eoptionstensions for configuring JWT services.
 /// </summary>
 /// <remarks>
-/// This class contains eoptionstension methods for adding JWT-related services to the
+/// This class contains extension methods for adding JWT-related services to the
 /// dependency injection container, allowing easy integration with authentication and
 /// authorization in ASP.NET Core applications.
 /// </remarks>
-public static class JwtServiceEoptionstensions
+public static class JwtServiceExtensions
 {
 
     /// <summary>
