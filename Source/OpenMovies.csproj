@@ -30,7 +30,7 @@
 
 
   <ItemGroup>
-    <Content Include="Data/db.sqlite">
+    <Content Include="Data/database.sqlite">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
   </ItemGroup>
