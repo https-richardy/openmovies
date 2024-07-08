@@ -8,6 +8,7 @@ public sealed class Episode : Entity
     public int Number { get; set; }
     public int SeasonNumber { get; set; }
     public Media Media { get; set; }
+    public Series Series { get; set; }
 
     public Episode()
     {
