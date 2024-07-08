@@ -1,6 +1,6 @@
 namespace OpenMovies.WebApi.Payloads;
 
-public record AuthenticationCredentials
+public sealed record AuthenticationCredentials
 {
     public string Email { get; init; }
     public string Password { get; init; }
