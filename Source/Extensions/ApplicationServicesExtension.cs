@@ -4,9 +4,6 @@ public static class ApplicationServicesExtension
 {
     public static void AddApplicationServices(this IServiceCollection services)
     {
-        services.AddScoped<IMovieService, MovieService>();
-        services.AddScoped<IAccountService, AccountService>();
-
         services.AddFileUploadService();
     }
 }
