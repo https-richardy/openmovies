@@ -20,7 +20,6 @@ public sealed class MovieEntityConfiguration : IEntityTypeConfiguration<Movie>
             .IsRequired();
 
         builder.Property(movie => movie.VideoSource)
-            .HasMaxLength(700)
             .IsRequired();
 
         builder.Property(movie => movie.ReleaseYear)
