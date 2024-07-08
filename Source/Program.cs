@@ -24,9 +24,7 @@ internal class Program
         app.MapControllers();
 
         app.UseStaticFiles();
-
         app.UseValidationExceptionHandler();
-        app.UseObjectDoesNotExistExceptionHandler();
 
         await Initialization.InitializeAsync(app.Services);
 
