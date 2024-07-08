@@ -30,8 +30,8 @@ global using OpenMovies.WebApi.Operations.Commands.Handlers;
 global using OpenMovies.WebApi.Operations.Queries.Handlers;
 global using OpenMovies.WebApi.Identity;
 global using OpenMovies.WebApi.Utils;
-global using OpenMovies.WebApi.Exceptions;
 global using OpenMovies.WebApi.Validators;
+global using OpenMovies.WebApi.Middlewares;
 
 /* add global usage directives for third-party namespaces here */
 global using Nelibur.ObjectMapper;
