@@ -22,6 +22,7 @@ global using Microsoft.AspNetCore.Identity;
 /* add global usage directives for application namespaces here */
 
 global using OpenMovies.WebApi.Data;
+global using OpenMovies.WebApi.Data.Repositories;
 global using OpenMovies.WebApi.Extensions;
 global using OpenMovies.WebApi.Entities;
 global using OpenMovies.WebApi.Services;
