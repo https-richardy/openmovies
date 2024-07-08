@@ -14,15 +14,8 @@ public class AccountController : ControllerBase
     [HttpPost("register")]
     public async Task<ActionResult> RegisterAsync(AccountRegistrationRequest request)
     {
-        try
-        {
             var response = await _mediator.Send(request);
             return StatusCode((int)HttpStatusCode.Created, response);
-        }
-        catch (UserAlreadyExistsException exception)
-        {
-            return Conflict(exception.Message);
-        }
     }
 
     [HttpPost("authenticate")]
