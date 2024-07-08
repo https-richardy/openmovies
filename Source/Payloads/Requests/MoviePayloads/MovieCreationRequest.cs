@@ -8,6 +8,7 @@ public sealed record MovieCreationRequest : AuthenticatedRequest
 
     public int ReleaseYear { get; init; }
     public int DurationInMinutes { get; init; }
+    public int CategoryId { get; init; }
 
     public IFormFile Image { get; init; }
 }
