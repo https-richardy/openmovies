@@ -25,12 +25,15 @@ public sealed class AccountRegistrationValidatorTest
         Assert.Contains("Email is required.", errorMessages);
     }
 
-    [Fact(DisplayName = "Given an invalid email format, there must be a validation error")]
-    public async Task GivenInvalidEmailFormat_ShouldHaveValidationError()
+    [Theory(DisplayName = "Given an invalid email format, should have validation error")]
+    [InlineData("invalid")]
+    [InlineData("invalid@")]
+    [InlineData("email.com")]
+    public async Task GivenInvalidEmailFormat_ShouldHaveValidationError(string email)
     {
         var payload = new AccountRegistrationRequest
         {
-            Email = "invalid"
+            Email = email
         };
 
         var result = await _validator.ValidateAsync(payload);
