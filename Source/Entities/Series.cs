@@ -1,8 +1,14 @@
 namespace OpenMovies.WebApi.Entities;
 
-public sealed class Series : Media
+public sealed class Series : Entity
 {
+    public string Title { get; set; }
+    public string Synopsis { get; set; }
+    public string ImageUrl { get; set; }
+    public int ReleaseYear { get; set; }
     public int Seasons { get; set; }
+
+    public Category Category { get; set; }
     public ICollection<Episode> Episodes { get; set; }
 
     public Series()
