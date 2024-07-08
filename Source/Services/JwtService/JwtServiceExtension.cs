@@ -1,14 +1,14 @@
 namespace OpenMovies.WebApi.Services;
 
 /// <summary>
-/// Provides extensions for configuring JWT services.
+/// Provides eoptionstensions for configuring JWT services.
 /// </summary>
 /// <remarks>
-/// This class contains extension methods for adding JWT-related services to the
+/// This class contains eoptionstension methods for adding JWT-related services to the
 /// dependency injection container, allowing easy integration with authentication and
 /// authorization in ASP.NET Core applications.
 /// </remarks>
-public static class JwtServiceExtensions
+public static class JwtServiceEoptionstensions
 {
 
     /// <summary>
@@ -21,13 +21,14 @@ public static class JwtServiceExtensions
     public static void AddJwtBearer(this IServiceCollection services, IConfiguration configuration)
     {
         services.AddScoped<IJwtService, JwtService>();
-        var secretKey = Encoding.ASCII.GetBytes(configuration["Jwt:SecretKey"]);
+        var secretKey = Encoding.ASCII.GetBytes(configuration["JwtSettings:SecretKey"]);
 
-        services.AddAuthentication(x =>
+        services.AddAuthentication(options =>
         {
-            x.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
-            x.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
-        }).AddJwtBearer(options =>
+            options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+            options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+        })
+        .AddJwtBearer(options =>
         {
             options.TokenValidationParameters = new TokenValidationParameters
             {
@@ -38,6 +39,7 @@ public static class JwtServiceExtensions
                 ClockSkew = TimeSpan.FromMinutes(5)
             };
         });
+
         services.AddAuthorization();
     }
 
@@ -50,16 +52,17 @@ public static class JwtServiceExtensions
     public static void AddJwtBearer(this IServiceCollection services, IConfiguration configuration, Action<JwtOptions> configureOptions)
     {
         var options = new JwtOptions();
-        var secretKey = Encoding.ASCII.GetBytes(configuration["Jwt:SecretKey"]);
+        var secretKey = Encoding.ASCII.GetBytes(configuration["JwtSettings:SecretKey"]);
 
         configureOptions(options);
 
         services.AddScoped<IJwtService, JwtService>(provider => new JwtService(configuration, options));
-        services.AddAuthentication(x =>
+        services.AddAuthentication(options =>
         {
-            x.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
-            x.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
-        }).AddJwtBearer(options =>
+            options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+            options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+        })
+        .AddJwtBearer(options =>
         {
             options.TokenValidationParameters = new TokenValidationParameters
             {
@@ -70,6 +73,7 @@ public static class JwtServiceExtensions
                 ClockSkew = TimeSpan.FromMinutes(5)
             };
         });
+ 
         services.AddAuthorization();
     }
 }
