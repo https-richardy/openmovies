@@ -21,10 +21,5 @@ public sealed class SeriesEntityConfiguration : IEntityTypeConfiguration<Series>
 
         builder.Property(series => series.ReleaseYear)
             .IsRequired();
-
-        builder.HasMany(series => series.Episodes)
-            .WithOne(series => series.Series)
-            .HasForeignKey(episode => episode.Series.Id)
-            .OnDelete(DeleteBehavior.Cascade);
     }
 }
