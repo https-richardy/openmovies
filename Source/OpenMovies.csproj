@@ -28,4 +28,11 @@
     <PackageReference Include="TinyMapper" Version="3.0.3" />
   </ItemGroup>
 
+
+  <ItemGroup>
+    <Content Include="Data/db.sqlite">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+  </ItemGroup>
+
 </Project>
