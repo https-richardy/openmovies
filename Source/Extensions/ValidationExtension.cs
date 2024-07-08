@@ -7,6 +7,7 @@ public static class ValidationExtension
         #region validators for identity
 
         services.AddScoped<IValidator<AccountRegistrationRequest>, AccountRegistrationValidator>();
+        services.AddScoped<IValidator<AuthenticationCredentials>, AuthenticationCredentialsValidator>();
 
         #endregion
     }
