@@ -1,6 +1,4 @@
-using OpenMovies.WebApi.Middlewares;
-
-internal class Program
+internal static class Program
 {
     private static void Main(string[] args)
     {
@@ -15,18 +13,11 @@ internal class Program
         {
             app.UseSwagger();
             app.UseSwaggerUI();
+            app.Bootstrap();
         }
 
-        app.UseCors(x => x.AllowAnyOrigin().AllowAnyHeader());
-        app.UseHttpsRedirection();
-
-        app.UseAuthorization();
+        app.ConfigureHttpPipeline();
         app.MapControllers();
-
-        app.UseStaticFiles();
-        app.UseValidationExceptionHandler();
-
-        app.Bootstrap();
         app.Run();
     }
 }
