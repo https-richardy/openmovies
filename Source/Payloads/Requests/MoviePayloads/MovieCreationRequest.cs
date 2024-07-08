@@ -1,6 +1,6 @@
 namespace OpenMovies.WebApi.Payloads;
 
-public sealed record MovieCreationRequest : AuthenticatedRequest
+public sealed record MovieCreationRequest : AuthenticatedRequest, IRequest<Response>
 {
     public string Title { get; init; }
     public string Synopsis { get; init; }
