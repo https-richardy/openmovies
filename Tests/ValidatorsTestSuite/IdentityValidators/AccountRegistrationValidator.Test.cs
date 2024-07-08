@@ -127,4 +127,21 @@ public sealed class AccountRegistrationValidatorTest
         Assert.False(result.IsValid);
         Assert.Contains("Password must contain at least one uppercase letter, one lowercase letter, one digit, and one special character.", errorMessages);
     }
+
+    [Fact(DisplayName = "Given a valid payload, should not have validation error")]
+    public async Task GivenValidPayload_ShouldNotHaveValidationError()
+    {
+        var payload = new AccountRegistrationRequest
+        {
+            FullName = "John Doe",
+            Email = "hOQpF@example.com",
+            Password = "Password123!"
+        };
+
+        var result = await _validator.ValidateAsync(payload);
+
+        Assert.NotNull(result);
+        Assert.True(result.IsValid);
+        Assert.Empty(result.Errors);
+    }
 }
