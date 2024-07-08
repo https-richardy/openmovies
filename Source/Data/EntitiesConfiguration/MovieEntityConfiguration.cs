@@ -1,6 +1,6 @@
 namespace OpenMovies.WebApi.Data.Configuration;
 
-public class MovieEntityConfiguration : IEntityTypeConfiguration<Movie>
+public sealed class MovieEntityConfiguration : IEntityTypeConfiguration<Movie>
 {
     public void Configure(EntityTypeBuilder<Movie> builder)
     {
