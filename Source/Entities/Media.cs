@@ -5,6 +5,7 @@ public abstract class Media : Entity
     public string Title { get; set; }
     public string Synopsis { get; set; }
     public string ImageUrl { get; set; }
+    public int ReleaseYear { get; set; }
     public Category Category { get; set; }
 
     public Media()
