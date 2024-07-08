@@ -4,5 +4,10 @@ public static class ValidationExtension
 {
     public static void AddValidation(this IServiceCollection services)
     {
+        #region validators for identity
+
+        services.AddScoped<IValidator<AccountRegistrationRequest>, AccountRegistrationValidator>();
+
+        #endregion
     }
 }
