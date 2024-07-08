@@ -12,6 +12,7 @@ public static class MediatorExtension
         #region handlers for identity
 
         services.AddScoped<IRequestHandler<AccountRegistrationRequest, Response>, AccountRegistrationHandler>();
+        services.AddScoped<IRequestHandler<AuthenticationCredentials, Response<AuthenticationResponse>>, AuthenticationHandler>();
 
         #endregion
     }
