@@ -26,8 +26,7 @@ internal class Program
         app.UseStaticFiles();
         app.UseValidationExceptionHandler();
 
-        await Initialization.InitializeAsync(app.Services);
-
+        app.Bootstrap();
         app.Run();
     }
 }
