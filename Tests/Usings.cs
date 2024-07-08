@@ -28,3 +28,4 @@ global using OpenMovies.WebApi.Middlewares;
 global using Moq;
 global using AutoFixture;
 global using FluentValidation;
+global using MediatR;
