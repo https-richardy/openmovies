@@ -23,7 +23,7 @@ public sealed class JwtService : IJwtService
     /// </remarks>
     public JwtService(IConfiguration configuration)
     {
-        _secretKey = Encoding.ASCII.GetBytes(configuration["Jwt:SecretKey"]);
+        _secretKey = Encoding.ASCII.GetBytes(configuration["JwtSettings:SecretKey"]);
         _options = new JwtOptions { Key = _secretKey }; 
     }
 
