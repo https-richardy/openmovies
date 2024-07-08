@@ -10,6 +10,7 @@ global using System.Security.Claims;
 
 /* add global usage directives for the Microsoft namespaces here */
 
+global using Microsoft.AspNetCore.Http;
 global using Microsoft.AspNetCore.Identity;
 
 /* add global usage directives for application namespaces here */
