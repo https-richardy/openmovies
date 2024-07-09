@@ -16,5 +16,11 @@ public static class ValidationExtension
         services.AddScoped<IValidator<MovieCreationRequest>, MovieCreationValidator>();
 
         #endregion
+
+        #region validators for categories
+
+        services.AddScoped<IValidator<CategoryCreationRequest>, CategoryCreationValidator>();
+
+        #endregion
     }
 }
