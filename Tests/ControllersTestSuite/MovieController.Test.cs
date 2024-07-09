@@ -221,7 +221,7 @@ public sealed class MovieControllerTest
         };
 
         _mediatorMock
-            .Setup(mediator => mediator.Send(It.Is<MovieDetailsRequest>(r => r.MovieId == movieId), default))
+            .Setup(mediator => mediator.Send(It.Is<MovieDetailsRequest>(request => request.MovieId == movieId), default))
             .ReturnsAsync(expectedResponse);
 
         var result = await _controller.GetMovieAsync(movieId);
@@ -244,7 +244,7 @@ public sealed class MovieControllerTest
         };
 
         _mediatorMock
-            .Setup(mediator => mediator.Send(It.Is<MovieDetailsRequest>(r => r.MovieId == movieId), default))
+            .Setup(mediator => mediator.Send(It.Is<MovieDetailsRequest>(request => request.MovieId == movieId), default))
             .ReturnsAsync(expectedResponse);
 
         var result = await _controller.GetMovieAsync(movieId);
