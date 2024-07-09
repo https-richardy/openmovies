@@ -4,6 +4,7 @@ public sealed class AppDbContext(DbContextOptions options) : IdentityDbContext(o
 {
     public DbSet<Category> Categories { get; set; }
     public DbSet<Movie> Movies { get; set; }
+    public DbSet<BookmarkedMovie> BookmarkedMovies { get; set; }
     public DbSet<Episode> Episodes { get; set; }
     public DbSet<Series> Series { get; set; }
 
