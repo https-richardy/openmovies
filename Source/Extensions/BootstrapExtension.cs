@@ -14,6 +14,7 @@ namespace OpenMovies.WebApi.Extensions;
 
 public static class BootstrapExtension
 {
+    [ExcludeFromCodeCoverage]
     public static async void Bootstrap(this IApplicationBuilder builder)
     {
         var serviceProvider = builder.ApplicationServices;
