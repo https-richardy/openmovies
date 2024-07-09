@@ -27,5 +27,9 @@ public sealed class MovieUpdateValidator :
         RuleFor(movie => movie.CategoryId)
             .NotEmpty().WithMessage("Movie category is required.")
             .GreaterThan(0).WithMessage("Movie category must be greater than 0.");
+
+        RuleFor(movie => movie.MovieId)
+            .NotEmpty().WithMessage("Movie id is required.")
+            .GreaterThan(0).WithMessage("Movie id must be greater than 0.");
     }
 }
