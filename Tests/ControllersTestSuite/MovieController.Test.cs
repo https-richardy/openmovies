@@ -106,7 +106,7 @@ public sealed class MovieControllerTest
             .Setup(mediator => mediator.Send(request, default))
             .ReturnsAsync(expectedResponse);
 
-        var response = await _controller.UpdateMovieAsync(request);
+        var response = await _controller.UpdateMovieAsync(request, request.MovieId);
         var objectResult = response as ObjectResult;
         var objectResultValue = objectResult?.Value as Response;
 
@@ -143,7 +143,7 @@ public sealed class MovieControllerTest
             .Setup(mediator => mediator.Send(request, default))
             .ThrowsAsync(new ValidationException("Invalid request"));
 
-        var exception = await Assert.ThrowsAsync<ValidationException>(() => _controller.UpdateMovieAsync(request));
+        var exception = await Assert.ThrowsAsync<ValidationException>(() => _controller.UpdateMovieAsync(request, request.MovieId));
 
         _mediatorMock
             .Verify(mediator => mediator.Send(request, default), Times.Once);
