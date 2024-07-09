@@ -491,3 +491,5 @@ $RECYCLE.BIN/
 **/*.sqlite
 **/*.sqlite-shm
 **/*.sqlite-wal
+
+**/Report
