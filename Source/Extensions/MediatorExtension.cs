@@ -2,6 +2,7 @@ namespace OpenMovies.WebApi.Extensions;
 
 public static class MediatorExtension
 {
+    [ExcludeFromCodeCoverage]
     public static void AddMediator(this IServiceCollection services)
     {
         services.AddMediatR(configuration =>
