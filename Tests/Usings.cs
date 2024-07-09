@@ -24,6 +24,7 @@ global using OpenMovies.WebApi.Services;
 global using OpenMovies.WebApi.Services.Exceptions;
 global using OpenMovies.WebApi.Payloads;
 global using OpenMovies.WebApi.Validators;
+global using OpenMovies.TestingSuite.Helpers;
 global using OpenMovies.WebApi.Controllers;
 global using OpenMovies.WebApi.Middlewares;
 
