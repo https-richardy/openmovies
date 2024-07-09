@@ -2,6 +2,7 @@ namespace OpenMovies.WebApi.Data.Configuration;
 
 public sealed class SeriesEntityConfiguration : IEntityTypeConfiguration<Series>
 {
+    [ExcludeFromCodeCoverage]
     public void Configure(EntityTypeBuilder<Series> builder)
     {
         builder.ToTable("Series");
