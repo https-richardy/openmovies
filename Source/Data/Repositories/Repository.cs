@@ -4,29 +4,30 @@ public abstract class Repository<TEntity, TDbContext> : IRepository<TEntity>
     where TEntity : Entity
     where TDbContext : DbContext
 {
-    private readonly ILogger<Repository<TEntity, TDbContext>> _logger;
+    protected ILogger<Repository<TEntity, TDbContext>> Logger { get; set; }
     protected TDbContext DbContext { get; private set; }
 
-    public Repository(TDbContext dbContext)
+    public Repository(TDbContext dbContext, ILogger<Repository<TEntity, TDbContext>> logger)
     {
         DbContext = dbContext;
+        Logger = logger;
     }
 
     public virtual async Task<OperationResult> DeleteAsync(TEntity entity)
     {
         try
         {
-            _logger.LogInformation($"Deleting entity `{typeof(TEntity).Name}` with id `{entity.Id}` from database...");
+            Logger.LogInformation($"Deleting entity `{typeof(TEntity).Name}` with id `{entity.Id}` from database...");
 
             DbContext.Set<TEntity>().Remove(entity);
             await DbContext.SaveChangesAsync();
 
-            _logger.LogInformation($"Entity `{typeof(TEntity).Name}` with id `{entity.Id}` deleted successfully.");
+            Logger.LogInformation($"Entity `{typeof(TEntity).Name}` with id `{entity.Id}` deleted successfully.");
             return OperationResult.Success($"Entity {typeof(TEntity).Name} deleted successfully.");
         }
         catch (Exception exception)
         {
-            _logger.LogError(exception, "Failed to delete entity `{Entity}` from database", typeof(TEntity).Name);
+            Logger.LogError(exception, "Failed to delete entity `{Entity}` from database", typeof(TEntity).Name);
             return OperationResult.Failure($"Failed to delete entity {typeof(TEntity).Name}. Error: {exception.Message}");
         }
     }
@@ -35,7 +36,7 @@ public abstract class Repository<TEntity, TDbContext> : IRepository<TEntity>
     {
         try
         {
-            _logger.LogInformation("Fetching entities `{Entity}` from database.", typeof(TEntity).Name);
+            Logger.LogInformation("Fetching entities `{Entity}` from database.", typeof(TEntity).Name);
 
             return await DbContext.Set<TEntity>()
                 .Where(predicate)
@@ -43,7 +44,7 @@ public abstract class Repository<TEntity, TDbContext> : IRepository<TEntity>
         }
         catch (Exception exception)
         {
-            _logger.LogError(exception, "Failed to fetch entities `{Entity}` from database", typeof(TEntity).Name);
+            Logger.LogError(exception, "Failed to fetch entities `{Entity}` from database", typeof(TEntity).Name);
             return Enumerable.Empty<TEntity>();
         }
     }
@@ -52,12 +53,12 @@ public abstract class Repository<TEntity, TDbContext> : IRepository<TEntity>
     {
         try
         {
-            _logger.LogInformation("Fetching entity `{Entity}` from database.", typeof(TEntity).Name);
+            Logger.LogInformation("Fetching entity `{Entity}` from database.", typeof(TEntity).Name);
             return await DbContext.Set<TEntity>().FirstOrDefaultAsync(predicate);
         }
         catch (Exception exception)
         {
-            _logger.LogError(exception, "Failed to fetch entity `{Entity}` from database", typeof(TEntity).Name);
+            Logger.LogError(exception, "Failed to fetch entity `{Entity}` from database", typeof(TEntity).Name);
             return null;
         }
     }
@@ -66,12 +67,12 @@ public abstract class Repository<TEntity, TDbContext> : IRepository<TEntity>
     {
         try
         {
-            _logger.LogInformation("Fetching all entities `{Entity}` from database.", typeof(TEntity).Name);
+            Logger.LogInformation("Fetching all entities `{Entity}` from database.", typeof(TEntity).Name);
             return await DbContext.Set<TEntity>().ToListAsync();
         }
         catch (Exception exception)
         {
-            _logger.LogError(exception, "Failed to fetch all entities `{Entity}` from database", typeof(TEntity).Name);
+            Logger.LogError(exception, "Failed to fetch all entities `{Entity}` from database", typeof(TEntity).Name);
             return Enumerable.Empty<TEntity>();
         }
     }
@@ -80,12 +81,12 @@ public abstract class Repository<TEntity, TDbContext> : IRepository<TEntity>
     {
         try
         {
-            _logger.LogInformation("Fetching entity `{Entity}` with id `{Id}` from database.", typeof(TEntity).Name, id);
+            Logger.LogInformation("Fetching entity `{Entity}` with id `{Id}` from database.", typeof(TEntity).Name, id);
             return await DbContext.Set<TEntity>().FindAsync(id);
         }
         catch (Exception exception)
         {
-            _logger.LogError(exception, "Failed to fetch entity `{Entity}` with id `{Id}` from database", typeof(TEntity).Name, id);
+            Logger.LogError(exception, "Failed to fetch entity `{Entity}` with id `{Id}` from database", typeof(TEntity).Name, id);
             return null;
         }
     }
@@ -96,7 +97,7 @@ public abstract class Repository<TEntity, TDbContext> : IRepository<TEntity>
         {
             /* Represents the adjustment applied to page numbers to align with zero-based indices in LINQ queries. */
             const int pageIndexAdjustment = 1;
-            _logger.LogInformation("Fetching entities from database. Page number: {PageNumber}, Page size: {PageSize}", pageNumber, pageSize);
+            Logger.LogInformation("Fetching entities from database. Page number: {PageNumber}, Page size: {PageSize}", pageNumber, pageSize);
 
             return await DbContext.Set<TEntity>()
                 .Skip((pageNumber - pageIndexAdjustment) * pageSize)
@@ -105,7 +106,7 @@ public abstract class Repository<TEntity, TDbContext> : IRepository<TEntity>
         }
         catch (Exception exception)
         {
-            _logger.LogError(exception, "Failed to fetch entities `{Entity}` from database", typeof(TEntity).Name);
+            Logger.LogError(exception, "Failed to fetch entities `{Entity}` from database", typeof(TEntity).Name);
             return Enumerable.Empty<TEntity>();
         }
     }
@@ -116,7 +117,7 @@ public abstract class Repository<TEntity, TDbContext> : IRepository<TEntity>
         {
             /* Represents the adjustment applied to page numbers to align with zero-based indices in LINQ queries. */
             const int pageIndexAdjustment = 1;
-            _logger.LogInformation("Fetching entities from database. Page number: {PageNumber}, Page size: {PageSize}", pageNumber, pageSize);
+            Logger.LogInformation("Fetching entities from database. Page number: {PageNumber}, Page size: {PageSize}", pageNumber, pageSize);
 
             return await DbContext.Set<TEntity>()
                 .Where(predicate)
@@ -126,7 +127,7 @@ public abstract class Repository<TEntity, TDbContext> : IRepository<TEntity>
         }
         catch (Exception exception)
         {
-            _logger.LogError(exception, "Failed to fetch entities `{Entity}` from database", typeof(TEntity).Name);
+            Logger.LogError(exception, "Failed to fetch entities `{Entity}` from database", typeof(TEntity).Name);
             return Enumerable.Empty<TEntity>();
         }
     }
@@ -135,18 +136,18 @@ public abstract class Repository<TEntity, TDbContext> : IRepository<TEntity>
     {
         try
         {
-            _logger.LogInformation($"Saving entity {typeof(TEntity).Name}");
+            Logger.LogInformation($"Saving entity {typeof(TEntity).Name}");
 
             await DbContext.Set<TEntity>().AddAsync(entity);
             await DbContext.SaveChangesAsync();
 
-            _logger.LogInformation($"Entity {typeof(TEntity).Name} saved successfully.");
+            Logger.LogInformation($"Entity {typeof(TEntity).Name} saved successfully.");
 
             return OperationResult.Success($"Entity {typeof(TEntity).Name} saved successfully.");
         }
         catch (Exception exception)
         {
-            _logger.LogError(exception, "Failed to save entity: {Entity}", typeof(TEntity).Name);
+            Logger.LogError(exception, "Failed to save entity: {Entity}", typeof(TEntity).Name);
             return OperationResult.Failure($"Failed to save entity {typeof(TEntity).Name}. Error: {exception.Message}");
         }
     }
@@ -164,16 +165,16 @@ public abstract class Repository<TEntity, TDbContext> : IRepository<TEntity>
 
                 await DbContext.SaveChangesAsync();
 
-                _logger.LogInformation($"Entity {typeof(TEntity).Name} updated successfully.");
+                Logger.LogInformation($"Entity {typeof(TEntity).Name} updated successfully.");
                 return OperationResult.Success($"Entity {typeof(TEntity).Name} updated successfully.");
             }
 
-            _logger.LogWarning($"Entity {typeof(TEntity).Name} not found.");
+            Logger.LogWarning($"Entity {typeof(TEntity).Name} not found.");
             return OperationResult.Failure($"Entity {typeof(TEntity).Name} not found.");
         }
         catch (Exception exception)
         {
-            _logger.LogError(exception, "Failed to update entity: {Entity}", typeof(TEntity).Name);
+            Logger.LogError(exception, "Failed to update entity: {Entity}", typeof(TEntity).Name);
             return OperationResult.Failure($"Failed to update entity {typeof(TEntity).Name}. Error: {exception.Message}");
         }
     }
