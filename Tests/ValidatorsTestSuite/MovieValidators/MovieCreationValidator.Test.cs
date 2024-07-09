@@ -210,7 +210,7 @@ public sealed class MovieCreationValidatorTest
             VideoSource = "https://example.com/video.mp4",
             ReleaseYear = DateTime.Now.Year,
             DurationInMinutes = 120,
-            CategoryId = 0 // Assuming 0 is considered empty in validation
+            CategoryId = 0
         };
 
         var result = await _validator.ValidateAsync(payload);
