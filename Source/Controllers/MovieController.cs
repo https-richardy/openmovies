@@ -11,4 +11,12 @@ public sealed class MovieController(IMediator mediator) : ControllerBase
         var response = await mediator.Send(request);
         return StatusCode(response.StatusCode, response);
     }
+
+    [HttpPut]
+    [Authorize(Roles = "Administrator")]
+    public async Task<IActionResult> UpdateMovieAsync(MovieUpdateRequest request)
+    {
+        var response = await mediator.Send(request);
+        return StatusCode(response.StatusCode, response);
+    }
 }
