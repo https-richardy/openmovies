@@ -1,15 +1,15 @@
 namespace OpenMovies.WebApi.Handlers;
 
-public sealed class GetMoviesHandler(
+public sealed class MovieRetrievalHandler(
     IMovieRepository movieRepository,
-    ILogger<GetMoviesHandler> logger,
+    ILogger<MovieRetrievalHandler> logger,
     IHttpContextAccessor contextAccessor
 ) :
-    IRequestHandler<GetMoviesRequest, Response<PaginationHelper<Movie>>>
+    IRequestHandler<MovieRetrievalRequest, Response<PaginationHelper<Movie>>>
 {
     #pragma warning disable CS8604
     public async Task<Response<PaginationHelper<Movie>>> Handle(
-        GetMoviesRequest request,
+        MovieRetrievalRequest request,
         CancellationToken cancellationToken)
     {
         try
