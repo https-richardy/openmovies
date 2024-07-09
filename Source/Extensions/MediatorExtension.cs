@@ -22,5 +22,11 @@ public static class MediatorExtension
         services.AddScoped<IRequestHandler<MovieCreationRequest, Response>, MovieCreationHandler>();
 
         #endregion
+
+        #region handlers for categories
+
+        services.AddScoped<IRequestHandler<CategoryCreationRequest, Response>, CategoryCreationHandler>();
+
+        #endregion
     }
 }
