@@ -4,6 +4,13 @@ namespace OpenMovies.WebApi.Controllers;
 [Route("api/movies")]
 public sealed class MovieController(IMediator mediator) : ControllerBase
 {
+    [HttpGet]
+    public async Task<IActionResult> GetMoviesAsync([FromQuery] GetMoviesRequest request)
+    {
+        var response = await mediator.Send(request);
+        return StatusCode(response.StatusCode, response);
+    }
+
     [HttpPost]
     [Authorize(Roles = "Administrator")]
     public async Task<IActionResult> CreateMovieAsync(MovieCreationRequest request)
