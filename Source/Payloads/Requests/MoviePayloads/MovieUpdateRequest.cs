@@ -1,6 +1,6 @@
 namespace OpenMovies.WebApi.Payloads;
 
-public sealed record UpdateMovieRequest
+public sealed record MovieUpdateRequest
 {
     public string Title { get; init; }
     public string Synopsis { get; init; }
