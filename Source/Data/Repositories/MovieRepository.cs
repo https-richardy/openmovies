@@ -1,7 +1,7 @@
 namespace OpenMovies.WebApi.Data.Repositories;
 
-public sealed class MovieRepository(AppDbContext dbContext) :
-    Repository<Movie, AppDbContext>(dbContext), IMovieRepository
+public sealed class MovieRepository(AppDbContext dbContext, ILogger<MovieRepository> logger) :
+    Repository<Movie, AppDbContext>(dbContext, logger), IMovieRepository
 {
-    
+
 }
