@@ -6,7 +6,7 @@ public sealed class MovieController(IMediator mediator) : ControllerBase
 {
 
     [HttpPost]
-    [Authorize(Roles = "Admin")]
+    [Authorize(Roles = "Administrator")]
     public async Task<IActionResult> CreateMovieAsync(MovieCreationRequest request)
     {
         var response = await mediator.Send(request);
