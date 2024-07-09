@@ -19,4 +19,14 @@ public sealed class MovieValidatorsExtensionTest
         Assert.NotNull(validator);
         Assert.IsType<MovieCreationValidator>(validator);
     }
+
+    [Fact(DisplayName = "Should verify if MovieUpdateValidator is registered.")]
+    public void ShouldVerifyIfMovieUpdateValidatorIsRegistered()
+    {
+        var validator = _services.BuildServiceProvider()
+            .GetRequiredService<IValidator<MovieUpdateRequest>>();
+
+        Assert.NotNull(validator);
+        Assert.IsType<MovieUpdateValidator>(validator);
+    }
 }
