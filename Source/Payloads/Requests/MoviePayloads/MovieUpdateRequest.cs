@@ -9,6 +9,7 @@ public sealed record MovieUpdateRequest
     public int ReleaseYear { get; init; }
     public int DurationInMinutes { get; init; }
     public int CategoryId { get; init; }
+    public int MovieId { get; init; }
 
     public IFormFile Image { get; init; }
 }
