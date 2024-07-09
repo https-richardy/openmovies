@@ -21,6 +21,7 @@ public static class ValidationExtension
         #region validators for categories
 
         services.AddScoped<IValidator<CategoryCreationRequest>, CategoryCreationValidator>();
+        services.AddScoped<IValidator<CategoryUpdateRequest>, CategoryUpdateValidator>();
 
         #endregion
     }
