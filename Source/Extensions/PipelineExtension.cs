@@ -2,6 +2,7 @@ namespace OpenMovies.WebApi.Extensions;
 
 public static class PipelineExtension
 {
+    [ExcludeFromCodeCoverage]
     public static void ConfigureHttpPipeline(this IApplicationBuilder app)
     {
         app.ConfigureCORS();
