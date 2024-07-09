@@ -10,5 +10,11 @@ public static class ValidationExtension
         services.AddScoped<IValidator<AuthenticationCredentials>, AuthenticationCredentialsValidator>();
 
         #endregion
+
+        #region validators for movies
+
+        services.AddScoped<IValidator<MovieCreationRequest>, MovieCreationValidator>();
+
+        #endregion
     }
 }
