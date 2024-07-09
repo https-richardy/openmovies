@@ -5,7 +5,7 @@ namespace OpenMovies.WebApi.Controllers;
 public sealed class MovieController(IMediator mediator) : ControllerBase
 {
     [HttpGet]
-    public async Task<IActionResult> GetMoviesAsync([FromQuery] GetMoviesRequest request)
+    public async Task<IActionResult> GetMoviesAsync([FromQuery] MovieRetrievalRequest request)
     {
         var response = await mediator.Send(request);
         return StatusCode(response.StatusCode, response);
