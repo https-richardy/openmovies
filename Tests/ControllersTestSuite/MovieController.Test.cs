@@ -284,4 +284,34 @@ public sealed class MovieControllerTest
         _mediatorMock
             .Verify(mediator => mediator.Send(request, default), Times.Once);
     }
+
+    [Fact(DisplayName = "Given an invalid request, should return a 404 Not Found response when deleting a movie")]
+    public async Task GivenInvalidRequest_ShouldReturnNotFoundResponseWhenDeletingAMovie()
+    {
+        var request = new MovieDeletionRequest
+        {
+            MovieId = 999
+        };
+
+        var expectedResponse = new Response
+        {
+            StatusCode = StatusCodes.Status404NotFound,
+            Message = "Movie not found."
+        };
+
+        _mediatorMock
+            .Setup(mediator => mediator.Send(request, default))
+            .ReturnsAsync(expectedResponse);
+
+        var result = await _controller.DeleteMovieAsync(request.MovieId);
+
+        var objectResult = Assert.IsType<ObjectResult>(result);
+        var actualResponse = Assert.IsType<Response>(objectResult.Value);
+
+        Assert.Equal(StatusCodes.Status404NotFound, objectResult.StatusCode);
+        Assert.Equal(expectedResponse, actualResponse);
+
+        _mediatorMock
+            .Verify(mediator => mediator.Send(request, default), Times.Once);
+    }
 }
