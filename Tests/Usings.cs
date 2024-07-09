@@ -37,4 +37,5 @@ global using Moq;
 global using AutoFixture;
 global using FluentValidation;
 global using FluentValidation.Results;
+global using Nelibur.ObjectMapper;
 global using MediatR;
