@@ -207,4 +207,51 @@ public sealed class MovieControllerTest
         Assert.NotNull(objectResultValue.Data);
         Assert.Equal(movies.Count, objectResultValue.Data.Results.Count());
     }
+
+    [Fact(DisplayName = "Given a valid movie id, should return 200 OK with movie details")]
+    public async Task GivenValidMovieId_ShouldReturnOkWithMovieDetails()
+    {
+        var movieId = 1;
+        var movie = _fixture.Create<Movie>();
+        var expectedResponse = new Response<Movie>
+        {
+            Data = movie,
+            StatusCode = StatusCodes.Status200OK,
+            Message = "Movie details retrieved successfully."
+        };
+
+        _mediatorMock
+            .Setup(mediator => mediator.Send(It.Is<MovieDetailsRequest>(r => r.MovieId == movieId), default))
+            .ReturnsAsync(expectedResponse);
+
+        var result = await _controller.GetMovieAsync(movieId);
+        var objectResult = Assert.IsType<ObjectResult>(result);
+        var actualResponse = Assert.IsType<Response<Movie>>(objectResult.Value);
+
+        Assert.Equal(StatusCodes.Status200OK, objectResult.StatusCode);
+        Assert.Equal(expectedResponse, actualResponse);
+    }
+
+    [Fact(DisplayName = "Given an invalid movie id, should return 404 Not Found")]
+    public async Task GivenInvalidMovieId_ShouldReturnNotFound()
+    {
+        var movieId = 999;
+        var expectedResponse = new Response<Movie>
+        {
+            Data = null,
+            StatusCode = StatusCodes.Status404NotFound,
+            Message = "Movie not found."
+        };
+
+        _mediatorMock
+            .Setup(mediator => mediator.Send(It.Is<MovieDetailsRequest>(r => r.MovieId == movieId), default))
+            .ReturnsAsync(expectedResponse);
+
+        var result = await _controller.GetMovieAsync(movieId);
+        var objectResult = Assert.IsType<ObjectResult>(result);
+        var actualResponse = Assert.IsType<Response<Movie>>(objectResult.Value);
+
+        Assert.Equal(StatusCodes.Status404NotFound, objectResult.StatusCode);
+        Assert.Equal(expectedResponse, actualResponse);
+    }
 }
