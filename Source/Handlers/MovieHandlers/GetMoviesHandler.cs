@@ -15,7 +15,7 @@ public sealed class GetMoviesHandler(
         try
         {
             Expression<Func<Movie, bool>> predicate = movie =>
-                (string.IsNullOrEmpty(request.Title) || movie.Title.Contains(request.Title.ToLower())) &&
+                (string.IsNullOrEmpty(request.Title) || movie.Title.ToLower().Contains(request.Title)) &&
                 (!request.Year.HasValue || movie.ReleaseYear == request.Year);
 
             var movies = await movieRepository.PagedAsync(predicate, request.Page, request.PageSize);
