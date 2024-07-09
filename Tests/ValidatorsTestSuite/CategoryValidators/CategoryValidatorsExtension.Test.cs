@@ -19,4 +19,14 @@ public sealed class CategoryValidatorsExtensionTest
         Assert.NotNull(validator);
         Assert.IsType<CategoryCreationValidator>(validator);
     }
+
+    [Fact(DisplayName = "Verify if CategoryUpdateValidator is registered.")]
+    public void VerifyIfCategoryUpdateValidatorIsRegistered()
+    {
+        var validator = _services.BuildServiceProvider()
+            .GetRequiredService<IValidator<CategoryUpdateRequest>>();
+
+        Assert.NotNull(validator);
+        Assert.IsType<CategoryUpdateValidator>(validator);
+    }
 }
