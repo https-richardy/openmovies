@@ -1,6 +1,6 @@
 namespace OpenMovies.TestingSuite.MediatorExtensionTestSuite;
 
-public class IdentityMediatorExtensionTest
+public sealed class IdentityMediatorExtensionTest
 {
     private readonly IServiceCollection _services;
 
