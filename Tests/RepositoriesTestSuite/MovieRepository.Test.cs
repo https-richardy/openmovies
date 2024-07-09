@@ -20,10 +20,12 @@ public sealed class MovieRepositoryTest : InMemoryDatabaseFixture<AppDbContext>
     {
         var movie = Fixture.Create<Movie>();
 
-        await _movieRepository.SaveAsync(movie);
+        var result = await _movieRepository.SaveAsync(movie);
         var savedMovie = await DbContext.Movies.FindAsync(movie.Id);
 
         Assert.NotNull(savedMovie);
+        Assert.True(result.IsSuccess);
+
         Assert.Equal(movie.Id, savedMovie.Id);
         Assert.Equal(movie.Title, savedMovie.Title);
         Assert.Equal(movie.Synopsis, savedMovie.Synopsis);
