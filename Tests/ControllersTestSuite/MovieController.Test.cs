@@ -254,4 +254,34 @@ public sealed class MovieControllerTest
         Assert.Equal(StatusCodes.Status404NotFound, objectResult.StatusCode);
         Assert.Equal(expectedResponse, actualResponse);
     }
+
+    [Fact(DisplayName = "Given a valid request, should return a 200 OK response when deleting a movie")]
+    public async Task GivenValidRequest_ShouldReturnOkResponseWhenDeletingAMovie()
+    {
+        var request = new MovieDeletionRequest
+        {
+            MovieId = 1
+        };
+
+        var expectedResponse = new Response
+        {
+            StatusCode = StatusCodes.Status200OK,
+            Message = "Movie deleted successfully."
+        };
+
+        _mediatorMock
+            .Setup(mediator => mediator.Send(request, default))
+            .ReturnsAsync(expectedResponse);
+
+        var result = await _controller.DeleteMovieAsync(request.MovieId);
+
+        var objectResult = Assert.IsType<ObjectResult>(result);
+        var actualResponse = Assert.IsType<Response>(objectResult.Value);
+
+        Assert.Equal(StatusCodes.Status200OK, objectResult.StatusCode);
+        Assert.Equal(expectedResponse, actualResponse);
+
+        _mediatorMock
+            .Verify(mediator => mediator.Send(request, default), Times.Once);
+    }
 }
