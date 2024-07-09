@@ -39,4 +39,16 @@ public sealed class MovieController(IMediator mediator) : ControllerBase
         var response = await mediator.Send(request);
         return StatusCode(response.StatusCode, response);
     }
+
+    [HttpDelete("{movieId}")]
+    [Authorize(Roles = "Administrator")]
+    public async Task<IActionResult> DeleteMovieAsync(int movieId)
+    {
+        var response = await mediator.Send(new MovieDeletionRequest
+        {
+            MovieId = movieId
+        });
+
+        return StatusCode(response.StatusCode, response);
+    }
 }
