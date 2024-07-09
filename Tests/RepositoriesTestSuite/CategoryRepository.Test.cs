@@ -154,7 +154,7 @@ public sealed class CategoryRepositoryTest : InMemoryDatabaseFixture<AppDbContex
         var pageNumber = 1;
         var pageSize = 5;
 
-        var pagedCategories = await _categoryRepository.PagedAsync(c => c.Name == "Action", pageNumber, pageSize);
+        var pagedCategories = await _categoryRepository.PagedAsync(category => category.Name == "Action", pageNumber, pageSize);
 
         Assert.Equal(2, pagedCategories.Count());
     }
