@@ -150,4 +150,61 @@ public sealed class MovieControllerTest
 
         Assert.Equal("Invalid request", exception.Message);
     }
+
+    [Fact(DisplayName = "Given a valid request, should return a 200 OK response with paginated movies for GetMoviesAsync")]
+    public async Task GivenValidRequest_ShouldReturnOkResponseWithPaginatedMoviesForGetMoviesAsync()
+    {
+        var request = new MovieRetrievalRequest
+        {
+            Title = "The Matrix",
+            Year = 1999,
+            Page = 1,
+            PageSize = 10
+        };
+
+        var movies = new List<Movie>
+        {
+            new Movie { Id = 1, Title = "The Matrix", ReleaseYear = 1999 },
+            new Movie { Id = 2, Title = "The Matrix Reloaded", ReleaseYear = 2003 }
+        };
+
+        var httpContext = new DefaultHttpContext();
+        var paginationHelper = new PaginationHelper<Movie>(
+            movies,
+            pageNumber: request.Page,
+            pageSize: request.PageSize,
+            httpContext: httpContext
+        );
+
+        var expectedResponse = new Response<PaginationHelper<Movie>>
+        {
+            StatusCode = StatusCodes.Status200OK,
+            Message = "movies retrieved successfully",
+            Data = paginationHelper
+        };
+
+        _mediatorMock
+            .Setup(mediator => mediator.Send(It.IsAny<MovieRetrievalRequest>(), default))
+            .ReturnsAsync(expectedResponse);
+
+        var response = await _controller.GetMoviesAsync(request);
+        var objectResult = response as ObjectResult;
+        var objectResultValue = objectResult?.Value as Response<PaginationHelper<Movie>>;
+
+        _mediatorMock
+            .Verify(mediator => mediator.Send(request, default), Times.Once);
+
+        Assert.NotNull(response);
+        Assert.IsType<ObjectResult>(response);
+
+        Assert.NotNull(objectResult);
+        Assert.Equal(expectedResponse, objectResult.Value);
+
+        Assert.NotNull(objectResultValue);
+        Assert.Equal(StatusCodes.Status200OK, objectResultValue.StatusCode);
+        Assert.Equal("movies retrieved successfully", objectResultValue.Message);
+
+        Assert.NotNull(objectResultValue.Data);
+        Assert.Equal(movies.Count, objectResultValue.Data.Results.Count());
+    }
 }
