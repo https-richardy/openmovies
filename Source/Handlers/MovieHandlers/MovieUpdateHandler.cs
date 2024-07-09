@@ -6,7 +6,7 @@ public sealed class MovieUpdateHandler(
     IFileUploadService fileUploadService,
     IValidator<MovieUpdateRequest> validator,
     ILogger<MovieUpdateHandler> logger
-)
+) : IRequestHandler<MovieUpdateRequest, Response>
 {
     public async Task<Response> Handle(
         MovieUpdateRequest request,
