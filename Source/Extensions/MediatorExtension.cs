@@ -19,6 +19,7 @@ public static class MediatorExtension
 
         #region handlers for movies
 
+        services.AddScoped<IRequestHandler<GetMoviesRequest, Response<PaginationHelper<Movie>>>, GetMoviesHandler>();
         services.AddScoped<IRequestHandler<MovieCreationRequest, Response>, MovieCreationHandler>();
         services.AddScoped<IRequestHandler<MovieUpdateRequest, Response>, MovieUpdateHandler>();
 
