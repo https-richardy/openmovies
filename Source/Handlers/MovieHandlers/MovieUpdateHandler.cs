@@ -33,6 +33,7 @@ public sealed class MovieUpdateHandler(
 
         movie = TinyMapper.Map<Movie>(request);
 
+        movie.Id = request.MovieId;
         movie.Category = category;
         movie.ImageUrl = await fileUploadService.UploadFileAsync(request.Image);
 
