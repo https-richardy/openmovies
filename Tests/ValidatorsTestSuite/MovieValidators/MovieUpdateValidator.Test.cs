@@ -9,6 +9,28 @@ public sealed class UpdateMovieValidatorTest
         _validator = new MovieUpdateValidator();
     }
 
+    [Fact(DisplayName = "Given a invalid movie id, should have validation error")]
+    public async Task GivenInvalidMovieId_ShouldHaveValidationError()
+    {
+        var payload = new MovieUpdateRequest
+        {
+            Title = "Movie title",
+            Synopsis = "Movie synopsis",
+            VideoSource = "https://example.com/video.mp4",
+            ReleaseYear = DateTime.Now.Year,
+            DurationInMinutes = 120,
+            CategoryId = 1,
+            MovieId = 0
+        };
+
+        var result = await _validator.ValidateAsync(payload);
+        var errorMessages = result.Errors.Select(error => error.ErrorMessage);
+
+        Assert.NotNull(result);
+        Assert.False(result.IsValid);
+        Assert.Contains("Movie id must be greater than 0.", errorMessages);
+    }
+
     [Fact(DisplayName = "Given an empty title, should have validation error")]
     public async Task GivenEmptyTitle_ShouldHaveValidationError()
     {
@@ -252,7 +274,8 @@ public sealed class UpdateMovieValidatorTest
             VideoSource = "https://example.com/video.mp4",
             ReleaseYear = DateTime.Now.Year,
             DurationInMinutes = 120,
-            CategoryId = 1
+            CategoryId = 1,
+            MovieId = 1
         };
 
         var result = await _validator.ValidateAsync(payload);
