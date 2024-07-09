@@ -2,6 +2,7 @@ namespace OpenMovies.WebApi.Extensions;
 
 public static class WebApplicationExtension
 {
+    [ExcludeFromCodeCoverage]
     public static void ConfigureWebApplication(this IServiceCollection services)
     {
         services.AddEndpointsApiExplorer();
