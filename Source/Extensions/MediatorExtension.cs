@@ -15,5 +15,11 @@ public static class MediatorExtension
         services.AddScoped<IRequestHandler<AuthenticationCredentials, Response<AuthenticationResponse>>, AuthenticationHandler>();
 
         #endregion
+
+        #region handlers for movies
+
+        services.AddScoped<IRequestHandler<MovieCreationRequest, Response>, MovieCreationHandler>();
+
+        #endregion
     }
 }
