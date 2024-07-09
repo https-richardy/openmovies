@@ -30,6 +30,7 @@ public static class MediatorExtension
         #region handlers for categories
 
         services.AddScoped<IRequestHandler<CategoryCreationRequest, Response>, CategoryCreationHandler>();
+        services.AddScoped<IRequestHandler<CategoryUpdateRequest, Response>, CategoryUpdateHandler>();
 
         #endregion
     }
