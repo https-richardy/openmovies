@@ -139,4 +139,62 @@ public sealed class CategoryControllerTest
         _mediatorMock
             .Verify(mediator => mediator.Send(request, default), Times.Once);
     }
+
+    [Fact(DisplayName = "Given categoryId exists, should return 200 Ok response, when deleting a category")]
+    public async Task GivenCategoryIdExists_ShouldReturnOkResponseWhenDeletingACategory()
+    {
+        var categoryId = 1;
+        var request = new CategoryDeletionRequest
+        {
+            CategoryId = categoryId
+        };
+
+        var expectedResponse = new Response
+        {
+            StatusCode = StatusCodes.Status200OK,
+            Message = "category deleted successfully"
+        };
+
+        _mediatorMock
+            .Setup(mediator => mediator.Send(request, default))
+            .ReturnsAsync(expectedResponse);
+
+        var result = await _controller.DeleteCategoryAsync(categoryId);
+
+        _mediatorMock.Verify(mediator => mediator.Send(request, default), Times.Once);
+
+        var objectResult = Assert.IsType<ObjectResult>(result);
+        var actualResponse = Assert.IsType<Response>(objectResult.Value);
+
+        Assert.Equal(StatusCodes.Status200OK, objectResult.StatusCode);
+        Assert.Equal(expectedResponse.StatusCode, actualResponse.StatusCode);
+        Assert.Equal(expectedResponse.Message, actualResponse.Message);
+    }
+
+    [Fact(DisplayName = "Given categoryId does not exist, should return 404 NotFound response when deleting a category")]
+    public async Task GivenCategoryIdDoesNotExist_ShouldReturnNotFoundResponseWhenDeletingACategory()
+    {
+        var categoryId = 1;
+
+        var request = new CategoryDeletionRequest { CategoryId = categoryId };
+        var expectedResponse = new Response
+        {
+            StatusCode = StatusCodes.Status404NotFound,
+            Message = "category not found"
+        };
+
+        _mediatorMock.Setup(mediator => mediator.Send(request, default))
+            .ReturnsAsync(expectedResponse);
+
+        var result = await _controller.DeleteCategoryAsync(categoryId);
+
+        _mediatorMock.Verify(mediator => mediator.Send(request, default), Times.Once);
+
+        var objectResult = Assert.IsType<ObjectResult>(result);
+        var actualResponse = Assert.IsType<Response>(objectResult.Value);
+
+        Assert.Equal(StatusCodes.Status404NotFound, objectResult.StatusCode);
+        Assert.Equal(expectedResponse.StatusCode, actualResponse.StatusCode);
+        Assert.Equal(expectedResponse.Message, actualResponse.Message);
+    }
 }
