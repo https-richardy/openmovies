@@ -267,4 +267,39 @@ public sealed class CategoryControllerTest
         Assert.Equal(expectedResponse.StatusCode, actualResponse.StatusCode);
         Assert.Equal(expectedResponse.Message, actualResponse.Message);
     }
+
+    [Fact(DisplayName = "Given valid request, should return a 200 OK response with all categories")]
+    public async Task GivenValidRequest_ShouldReturnOkResponseWithAllCategories()
+    {
+        var expectedCategories = new List<Category>
+        {
+            new Category { Id = 1, Name = "Action" },
+            new Category { Id = 2, Name = "Comedy" }
+        };
+
+        var expectedResponse = new Response<IEnumerable<Category>>
+        {
+            Data = expectedCategories,
+            StatusCode = StatusCodes.Status200OK,
+            Message = "categories retrieved successfully"
+        };
+
+        _mediatorMock.Setup(mediator => mediator.Send(It.IsAny<GetCategoriesRequest>(), default))
+                    .ReturnsAsync(expectedResponse);
+
+        var result = await _controller.GetCategoriesAsync();
+
+        _mediatorMock.Verify(mediator => mediator.Send(It.IsAny<GetCategoriesRequest>(), default), Times.Once);
+
+        var objectResult = Assert.IsType<ObjectResult>(result);
+        var actualResponse = Assert.IsType<Response<IEnumerable<Category>>>(objectResult.Value);
+
+        Assert.NotNull(objectResult);
+        Assert.NotNull(actualResponse);
+        Assert.NotNull(actualResponse.Data);
+
+        Assert.Equal(StatusCodes.Status200OK, objectResult.StatusCode);
+        Assert.Equal(expectedResponse.Data.Count(), actualResponse.Data.Count());
+        Assert.Equal(expectedResponse.Message, actualResponse.Message);
+    }
 }
