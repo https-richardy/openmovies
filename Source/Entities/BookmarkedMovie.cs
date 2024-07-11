@@ -3,7 +3,7 @@ namespace OpenMovies.WebApi.Entities;
 public sealed class BookmarkedMovie : Entity
 {
     public Movie Movie { get; set; }
-    public IdentityUser User { get; set; }
+    public Profile Profile { get; set; }
 
     public BookmarkedMovie()
     {
@@ -13,9 +13,9 @@ public sealed class BookmarkedMovie : Entity
         */
     }
 
-    public BookmarkedMovie(Movie movie, IdentityUser user)
+    public BookmarkedMovie(Movie movie, Profile profile)
     {
         Movie = movie;
-        User = user;
+        Profile = profile;
     }
 }
