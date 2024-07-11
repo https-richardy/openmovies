@@ -2,7 +2,7 @@ namespace OpenMovies.TestingSuite.HandlersTestSuite.IdentityHandlers;
 
 public sealed class AccountRegistrationHandlerTest
 {
-    private readonly Mock<UserManager<IdentityUser>> _userManagerMock;
+    private readonly Mock<UserManager<ApplicationUser>> _userManagerMock;
     private readonly Mock<RoleManager<IdentityRole>> _roleManagerMock;
     private readonly Mock<IValidator<AccountRegistrationRequest>> _validatorMock;
     private readonly IRequestHandler<AccountRegistrationRequest, Response> _handler;
@@ -12,8 +12,8 @@ public sealed class AccountRegistrationHandlerTest
     {
         #pragma warning disable CS8625 // disable CS8625 because of Mocks they need to be null.
         #region Mocks
-        _userManagerMock = new Mock<UserManager<IdentityUser>>(
-            Mock.Of<IUserStore<IdentityUser>>(),
+        _userManagerMock = new Mock<UserManager<ApplicationUser>>(
+            Mock.Of<IUserStore<ApplicationUser>>(),
             null, /* passwordHasher */
             null, /* userValidators */
             null, /* passwordValidators */
@@ -58,7 +58,7 @@ public sealed class AccountRegistrationHandlerTest
             .ReturnsAsync(new ValidationResult());
 
         _userManagerMock.Setup(userManager => userManager.CreateAsync(
-                It.IsAny<IdentityUser>(),
+                It.IsAny<ApplicationUser>(),
                 It.IsAny<string>()
             ))
             .ReturnsAsync(IdentityResult.Success);
@@ -74,13 +74,13 @@ public sealed class AccountRegistrationHandlerTest
 
         /* checking if the handler called the userManager passing an IdentityUser and a password. */
         _userManagerMock.Verify(userManager => userManager.CreateAsync(
-            It.IsAny<IdentityUser>(),
+            It.IsAny<ApplicationUser>(),
             It.IsAny<string>()
         ));
 
         /* checking if the handler called the userManager passing an IdentityUser and a role. */
         _userManagerMock.Verify(userManager => userManager.AddToRoleAsync(
-            It.IsAny<IdentityUser>(),
+            It.IsAny<ApplicationUser>(),
             It.IsAny<string>()
         ));
 
@@ -125,7 +125,7 @@ public sealed class AccountRegistrationHandlerTest
 
         /* setting up the behavior of the userManager. In this scenario, the userManager will return a success result. */
         _userManagerMock.Setup(userManager => userManager.CreateAsync(
-                It.IsAny<IdentityUser>(),
+                It.IsAny<ApplicationUser>(),
                 It.IsAny<string>()
             ))
             .ReturnsAsync(IdentityResult.Success);
@@ -160,7 +160,7 @@ public sealed class AccountRegistrationHandlerTest
 
         /* setting up the behavior of the userManager. In this scenario, the userManager will return a success result. */
         _userManagerMock.Setup(userManager => userManager.CreateAsync(
-                It.IsAny<IdentityUser>(),
+                It.IsAny<ApplicationUser>(),
                 It.IsAny<string>()
             ))
             .ReturnsAsync(IdentityResult.Success);
@@ -171,7 +171,7 @@ public sealed class AccountRegistrationHandlerTest
 
         /* setting up the behavior of the userManager.AddToRoleAsync. In this scenario, the userManager will return a success result. */
         _userManagerMock.Setup(userManager => userManager.AddToRoleAsync(
-                It.IsAny<IdentityUser>(),
+                It.IsAny<ApplicationUser>(),
                 It.IsAny<string>()
             ))
             .ReturnsAsync(IdentityResult.Success);
@@ -181,7 +181,7 @@ public sealed class AccountRegistrationHandlerTest
 
         /* verify that AddToRoleAsync was called once with the expected parameters. */
         _userManagerMock.Verify(userManager => userManager.AddToRoleAsync(
-            It.Is<IdentityUser>(u => u.Email == request.Email),
+            It.Is<ApplicationUser>(u => u.Email == request.Email),
             "Common"
         ), Times.Once);
     }
