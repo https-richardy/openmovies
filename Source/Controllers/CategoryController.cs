@@ -21,4 +21,16 @@ public sealed class CategoryController(IMediator mediator) : ControllerBase
         var response = await mediator.Send(request);
         return StatusCode(response.StatusCode, response);
     }
+
+    [HttpDelete("{categoryId}")]
+    [Authorize(Roles = "Administrator")]
+    public async Task<IActionResult> DeleteCategoryAsync([FromRoute] int categoryId)
+    {
+        var response = await mediator.Send(new CategoryDeletionRequest
+        {
+            CategoryId = categoryId
+        });
+
+        return StatusCode(response.StatusCode, response);
+    }
 }
