@@ -21,7 +21,7 @@ public static class BootstrapExtension
 
         using (var scope = serviceProvider.CreateScope())
         {
-            var userManager = scope.ServiceProvider.GetRequiredService<UserManager<IdentityUser>>();
+            var userManager = scope.ServiceProvider.GetRequiredService<UserManager<ApplicationUser>>();
             var roleManager = scope.ServiceProvider.GetRequiredService<RoleManager<IdentityRole>>();
 
             var adminRoleExists = await roleManager.RoleExistsAsync("Administrator");
@@ -54,7 +54,7 @@ public static class BootstrapExtension
                 Console.Write("Enter a password: ");
                 var password = Console.ReadLine();
 
-                var adminUser = new IdentityUser
+                var adminUser = new ApplicationUser
                 {
                     UserName = username,
                     Email = email,
