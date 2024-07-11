@@ -1,6 +1,6 @@
 namespace OpenMovies.WebApi.Data;
 
-public sealed class AppDbContext(DbContextOptions options) : IdentityDbContext(options)
+public sealed class AppDbContext(DbContextOptions options) : IdentityDbContext<ApplicationUser>(options)
 {
     public DbSet<Category> Categories { get; set; }
     public DbSet<Movie> Movies { get; set; }
