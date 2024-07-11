@@ -3,7 +3,7 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.0.31903.59
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OpenMovies", "Source\OpenMovies.csproj", "{05B6F968-099E-4248-94AC-4C1F2A54006F}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OpenMovies", "Source\OpenMovies.WebApi.csproj", "{05B6F968-099E-4248-94AC-4C1F2A54006F}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OpenMovies.TestingSuite", "Tests\OpenMovies.TestingSuite.csproj", "{48F6CF45-899D-4AB1-8ADF-14C67082A494}"
 EndProject
