@@ -1,6 +1,6 @@
 namespace OpenMovies.WebApi.Entities;
 
-public sealed class Profile
+public sealed class Profile : Entity
 {
     public string Name { get; set; }
     public bool IsChild { get; set; }
