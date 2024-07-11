@@ -1,7 +1,7 @@
 namespace OpenMovies.WebApi.Handlers;
 
 public sealed class AuthenticationHandler(
-    UserManager<IdentityUser> userManager,
+    UserManager<ApplicationUser> userManager,
     IValidator<AuthenticationCredentials> validator,
     IJwtService jwtService
 ) :
