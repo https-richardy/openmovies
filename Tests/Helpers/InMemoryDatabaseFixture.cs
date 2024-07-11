@@ -26,6 +26,6 @@ public abstract class InMemoryDatabaseFixture<TDbContext> : IAsyncLifetime
     public async Task DisposeAsync()
     {
         await DbContext.Database.EnsureDeletedAsync();
-        DbContext.Dispose();
+        await DbContext.DisposeAsync();
     }
 }
