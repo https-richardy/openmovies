@@ -3,7 +3,7 @@ namespace OpenMovies.TestingSuite.HandlersTestSuite.IdentityHandlers;
 public sealed class AuthenticationHandlerTest
 {
     private readonly Mock<IValidator<AuthenticationCredentials>> _validatorMock;
-    private readonly Mock<UserManager<IdentityUser>> _userManagerMock;
+    private readonly Mock<UserManager<ApplicationUser>> _userManagerMock;
     private readonly Mock<IJwtService> _jwtServiceMock;
     private readonly IRequestHandler<AuthenticationCredentials, Response<AuthenticationResponse>> _handler;
     private readonly Fixture _fixture;
@@ -12,8 +12,8 @@ public sealed class AuthenticationHandlerTest
     {
         #pragma warning disable CS8625 // disable CS8625 because of Mocks they need to be null.
         #region Mocking
-        _userManagerMock = new Mock<UserManager<IdentityUser>>(
-            Mock.Of<IUserStore<IdentityUser>>(),
+        _userManagerMock = new Mock<UserManager<ApplicationUser>>(
+            Mock.Of<IUserStore<ApplicationUser>>(),
             null, /* passwordHasher */
             null, /* userValidators */
             null, /* passwordValidators */
@@ -47,7 +47,7 @@ public sealed class AuthenticationHandlerTest
             Password = "password123"
         };
 
-        var user = new IdentityUser
+        var user = new ApplicationUser
         {
             Id = "123",
             UserName = "testuser",
@@ -111,7 +111,7 @@ public sealed class AuthenticationHandlerTest
 
         #pragma warning disable CS8600 // disable CS8600because it needs to be null since in this scenario no user is found.
         _userManagerMock.Setup(userManager => userManager.FindByEmailAsync(credentials.Email))
-            .ReturnsAsync((IdentityUser)null);
+            .ReturnsAsync((ApplicationUser)null);
 
         var result = await _handler.Handle(credentials, CancellationToken.None);
 
@@ -131,12 +131,12 @@ public sealed class AuthenticationHandlerTest
             since the user is null, it should return a NotAuthorized if the credentials are not found.
          */
         _userManagerMock.Verify(userManager => userManager.CheckPasswordAsync(
-            It.IsAny<IdentityUser>(),
+            It.IsAny<ApplicationUser>(),
             It.IsAny<string>()
         ), Times.Never);
 
         _userManagerMock.Verify(userManager => userManager.GetRolesAsync(
-            It.IsAny<IdentityUser>()
+            It.IsAny<ApplicationUser>()
         ), Times.Never);
 
         Assert.NotNull(result);
