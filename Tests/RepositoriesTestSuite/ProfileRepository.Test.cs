@@ -165,7 +165,8 @@ public sealed class ProfileRepositoryTest : InMemoryDatabaseFixture<AppDbContext
     public async Task GetBookmarkedMoviesAsync_ShouldReturnCorrectMoviesForProfile()
     {
         var profile = Fixture.Create<Profile>();
-        profile.BookmarkedMovies.Clear();
+
+        profile.BookmarkedMovies.Clear(); // clear bookmarked movie collection because
 
         var bookmarkedMovies = Fixture.Build<BookmarkedMovie>()
             .With(bookmarkedMovies => bookmarkedMovies.Profile, profile)
