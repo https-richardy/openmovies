@@ -28,7 +28,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\Source\OpenMovies.csproj" />
+    <ProjectReference Include="..\Source\OpenMovies.WebApi.csproj" />
   </ItemGroup>
 
 </Project>
