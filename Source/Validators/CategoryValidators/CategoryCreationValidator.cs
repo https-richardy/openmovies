@@ -1,6 +1,7 @@
 namespace OpenMovies.WebApi.Validators;
 
-public sealed class CategoryCreationValidator : AbstractValidator<CategoryCreationRequest>
+public sealed class CategoryCreationValidator :
+    AbstractValidator<CategoryCreationRequest>, IValidator<CategoryCreationRequest>
 {
     public CategoryCreationValidator()
     {
