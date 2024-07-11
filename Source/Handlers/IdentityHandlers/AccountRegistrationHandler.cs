@@ -1,7 +1,7 @@
 namespace OpenMovies.WebApi.Handlers;
 
 public sealed class AccountRegistrationHandler(
-    UserManager<IdentityUser> userManager,
+    UserManager<ApplicationUser> userManager,
     RoleManager<IdentityRole> roleManager,
     IValidator<AccountRegistrationRequest> validator
 ) : IRequestHandler<AccountRegistrationRequest, Response>
@@ -15,7 +15,7 @@ public sealed class AccountRegistrationHandler(
         if (!validationResult.IsValid)
             throw new ValidationException(validationResult.Errors);
 
-        var user = new IdentityUser
+        var user = new ApplicationUser
         {
             UserName = request.FullName,
             Email = request.Email
