@@ -216,7 +216,7 @@ public sealed class CategoryControllerTest
             .Setup(mediator => mediator.Send(request, default))
             .ReturnsAsync(expectedResponse);
 
-        var result = await _controller.GetCategoriesAsync(categoryId);
+        var result = await _controller.GetCategoryByIdAsync(categoryId);
 
        _mediatorMock
             .Verify(mediator => mediator.Send(It.Is<CategoryRetrievalRequest>(request => request.CategoryId == categoryId), default), Times.Once);
@@ -251,7 +251,7 @@ public sealed class CategoryControllerTest
             .Setup(mediator => mediator.Send(It.Is<CategoryRetrievalRequest>(request => request.CategoryId == categoryId), default))
             .ReturnsAsync(expectedResponse);
 
-        var result = await _controller.GetCategoriesAsync(categoryId);
+        var result = await _controller.GetCategoryByIdAsync(categoryId);
 
         var objectResult = Assert.IsType<ObjectResult>(result);
         var actualResponse = Assert.IsType<Response<Category>>(objectResult.Value);
