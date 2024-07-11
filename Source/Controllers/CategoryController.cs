@@ -4,6 +4,17 @@ namespace OpenMovies.WebApi.Controllers;
 [Route("api/categories")]
 public sealed class CategoryController(IMediator mediator) : ControllerBase
 {
+    [HttpGet("{categoryId}")]
+    public async Task<IActionResult> GetCategoriesAsync(int categoryId)
+    {
+        var response = await mediator.Send(new CategoryRetrievalRequest
+        {
+            CategoryId = categoryId
+        });
+
+        return StatusCode(response.StatusCode, response);
+    }
+
     [HttpPost]
     [Authorize(Roles = "Administrator")]
     public async Task<IActionResult> CreateCategoryAsync(CategoryCreationRequest request)
