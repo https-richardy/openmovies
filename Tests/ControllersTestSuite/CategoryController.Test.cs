@@ -197,4 +197,74 @@ public sealed class CategoryControllerTest
         Assert.Equal(expectedResponse.StatusCode, actualResponse.StatusCode);
         Assert.Equal(expectedResponse.Message, actualResponse.Message);
     }
+
+    [Fact(DisplayName = "Given a valid categoryId, should return a 200 OK response")]
+    public async Task GivenValidCategoryId_ShouldReturnOkResponse()
+    {
+        var categoryId = 1;
+
+        var request = new CategoryRetrievalRequest { CategoryId = categoryId };
+
+        var expectedResponse = new Response<Category>
+        {
+            Data = new Category { Id = categoryId, Name = "Action" },
+            StatusCode = StatusCodes.Status200OK,
+            Message = "category retrieved successfully"
+        };
+
+        _mediatorMock
+            .Setup(mediator => mediator.Send(request, default))
+            .ReturnsAsync(expectedResponse);
+
+        var result = await _controller.GetCategoriesAsync(categoryId);
+
+       _mediatorMock
+            .Verify(mediator => mediator.Send(It.Is<CategoryRetrievalRequest>(request => request.CategoryId == categoryId), default), Times.Once);
+
+        var objectResult = Assert.IsType<ObjectResult>(result);
+        var actualResponse = Assert.IsType<Response<Category>>(objectResult.Value);
+
+        Assert.NotNull(objectResult);
+        Assert.NotNull(actualResponse.Data);
+
+        Assert.Equal(StatusCodes.Status200OK, objectResult.StatusCode);
+
+        Assert.Equal(expectedResponse.StatusCode, actualResponse.StatusCode);
+        Assert.Equal(expectedResponse.Message, actualResponse.Message);
+        Assert.Equal(expectedResponse.Data, actualResponse.Data);
+        Assert.Equal(expectedResponse.Data.Id, actualResponse.Data.Id);
+        Assert.Equal(expectedResponse.Data.Name, actualResponse.Data.Name);
+    }
+
+    [Fact(DisplayName = "Given a non-existing categoryId, should return a 404 NotFound response")]
+    public async Task GivenNonExistingCategoryId_ShouldReturnNotFoundResponse()
+    {
+        const int categoryId = 999;
+        var expectedResponse = new Response<Category>
+        {
+            Data = null,
+            StatusCode = StatusCodes.Status404NotFound,
+            Message = "category not found"
+        };
+
+        _mediatorMock
+            .Setup(mediator => mediator.Send(It.Is<CategoryRetrievalRequest>(request => request.CategoryId == categoryId), default))
+            .ReturnsAsync(expectedResponse);
+
+        var result = await _controller.GetCategoriesAsync(categoryId);
+
+        var objectResult = Assert.IsType<ObjectResult>(result);
+        var actualResponse = Assert.IsType<Response<Category>>(objectResult.Value);
+
+        _mediatorMock.Verify(mediator => mediator.Send(It.Is<CategoryRetrievalRequest>(request => request.CategoryId == categoryId), default), Times.Once);
+
+        Assert.NotNull(objectResult);
+        Assert.NotNull(actualResponse);
+
+        Assert.Null(actualResponse.Data);
+        Assert.Equal(StatusCodes.Status404NotFound, objectResult.StatusCode);
+
+        Assert.Equal(expectedResponse.StatusCode, actualResponse.StatusCode);
+        Assert.Equal(expectedResponse.Message, actualResponse.Message);
+    }
 }
