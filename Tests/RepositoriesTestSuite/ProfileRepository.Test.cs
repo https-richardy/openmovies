@@ -233,4 +233,25 @@ public sealed class ProfileRepositoryTest : InMemoryDatabaseFixture<AppDbContext
             Assert.Equal(profile.Id, movie.Profile.Id);
         }
     }
+
+    [Fact(DisplayName = "Given a valid user and profile ID, should fetch the profile by ID")]
+    public async Task GivenValidUserAndProfileId_ShouldFetchProfileById()
+    {
+        var user = Fixture.Create<ApplicationUser>();
+        var profile = Fixture.Build<Profile>()
+            .With(profile => profile.Account, user)
+            .Create();
+
+        await DbContext.Profiles.AddAsync(profile);
+        await DbContext.SaveChangesAsync();
+
+        var foundProfile = await _profileRepository.GetUserProfileByIdAsync(user, profile.Id);
+
+        Assert.NotNull(foundProfile);
+        Assert.Equal(profile.Id, foundProfile.Id);
+        Assert.Equal(profile.Name, foundProfile.Name);
+        Assert.Equal(profile.Avatar, foundProfile.Avatar);
+        Assert.Equal(profile.BookmarkedMovies.Count, foundProfile.BookmarkedMovies.Count);
+        Assert.Equal(profile.WatchedMovies.Count, foundProfile.WatchedMovies.Count);
+    }
 }
