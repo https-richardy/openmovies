@@ -6,6 +6,7 @@ public sealed class ProfileManagerTests
     private readonly Mock<IProfileRepository> _profileRepositoryMock;
     private readonly Mock<IProfileCreationPolicy> _profileCreationPolicyMock;
     private readonly Mock<ILogger<ProfileManager>> _loggerMock;
+    private readonly Mock<IWebHostEnvironment> _webHostEnvironmentMock;
     private readonly IFixture _fixture;
     private readonly IProfileManager _profileManager;
 
@@ -24,6 +25,10 @@ public sealed class ProfileManagerTests
             null  /* contextAccessor */
         );
 
+        _webHostEnvironmentMock = new Mock<IWebHostEnvironment>();
+        _webHostEnvironmentMock.Setup(environment => environment.WebRootPath)
+            .Returns("/wwwroot");
+
         _profileRepositoryMock = new Mock<IProfileRepository>();
         _profileCreationPolicyMock = new Mock<IProfileCreationPolicy>();
         _loggerMock = new Mock<ILogger<ProfileManager>>();
@@ -35,6 +40,7 @@ public sealed class ProfileManagerTests
             _userManagerMock.Object,
             _profileRepositoryMock.Object,
             _profileCreationPolicyMock.Object,
+            _webHostEnvironmentMock.Object,
             _loggerMock.Object
         );
     }
