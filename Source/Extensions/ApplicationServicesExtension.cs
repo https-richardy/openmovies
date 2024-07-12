@@ -6,8 +6,9 @@ public static class ApplicationServicesExtension
     public static void AddApplicationServices(this IServiceCollection services)
     {
         services.AddFileUploadService();
-
         services.AddScoped<UserContextService>();
+
+        services.AddScoped<IAvatarImageProvider, AvatarImageProvider>();
         services.AddScoped<IProfileManager, ProfileManager>();
     }
 }
