@@ -5,6 +5,7 @@ public sealed class AccountRegistrationHandlerTest
     private readonly Mock<UserManager<ApplicationUser>> _userManagerMock;
     private readonly Mock<RoleManager<IdentityRole>> _roleManagerMock;
     private readonly Mock<IValidator<AccountRegistrationRequest>> _validatorMock;
+    private readonly Mock<IProfileManager> _profileManager;
     private readonly IRequestHandler<AccountRegistrationRequest, Response> _handler;
     private readonly IFixture _fixture;
 
@@ -32,6 +33,7 @@ public sealed class AccountRegistrationHandlerTest
             null  /* logger */
         );
 
+        _profileManager = new Mock<IProfileManager>();
         _validatorMock = new Mock<IValidator<AccountRegistrationRequest>>();
         #endregion
 
@@ -41,6 +43,7 @@ public sealed class AccountRegistrationHandlerTest
         _handler = new AccountRegistrationHandler(
             userManager: _userManagerMock.Object,
             roleManager: _roleManagerMock.Object,
+            profileManager: _profileManager.Object,
             validator: _validatorMock.Object
         );
     }
@@ -62,6 +65,12 @@ public sealed class AccountRegistrationHandlerTest
                 It.IsAny<string>()
             ))
             .ReturnsAsync(IdentityResult.Success);
+
+        _profileManager.Setup(profileManager => profileManager.SaveUserProfileAsync(
+                It.IsAny<string>(),
+                It.IsAny<Profile>()
+            ))
+            .ReturnsAsync(OperationResult.Success());
         #endregion
 
         var result = await _handler.Handle(request, CancellationToken.None);
@@ -72,16 +81,22 @@ public sealed class AccountRegistrationHandlerTest
             It.IsAny<CancellationToken>()
         ));
 
-        /* checking if the handler called the userManager passing an IdentityUser and a password. */
+        /* checking if the handler called the userManager passing an ApplicationUser and a password. */
         _userManagerMock.Verify(userManager => userManager.CreateAsync(
             It.IsAny<ApplicationUser>(),
             It.IsAny<string>()
         ));
 
-        /* checking if the handler called the userManager passing an IdentityUser and a role. */
+        /* checking if the handler called the userManager passing an ApplicationUser and a role. */
         _userManagerMock.Verify(userManager => userManager.AddToRoleAsync(
             It.IsAny<ApplicationUser>(),
             It.IsAny<string>()
+        ));
+
+        /* checking if the handler called the profileManager passing an ApplicationUser. */
+        _profileManager.Verify(profileManager => profileManager.SaveUserProfileAsync(
+            It.IsAny<string>(),
+            It.IsAny<Profile>()
         ));
 
         Assert.NotNull(result);
