@@ -3,6 +3,7 @@ namespace OpenMovies.TestingSuite.PoliciesTestSuite;
 public sealed class MaxProfileCountPolicyTest
 {
     private readonly Mock<UserManager<ApplicationUser>> _userManagerMock;
+    private readonly Mock<IProfileRepository> _profileRepositoryMock;
     private readonly IProfileCreationPolicy _policy;
     private const int _currentMaxNumberOfProfilesPerAccount = 4;
     private readonly IFixture _fixture;
@@ -22,12 +23,18 @@ public sealed class MaxProfileCountPolicyTest
             null, /* logger */
             null  /* contextAccessor */
         );
+
+        _profileRepositoryMock = new Mock<IProfileRepository>();
+
         #endregion
 
         _fixture = new Fixture();
         _fixture.Behaviors.Add(new OmitOnRecursionBehavior());
 
-        _policy = new MaxProfileCountPolicy(userManager: _userManagerMock.Object);
+        _policy = new MaxProfileCountPolicy(
+            userManager: _userManagerMock.Object,
+            profileRepository: _profileRepositoryMock.Object
+        );
     }
 
     [Fact(DisplayName = "Users with fewer profiles than the maximum limit can create a new profile")]
@@ -38,6 +45,10 @@ public sealed class MaxProfileCountPolicyTest
         _userManagerMock
             .Setup(userManager => userManager.FindByIdAsync(It.Is<string>(userId => userId == user.Id)))
             .ReturnsAsync(user);
+
+        _profileRepositoryMock
+            .Setup(profileRepository => profileRepository.GetUserProfilesAsync(user))
+            .ReturnsAsync(user.Profiles);
 
         var result = await _policy.CanCreateProfileAsync(user.Id);
         Assert.True(result);
@@ -58,6 +69,10 @@ public sealed class MaxProfileCountPolicyTest
             .Setup(userManager => userManager.FindByIdAsync(It.Is<string>(userId => userId == user.Id)))
             .ReturnsAsync(user);
 
+        _profileRepositoryMock
+            .Setup(profileRepository => profileRepository.GetUserProfilesAsync(user))
+            .ReturnsAsync(user.Profiles);
+
         var result = await _policy.CanCreateProfileAsync(user.Id);
         Assert.False(result);
     }
@@ -76,6 +91,10 @@ public sealed class MaxProfileCountPolicyTest
         _userManagerMock
             .Setup(userManager => userManager.FindByIdAsync(It.Is<string>(userId => userId == user.Id)))
             .ReturnsAsync(user);
+
+        _profileRepositoryMock
+            .Setup(profileRepository => profileRepository.GetUserProfilesAsync(user))
+            .ReturnsAsync(user.Profiles);
 
         var result = await _policy.CanCreateProfileAsync(user.Id);
         Assert.False(result);
