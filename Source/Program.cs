@@ -19,6 +19,7 @@ internal static class Program
         }
 
         app.ConfigureHttpPipeline();
+
         app.MapControllers();
         app.Run();
     }
