@@ -18,8 +18,6 @@ public sealed class ProfileManager(
         if (string.IsNullOrEmpty(profile.Avatar))
             profile.Avatar = avatarImageProvider.GetRandomDefaultAvatar();
 
-        user.Profiles.Add(profile);
-
         var result = await profileRepository.SaveAsync(profile);
         if (!result.IsSuccess)
             return result;
@@ -37,8 +35,6 @@ public sealed class ProfileManager(
         var profile = user.Profiles.FirstOrDefault(profile => profile.Id == profileId);
         if (profile is null)
             return OperationResult.Failure("Profile not found.");
-
-        user.Profiles.Remove(profile);
 
         var result = await profileRepository.DeleteAsync(profile);
         if (!result.IsSuccess)
@@ -67,13 +63,15 @@ public sealed class ProfileManager(
     public async Task<Profile?> GetUserProfileByIdAsync(string userId, int profileId)
     {
         var user = await GetUserByIdAsync(userId);
-        return user.Profiles.FirstOrDefault(profile => profile.Id == profileId);
+
+        return await profileRepository.GetUserProfileByIdAsync(user, profileId);
     }
 
     public async Task<IEnumerable<Profile>> GetUserProfilesAsync(string userId)
     {
         var user = await GetUserByIdAsync(userId);
-        return user.Profiles;
+
+        return await profileRepository.GetUserProfilesAsync(user);
     }
 
     private async Task<ApplicationUser> GetUserByIdAsync(string userId)
