@@ -2,7 +2,6 @@
 
 global using System.Reflection;
 global using System.Diagnostics.CodeAnalysis;
-global using System.Net;
 global using System.Text;
 global using System.Text.Json;
 global using System.Text.Json.Serialization;
@@ -31,6 +30,7 @@ global using OpenMovies.WebApi.Identity;
 global using OpenMovies.WebApi.Services;
 global using OpenMovies.WebApi.Services.Exceptions;
 global using OpenMovies.WebApi.Payloads;
+global using OpenMovies.WebApi.Policies;
 global using OpenMovies.WebApi.Handlers;
 global using OpenMovies.WebApi.Helpers;
 global using OpenMovies.WebApi.Validators;
