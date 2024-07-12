@@ -6,7 +6,7 @@ public sealed class ProfileManagerTests
     private readonly Mock<IProfileRepository> _profileRepositoryMock;
     private readonly Mock<IProfileCreationPolicy> _profileCreationPolicyMock;
     private readonly Mock<ILogger<ProfileManager>> _loggerMock;
-    private readonly Mock<IWebHostEnvironment> _webHostEnvironmentMock;
+    private readonly Mock<IAvatarImageProvider> _avatarImageProviderMock;
     private readonly IFixture _fixture;
     private readonly IProfileManager _profileManager;
 
@@ -25,12 +25,9 @@ public sealed class ProfileManagerTests
             null  /* contextAccessor */
         );
 
-        _webHostEnvironmentMock = new Mock<IWebHostEnvironment>();
-        _webHostEnvironmentMock.Setup(environment => environment.WebRootPath)
-            .Returns("/wwwroot");
-
         _profileRepositoryMock = new Mock<IProfileRepository>();
         _profileCreationPolicyMock = new Mock<IProfileCreationPolicy>();
+        _avatarImageProviderMock = new Mock<IAvatarImageProvider>();
         _loggerMock = new Mock<ILogger<ProfileManager>>();
 
         _fixture = new Fixture();
@@ -40,7 +37,7 @@ public sealed class ProfileManagerTests
             _userManagerMock.Object,
             _profileRepositoryMock.Object,
             _profileCreationPolicyMock.Object,
-            _webHostEnvironmentMock.Object,
+            _avatarImageProviderMock.Object,
             _loggerMock.Object
         );
     }
@@ -57,7 +54,10 @@ public sealed class ProfileManagerTests
 
         _profileCreationPolicyMock.Setup(policy => policy.CanCreateProfileAsync(userId))
             .ReturnsAsync(true);
-    
+
+        _avatarImageProviderMock.Setup(provider => provider.GetRandomDefaultAvatar())
+            .Returns("default.png");
+
         _profileRepositoryMock.Setup(profileManager => profileManager.SaveAsync(profile))
             .ReturnsAsync(OperationResult.Success("Profile saved successfully."));
 
