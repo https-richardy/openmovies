@@ -23,7 +23,7 @@ public sealed class MaxProfileCountPolicy(UserManager<ApplicationUser> userManag
     {
         var user = await userManager.FindByIdAsync(userId);
         if (user is null)
-            throw new Exception(""); // TODO: throw custom exception.
+            throw new MaxProfileCountReachedException(userId, _maxNumberOfProfilesPerAccount); // TODO: throw custom exception.
 
         return user.Profiles.Count < _maxNumberOfProfilesPerAccount;
     }
