@@ -13,4 +13,5 @@ public interface IProfileService
 
     Task FavoriteMovieAsync(Profile profile, Movie movie);
     Task UnfavoriteMovieAsync(Profile profile, Movie movie);
+    Task MarkAsWatchedAsync(Profile profile, Movie movie);
 }
