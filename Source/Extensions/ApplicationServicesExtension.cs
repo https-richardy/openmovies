@@ -7,5 +7,7 @@ public static class ApplicationServicesExtension
     {
         services.AddFileUploadService();
         services.AddScoped<UserContextService>();
+
+        services.AddScoped<IProfileManager, ProfileManager>();
     }
 }
