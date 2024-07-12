@@ -3,6 +3,7 @@ namespace OpenMovies.WebApi.Handlers;
 public sealed class AccountRegistrationHandler(
     UserManager<ApplicationUser> userManager,
     RoleManager<IdentityRole> roleManager,
+    IProfileManager profileManager,
     IValidator<AccountRegistrationRequest> validator
 ) : IRequestHandler<AccountRegistrationRequest, Response>
 {
@@ -32,6 +33,9 @@ public sealed class AccountRegistrationHandler(
             await roleManager.CreateAsync(new IdentityRole("Common"));
 
         await userManager.AddToRoleAsync(user, "Common");
+
+        var profile = new Profile { Name = request.FullName, Account = user };
+        await profileManager.SaveUserProfileAsync(user.Id, profile);
 
         return new Response(
             statusCode: StatusCodes.Status201Created,
