@@ -184,4 +184,26 @@ public sealed class ProfileRepositoryTest : InMemoryDatabaseFixture<AppDbContext
             Assert.Equal(profile.Id, movie.Profile.Id);
         }
     }
+
+    [Fact(DisplayName = "Given a valid user, should return all related profiles")]
+    public async Task GivenAValidUserShouldReturnAllRelatedProfiles()
+    {
+        var user = Fixture.Create<ApplicationUser>();
+        user.Profiles.Clear();
+
+        var profiles = Fixture.Build<Profile>()
+            .With(profile =>  profile.Account, user)
+            .CreateMany(3)
+            .ToList();
+
+        user.Profiles = profiles;
+
+        await DbContext.Profiles.AddRangeAsync(profiles);
+        await DbContext.SaveChangesAsync();
+
+        var foundProfiles = await _profileRepository.GetUserProfilesAsync(user);
+
+        Assert.NotNull(foundProfiles);
+        Assert.Equal(user.Profiles.Count, foundProfiles.Count());
+    }
 }
