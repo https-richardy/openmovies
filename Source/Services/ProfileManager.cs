@@ -4,6 +4,7 @@ public sealed class ProfileManager(
     UserManager<ApplicationUser> userManager,
     IProfileRepository profileRepository,
     IProfileCreationPolicy profileCreationPolicy,
+    IWebHostEnvironment webHostEnvironment,
     ILogger<ProfileManager> logger
 ) : IProfileManager
 {
@@ -13,6 +14,9 @@ public sealed class ProfileManager(
 
         if (!await profileCreationPolicy.CanCreateProfileAsync(userId))
             return OperationResult.Failure("Maximum number of profiles reached.");
+
+        if (string.IsNullOrEmpty(profile.Avatar))
+            profile.Avatar = GetRandomDefaultAvatar();
 
         user.Profiles.Add(profile);
 
@@ -79,5 +83,21 @@ public sealed class ProfileManager(
             throw new UserNotFoundException(userId);
 
         return user;
+    }
+
+    private string GetRandomDefaultAvatar()
+    {
+        var avatarFolderPath = Path.Combine(webHostEnvironment.WebRootPath, "assets", "avatars");
+        var avatarFilePaths = Directory.GetFiles(avatarFolderPath);
+
+        var random = new Random();
+
+        var randomIndex = random.Next(avatarFilePaths.Length);
+        var selectedFilePath = avatarFilePaths[randomIndex];
+
+        var fileName = Path.GetFileName(selectedFilePath);
+        var relativePath = Path.Combine("assets", "avatars", fileName);
+
+        return relativePath;
     }
 }
