@@ -4,5 +4,5 @@ public sealed record AddNewProfileRequest : AuthenticatedRequest, IRequest<Respo
 {
     public string Name { get; init; }
     public bool IsChild { get; init; }
-    public IFormFile Avatar { get; init; }
+    public IFormFile? Avatar { get; init; }
 }
