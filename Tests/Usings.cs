@@ -11,6 +11,7 @@ global using System.Security.Claims;
 /* add global usage directives for the Microsoft namespaces here */
 
 global using Microsoft.AspNetCore.Mvc;
+global using Microsoft.AspNetCore.Hosting;
 global using Microsoft.Extensions.DependencyInjection;
 global using Microsoft.Extensions.Logging;
 global using Microsoft.AspNetCore.Http;
