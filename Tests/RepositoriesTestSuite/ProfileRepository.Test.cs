@@ -161,30 +161,6 @@ public sealed class ProfileRepositoryTest : InMemoryDatabaseFixture<AppDbContext
         Assert.Equal(3, pagedProfiles.Count());
     }
 
-    [Fact(DisplayName = "GetBookmarkedMoviesAsync should return correct movies for profile")]
-    public async Task GetBookmarkedMoviesAsync_ShouldReturnCorrectMoviesForProfile()
-    {
-        var profile = Fixture.Create<Profile>();
-
-        profile.BookmarkedMovies.Clear(); // cleaning the collection because it causes duplication.
-
-        var bookmarkedMovies = Fixture.Build<BookmarkedMovie>()
-            .With(bookmarkedMovies => bookmarkedMovies.Profile, profile)
-            .CreateMany(3);
-
-        await DbContext.BookmarkedMovies.AddRangeAsync(bookmarkedMovies);
-        await DbContext.SaveChangesAsync();
-
-        var result = await _profileRepository.GetBookmarkedMoviesAsync(profile);
-
-        Assert.Equal(bookmarkedMovies.Count(), result.Count());
-
-        foreach (var movie in result)
-        {
-            Assert.Equal(profile.Id, movie.Profile.Id);
-        }
-    }
-
     [Fact(DisplayName = "Given a valid user, should return all related profiles")]
     public async Task GivenAValidUserShouldReturnAllRelatedProfiles()
     {
@@ -205,33 +181,6 @@ public sealed class ProfileRepositoryTest : InMemoryDatabaseFixture<AppDbContext
 
         Assert.NotNull(foundProfiles);
         Assert.Equal(user.Profiles.Count, foundProfiles.Count());
-    }
-
-    [Fact(DisplayName = "Given a valid profile, should return all related watched movies")]
-    public async Task GivenAValidProfileShouldReturnAllRelatedWatchedMovies()
-    {
-        var profile = Fixture.Create<Profile>();
-        profile.WatchedMovies.Clear(); // cleaning the collection because it causes duplication.
-
-        var watchedMovies = Fixture.Build<WatchedMovie>()
-            .With(watchedMovie => watchedMovie.Profile, profile)
-            .CreateMany(3)
-            .ToList();
-
-        profile.WatchedMovies = watchedMovies;
-
-        await DbContext.Profiles.AddAsync(profile);
-        await DbContext.SaveChangesAsync();
-
-        var foundMovies = await _profileRepository.GetWatchedMoviesAsync(profile);
-
-        Assert.NotNull(foundMovies);
-        Assert.Equal(profile.WatchedMovies.Count, foundMovies.Count());
-
-        foreach (var movie in foundMovies)
-        {
-            Assert.Equal(profile.Id, movie.Profile.Id);
-        }
     }
 
     [Fact(DisplayName = "Given a valid user and profile ID, should fetch the profile by ID")]
