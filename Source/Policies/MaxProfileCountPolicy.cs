@@ -7,7 +7,10 @@ namespace OpenMovies.WebApi.Policies;
 /// This policy checks if a user has reached the maximum allowed number of profiles before allowing them to create a new one.
 /// The maximum number of profiles is defined by the private constant <c>_maxNumberOfProfilesPerAccount</c>.
 /// </remarks>
-public sealed class MaxProfileCountPolicy(UserManager<ApplicationUser> userManager) : IProfileCreationPolicy
+public sealed class MaxProfileCountPolicy(
+    UserManager<ApplicationUser> userManager,
+    IProfileRepository profileRepository
+) : IProfileCreationPolicy
 {
     private const int _maxNumberOfProfilesPerAccount = 4;
 
@@ -25,6 +28,8 @@ public sealed class MaxProfileCountPolicy(UserManager<ApplicationUser> userManag
         if (user is null)
             throw new MaxProfileCountReachedException(userId, _maxNumberOfProfilesPerAccount);
 
-        return user.Profiles.Count < _maxNumberOfProfilesPerAccount;
+        var profiles = await profileRepository.GetUserProfilesAsync(user);
+
+        return profiles.Count() < _maxNumberOfProfilesPerAccount;
     }
 }
