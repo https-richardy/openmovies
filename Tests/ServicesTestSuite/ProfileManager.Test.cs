@@ -254,6 +254,9 @@ public sealed class ProfileManagerTests
         var profile = new Profile { Id = profileId, Name = "Test Profile" };
         var user = new ApplicationUser { Id = userId, Profiles = new List<Profile> { profile } };
 
+        _profileRepositoryMock.Setup(repository => repository.GetUserProfileByIdAsync(user, profileId))
+            .ReturnsAsync(profile);
+
         _userManagerMock.Setup(userManager => userManager.FindByIdAsync(userId))
             .ReturnsAsync(user);
 
@@ -264,6 +267,7 @@ public sealed class ProfileManagerTests
         Assert.Equal("Test Profile", result?.Name);
 
         _userManagerMock.Verify(userManager => userManager.FindByIdAsync(userId), Times.Once);
+        _profileRepositoryMock.Verify(repository => repository.GetUserProfileByIdAsync(user, profileId), Times.Once);
     }
 
     [Fact(DisplayName = "Given valid userId, should return user profiles")]
@@ -275,6 +279,9 @@ public sealed class ProfileManagerTests
 
         _userManagerMock.Setup(userManager => userManager.FindByIdAsync(userId))
             .ReturnsAsync(user);
+
+        _profileRepositoryMock.Setup(repository => repository.GetUserProfilesAsync(user))
+            .ReturnsAsync(profiles);
 
         var result = await _profileManager.GetUserProfilesAsync(userId);
 
