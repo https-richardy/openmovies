@@ -8,8 +8,7 @@ public static class ApplicationServicesExtension
         services.AddFileUploadService();
         services.AddApplicationPolicies();
 
-        services.AddScoped<UserContextService>();
-
+        services.AddScoped<IUserContextService, UserContextService>();
         services.AddScoped<IAvatarImageProvider, AvatarImageProvider>();
         services.AddScoped<IProfileManager, ProfileManager>();
     }
