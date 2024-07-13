@@ -13,44 +13,38 @@ public sealed class ProfileCreationHandler(
         ProfileCreationRequest request,
         CancellationToken cancellationToken)
     {
-        try
+        var userId = userContextService.GetCurrentUserId();
+        var user = await userManager.FindByIdAsync(userId);
+
+        if (user is null)
+            return new Response(
+                statusCode: StatusCodes.Status404NotFound,
+                message: "User not found."
+            );
+
+        var validationResult = await validator.ValidateAsync(request);
+        if (!validationResult.IsValid)
+            throw new ValidationException(validationResult.Errors);
+
+        var profile = TinyMapper.Map<Profile>(request);
+
+        if (request.Avatar != null)
         {
-            var userId = userContextService.GetCurrentUserId();
-            var user = await userManager.FindByIdAsync(userId);
-
-            if (user is null)
-                return new Response(
-                    statusCode: StatusCodes.Status404NotFound,
-                    message: "User not found."
-                );
-
-            var validationResult = await validator.ValidateAsync(request);
-            if (!validationResult.IsValid)
-                throw new ValidationException(validationResult.Errors);
-
-            var profile = TinyMapper.Map<Profile>(request);
-
-            if (request.Avatar != null)
-            {
-                var imagePath = await fileUploadService.UploadFileAsync(request.Avatar);
-                profile.Avatar = imagePath;
-            }
-
-            await profileManager.SaveUserProfileAsync(user.Id, profile);
-            return new Response
-            {
-                StatusCode = StatusCodes.Status201Created,
-                Message = "Profile created successfully."
-            };
-
+            var imagePath = await fileUploadService.UploadFileAsync(request.Avatar);
+            profile.Avatar = imagePath;
         }
-        catch (MaxProfileCountReachedException exception)
+
+        var result = await profileManager.SaveUserProfileAsync(user.Id, profile);
+        if (!result.IsSuccess)
+            return new Response(
+                statusCode: StatusCodes.Status403Forbidden,
+                message: result.Message
+            );
+
+        return new Response
         {
-            return new Response
-            {
-                StatusCode = StatusCodes.Status403Forbidden,
-                Message = exception.Message
-            };
-        }
+            StatusCode = StatusCodes.Status201Created,
+            Message = "Profile created successfully."
+        };
     }
 }
