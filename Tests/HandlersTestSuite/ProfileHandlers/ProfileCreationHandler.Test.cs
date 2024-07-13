@@ -6,7 +6,9 @@ public sealed class ProfileCreationHandlerTest
     private readonly Mock<IUserContextService> _userContextServiceMock;
     private readonly Mock<IProfileManager> _profileManagerMock;
     private readonly Mock<IFileUploadService> _fileUploadServiceMock;
+    private readonly Mock<IValidator<ProfileCreationRequest>> _validatorMock;
     private readonly IFixture _fixture;
+    private readonly IServiceCollection _services;
     private readonly IRequestHandler<ProfileCreationRequest, Response> _handler;
     private readonly int _maxNumberOfProfiles = 4;
 
@@ -30,15 +32,20 @@ public sealed class ProfileCreationHandlerTest
         _userContextServiceMock = new Mock<IUserContextService>();
         _profileManagerMock = new Mock<IProfileManager>();
         _fileUploadServiceMock = new Mock<IFileUploadService>();
+        _validatorMock = new Mock<IValidator<ProfileCreationRequest>>();
 
         _fixture = new Fixture();
         _fixture.Behaviors.Add(new OmitOnRecursionBehavior());
+
+        _services = new ServiceCollection();
+        _services.AddMapping(); // Add mapping settings with TinyMapper
 
         _handler = new ProfileCreationHandler(
             userManager: _userManagerMock.Object,
             userContextService: _userContextServiceMock.Object,
             profileManager: _profileManagerMock.Object,
-            fileUploadService: _fileUploadServiceMock.Object
+            fileUploadService: _fileUploadServiceMock.Object,
+            validator: _validatorMock.Object
         );
 
         #endregion
@@ -61,6 +68,11 @@ public sealed class ProfileCreationHandlerTest
 
         var userId = Guid.NewGuid().ToString();
         var user = new ApplicationUser { Id = userId };
+
+        var validationResult = new ValidationResult();
+
+        _validatorMock.Setup(validator => validator.ValidateAsync(request, CancellationToken.None))
+            .ReturnsAsync(validationResult);
 
         _userContextServiceMock.Setup(service => service.GetCurrentUserId())
             .Returns(userId);
@@ -100,6 +112,11 @@ public sealed class ProfileCreationHandlerTest
         _userContextServiceMock.Setup(service => service.GetCurrentUserId())
             .Returns(userId);
 
+        var validationResult = new ValidationResult();
+
+        _validatorMock.Setup(validator => validator.ValidateAsync(request, CancellationToken.None))
+            .ReturnsAsync(validationResult);
+
         _userManagerMock.Setup(userManager => userManager.FindByIdAsync(userId))
             .ReturnsAsync(user);
 
@@ -117,6 +134,35 @@ public sealed class ProfileCreationHandlerTest
         /* because the avatar is null, the file upload service will not be called and the profileManager provides a default avatar. */
         _fileUploadServiceMock.Verify(service => service.UploadFileAsync(It.IsAny<IFormFile>()), Times.Never);
         _profileManagerMock.Verify(manager => manager.SaveUserProfileAsync(userId, It.IsAny<Profile>()), Times.Once);
+    }
+
+    [Fact(DisplayName = "Given a invalid request should throw ValidationException")]
+    public async Task GivenInvalidRequest_ShouldThrowValidationException()
+    {
+        var request = _fixture.Build<ProfileCreationRequest>()
+            .With(request => request.Avatar, new Mock<IFormFile>().Object)
+            .Create();
+
+        var userId = Guid.NewGuid().ToString();
+        var user = new ApplicationUser { Id = userId };
+
+        var validationErrors = new List<ValidationFailure>
+        {
+            new ValidationFailure("Name", "Name is required."),
+        };
+
+        var validationResult = new ValidationResult { Errors = validationErrors };
+
+        _userContextServiceMock.Setup(service => service.GetCurrentUserId())
+            .Returns(userId);
+
+        _userManagerMock.Setup(userManager => userManager.FindByIdAsync(userId))
+            .ReturnsAsync(user);
+
+        _validatorMock.Setup(validator => validator.ValidateAsync(request, default))
+            .ThrowsAsync(new ValidationException(validationErrors));
+
+        await Assert.ThrowsAsync<ValidationException>(() => _handler.Handle(request, default));
     }
 
     [Fact(DisplayName = "Given user is not found, should return 404 Not Found")]
@@ -162,6 +208,11 @@ public sealed class ProfileCreationHandlerTest
 
             _userContextServiceMock.Setup(service => service.GetCurrentUserId())
                 .Returns(userId);
+
+            var validationResult = new ValidationResult();
+
+            _validatorMock.Setup(validator => validator.ValidateAsync(request, CancellationToken.None))
+                .ReturnsAsync(validationResult);
 
             _userManagerMock.Setup(userManager => userManager.FindByIdAsync(userId))
                 .ReturnsAsync(user);
