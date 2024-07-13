@@ -5,4 +5,7 @@ public sealed record ProfileEditingRequest : AuthenticatedRequest, IRequest<Resp
     public string Name { get; init; }
     public bool IsChild { get; init; }
     public IFormFile? Avatar { get; init; }
+
+    [JsonIgnore]
+    public int ProfileId { get; set; }
 }
