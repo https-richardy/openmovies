@@ -36,5 +36,11 @@ public static class MediatorExtension
         services.AddScoped<IRequestHandler<CategoryDeletionRequest, Response>, CategoryDeletionHandler>();
 
         #endregion
+
+        #region handlers for profiles
+
+        services.AddScoped<IRequestHandler<AddNewProfileRequest, Response>, AddNewProfileHandler>();
+
+        #endregion
     }
 }
