@@ -1,6 +1,6 @@
 namespace OpenMovies.TestingSuite.HandlersTestSuite.ProfileHandlers;
 
-public sealed class AddNewProfileHandlerTest
+public sealed class ProfileCreationHandlerTest
 {
     private readonly Mock<UserManager<ApplicationUser>> _userManagerMock;
     private readonly Mock<IUserContextService> _userContextServiceMock;
@@ -11,7 +11,7 @@ public sealed class AddNewProfileHandlerTest
     private readonly int _maxNumberOfProfiles = 4;
 
 
-    public AddNewProfileHandlerTest()
+    public ProfileCreationHandlerTest()
     {
         #region Mocking
         #pragma warning disable CS8625
@@ -34,7 +34,7 @@ public sealed class AddNewProfileHandlerTest
         _fixture = new Fixture();
         _fixture.Behaviors.Add(new OmitOnRecursionBehavior());
 
-        _handler = new AddNewProfileHandler(
+        _handler = new ProfileCreationHandler(
             userManager: _userManagerMock.Object,
             userContextService: _userContextServiceMock.Object,
             profileManager: _profileManagerMock.Object,

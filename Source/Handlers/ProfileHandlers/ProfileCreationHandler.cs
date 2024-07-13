@@ -1,6 +1,6 @@
 namespace OpenMovies.WebApi.Handlers;
 
-public sealed class AddNewProfileHandler(
+public sealed class ProfileCreationHandler(
     UserManager<ApplicationUser> userManager,
     IUserContextService userContextService,
     IProfileManager profileManager,
@@ -9,7 +9,7 @@ public sealed class AddNewProfileHandler(
 {
     #pragma warning disable CS8604
     public async Task<Response> Handle(
-        ProfileCreationRequest request, 
+        ProfileCreationRequest request,
         CancellationToken cancellationToken)
     {
         try

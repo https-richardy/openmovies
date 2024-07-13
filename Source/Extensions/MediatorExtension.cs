@@ -39,7 +39,7 @@ public static class MediatorExtension
 
         #region handlers for profiles
 
-        services.AddScoped<IRequestHandler<ProfileCreationRequest, Response>, AddNewProfileHandler>();
+        services.AddScoped<IRequestHandler<ProfileCreationRequest, Response>, ProfileCreationHandler>();
 
         #endregion
     }
