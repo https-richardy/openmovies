@@ -5,11 +5,11 @@ public sealed class AddNewProfileHandler(
     IUserContextService userContextService,
     IProfileManager profileManager,
     IFileUploadService fileUploadService
-) : IRequestHandler<AddNewProfileRequest, Response>
+) : IRequestHandler<ProfileCreationRequest, Response>
 {
     #pragma warning disable CS8604
     public async Task<Response> Handle(
-        AddNewProfileRequest request, 
+        ProfileCreationRequest request, 
         CancellationToken cancellationToken)
     {
         try

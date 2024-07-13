@@ -7,7 +7,7 @@ public sealed class AddNewProfileHandlerTest
     private readonly Mock<IProfileManager> _profileManagerMock;
     private readonly Mock<IFileUploadService> _fileUploadServiceMock;
     private readonly IFixture _fixture;
-    private readonly IRequestHandler<AddNewProfileRequest, Response> _handler;
+    private readonly IRequestHandler<ProfileCreationRequest, Response> _handler;
     private readonly int _maxNumberOfProfiles = 4;
 
 
@@ -53,7 +53,7 @@ public sealed class AddNewProfileHandlerTest
         formFileMock.Setup(file => file.Length).Returns(100);
         formFileMock.Setup(file => file.OpenReadStream()).Returns(new MemoryStream());
 
-        var request = new AddNewProfileRequest
+        var request = new ProfileCreationRequest
         {
             Name = "John Doe",
             Avatar = formFileMock.Object
@@ -88,7 +88,7 @@ public sealed class AddNewProfileHandlerTest
     [Fact(DisplayName = "Given a valid user without avatar, should save the profile successfully")]
     public async Task GivenValidUserWithoutAvatar_ShouldSaveTheProfileSuccessfully()
     {
-        var request = new AddNewProfileRequest
+        var request = new ProfileCreationRequest
         {
             Name = "Test Profile",
             Avatar = null
@@ -122,7 +122,7 @@ public sealed class AddNewProfileHandlerTest
     [Fact(DisplayName = "Given user is not found, should return 404 Not Found")]
     public async Task GivenUserIsNotFound_ShouldReturnNotFound()
     {
-        var request = new AddNewProfileRequest
+        var request = new ProfileCreationRequest
         {
             Name = "Test Profile",
             Avatar = null
@@ -151,7 +151,7 @@ public sealed class AddNewProfileHandlerTest
         [Fact(DisplayName = "Given MaxProfileCountReachedException is thrown, should return 403 Forbidden")]
         public async Task GivenMaxProfileCountReachedExceptionIsThrown_ShouldReturnForbidden()
         {
-            var request = new AddNewProfileRequest
+            var request = new ProfileCreationRequest
             {
                 Name = "Test Profile",
                 Avatar = null

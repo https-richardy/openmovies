@@ -19,7 +19,7 @@ public sealed class ProfileControllerTest
     public async Task GivenValidRequest_ShouldReturnCreatedResponse()
     {
         #pragma warning disable CS8600 // disabling because in this scenario the avatar (IFormFile) goes null
-        var request = _fixture.Build<AddNewProfileRequest>()
+        var request = _fixture.Build<ProfileCreationRequest>()
             .With(request => request.Avatar, (IFormFile)null)
             .Create();
 
@@ -33,7 +33,7 @@ public sealed class ProfileControllerTest
             .Setup(mediator => mediator.Send(request, default))
             .ReturnsAsync(expectedResponse);
 
-        var response = await _controller.AddNewProfileAsync(request);
+        var response = await _controller.CreateProfileAsync(request);
         var objectResult = response as ObjectResult;
         var objectResultValue = objectResult?.Value as Response;
 
@@ -53,7 +53,7 @@ public sealed class ProfileControllerTest
     [Fact(DisplayName = "Given a valid request with avatar, it should return a response of 201 Created")]
     public async Task GivenValidRequestWithAvatar_ShouldReturnCreatedResponse()
     {
-        var request = _fixture.Build<AddNewProfileRequest>()
+        var request = _fixture.Build<ProfileCreationRequest>()
             .With(request => request.Avatar, new Mock<IFormFile>().Object)
             .Create();
 
@@ -67,7 +67,7 @@ public sealed class ProfileControllerTest
             .Setup(mediator => mediator.Send(request, default))
             .ReturnsAsync(expectedResponse);
 
-        var response = await _controller.AddNewProfileAsync(request);
+        var response = await _controller.CreateProfileAsync(request);
         var objectResult = response as ObjectResult;
         var objectResultValue = objectResult?.Value as Response;
 
@@ -87,7 +87,7 @@ public sealed class ProfileControllerTest
     [Fact(DisplayName = "Dado uma exceção de MaxProfileCountReachedException, deve retornar resposta de 403 Forbidden")]
     public async Task GivenMaxProfileCountReachedException_ShouldReturnForbiddenResponse()
     {
-        var request = _fixture.Build<AddNewProfileRequest>()
+        var request = _fixture.Build<ProfileCreationRequest>()
             .With(request => request.Avatar, new Mock<IFormFile>().Object)
             .Create();
 
@@ -102,7 +102,7 @@ public sealed class ProfileControllerTest
             .Setup(mediator => mediator.Send(request, default))
             .ReturnsAsync(expectedResponse);
 
-        var response = await _controller.AddNewProfileAsync(request);
+        var response = await _controller.CreateProfileAsync(request);
         var objectResult = response as ObjectResult;
         var objectResultValue = objectResult?.Value as Response;
 

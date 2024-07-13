@@ -5,7 +5,7 @@ namespace OpenMovies.WebApi.Controllers;
 public sealed class ProfileController(IMediator mediator) : ControllerBase
 {
     [HttpPost]
-    public async Task<IActionResult> AddNewProfileAsync(AddNewProfileRequest request)
+    public async Task<IActionResult> CreateProfileAsync(ProfileCreationRequest request)
     {
         var response = await mediator.Send(request);
         return StatusCode(response.StatusCode, response);
