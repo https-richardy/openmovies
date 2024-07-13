@@ -18,6 +18,8 @@ public sealed class ProfileManager(
         if (string.IsNullOrEmpty(profile.Avatar))
             profile.Avatar = avatarImageProvider.GetRandomDefaultAvatar();
 
+        profile.Account = user;
+
         var result = await profileRepository.SaveAsync(profile);
         if (!result.IsSuccess)
             return result;
