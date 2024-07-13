@@ -7,10 +7,6 @@ public sealed class ProfileEditingValidator
     {
         RuleFor(request => request.Name)
             .MinimumLength(3).WithMessage("Name must be at least 3 characters.")
-            .NotEmpty();
-
-        RuleFor(profile => profile.IsChild)
-            .NotEmpty()
-            .WithMessage("is child is required.");
+            .NotEmpty().WithMessage("Name is required.");
     }
 }
