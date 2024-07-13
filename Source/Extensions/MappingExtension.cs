@@ -25,5 +25,23 @@ public static class MappingExtension
         });
 
         #endregion
+
+        #region mapping settings for profiles
+
+        TinyMapper.Bind<ProfileCreationRequest, Profile>(config =>
+        {
+            config.Bind(target: target => target.Name, source: source => source.Name);
+            config.Bind(target: target => target.IsChild, source: source => source.IsChild);
+            config.Ignore(target => target.Avatar);
+        });
+
+        TinyMapper.Bind<ProfileEditingRequest, Profile>(config =>
+        {
+            config.Bind(target: target => target.Name, source: source => source.Name);
+            config.Bind(target: target => target.IsChild, source: source => source.IsChild);
+            config.Ignore(target => target.Avatar);
+        });
+
+        #endregion
     }
 }
