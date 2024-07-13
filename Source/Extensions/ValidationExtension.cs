@@ -11,6 +11,13 @@ public static class ValidationExtension
 
         #endregion
 
+        #region validators for profiles
+
+        services.AddScoped<IValidator<ProfileCreationRequest>, ProfileCreationValidator>();
+        services.AddScoped<IValidator<ProfileEditingRequest>, ProfileEditingValidator>();
+
+        #endregion
+
         #region validators for movies
 
         services.AddScoped<IValidator<MovieCreationRequest>, MovieCreationValidator>();
