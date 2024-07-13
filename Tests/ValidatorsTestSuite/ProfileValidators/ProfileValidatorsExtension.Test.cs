@@ -14,7 +14,7 @@ public sealed class ProfileValidatorsExtensionTest
     public void ShouldVerifyIProfileCreationValidatorIsRegistered()
     {
         var validator = _services.BuildServiceProvider()
-            .GetRequiredService<IValidator<ProfileCreationValidator>>();
+            .GetRequiredService<IValidator<ProfileCreationRequest>>();
 
         Assert.NotNull(validator);
         Assert.IsType<ProfileCreationValidator>(validator);
