@@ -10,4 +10,13 @@ public sealed class ProfileController(IMediator mediator) : ControllerBase
         var response = await mediator.Send(request);
         return StatusCode(response.StatusCode, response);
     }
+
+    [HttpPut("{profileId}")]
+    public async Task<IActionResult> EditProfileAsync(ProfileEditingRequest request, [FromRoute] int profileId)
+    {
+        request.ProfileId = profileId;
+
+        var response = await mediator.Send(request);
+        return StatusCode(response.StatusCode, response);
+    }
 }
