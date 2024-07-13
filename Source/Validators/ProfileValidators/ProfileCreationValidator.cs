@@ -5,8 +5,12 @@ public sealed class ProfileCreationValidator
 {
     public ProfileCreationValidator()
     {
-        RuleFor(request => request.Name)
+        RuleFor(profile => profile.Name)
             .MinimumLength(3).WithMessage("Name must be at least 3 characters.")
             .NotEmpty();
+
+        RuleFor(profile => profile.IsChild)
+            .NotEmpty()
+            .WithMessage("is child is required.");
     }
 }
