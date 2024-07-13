@@ -34,7 +34,7 @@ public sealed class UserContextServiceTest
         Assert.Equal(userId, result);
     }
 
-    [Fact()]
+    [Fact(DisplayName = "Should return null when there is no user in the context")]
     public void GetCurrentUserId_NoUserInContext_ReturnsNull()
     {
         #pragma warning disable CS8600 // this needs to be null and void in this scenario.
@@ -45,7 +45,7 @@ public sealed class UserContextServiceTest
         Assert.Null(result);
     }
 
-    [Fact]
+    [Fact(DisplayName = "It should return the user's principal when a user is in the context")]
     public void GetCurrentUserClaimsPrincipal_UserInContext_ReturnsClaimsPrincipal()
     {
         var claims = new List<Claim>
@@ -69,5 +69,15 @@ public sealed class UserContextServiceTest
         Assert.Equal(claimsPrincipal.FindFirstValue(ClaimTypes.NameIdentifier), result?.FindFirstValue(ClaimTypes.NameIdentifier));
         Assert.Equal(claimsPrincipal.FindFirstValue(ClaimTypes.Name), result?.FindFirstValue(ClaimTypes.Name));
         Assert.Equal(claimsPrincipal.FindFirstValue(ClaimTypes.Role), result?.FindFirstValue(ClaimTypes.Role));
+    }
+
+    [Fact(DisplayName = "It should return null when there is no user in the context")]
+    public void GetCurrentUserClaimsPrincipal_NoUserInContext_LogsWarning()
+    {
+        _contextAccessorMock.Setup(accessor => accessor.HttpContext)
+            .Returns((HttpContext)null);
+
+        var result = _userContextService.GetCurrentUserClaimsPrincipal();
+        Assert.Null(result);
     }
 }
