@@ -3,7 +3,7 @@ namespace OpenMovies.WebApi.Services;
 public sealed class UserContextService(
     IHttpContextAccessor contextAccessor,
     ILogger<UserContextService> logger
-)
+) : IUserContextService
 {
     public string? GetCurrentUserId()
     {
