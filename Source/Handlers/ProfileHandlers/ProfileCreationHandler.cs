@@ -4,7 +4,8 @@ public sealed class ProfileCreationHandler(
     UserManager<ApplicationUser> userManager,
     IUserContextService userContextService,
     IProfileManager profileManager,
-    IFileUploadService fileUploadService
+    IFileUploadService fileUploadService,
+    IValidator<ProfileCreationRequest> validator
 ) : IRequestHandler<ProfileCreationRequest, Response>
 {
     #pragma warning disable CS8604
@@ -23,11 +24,11 @@ public sealed class ProfileCreationHandler(
                     message: "User not found."
                 );
 
-            var profile = new Profile
-            {
-                Name = request.Name,
-                Account = user
-            };
+            var validationResult = await validator.ValidateAsync(request);
+            if (!validationResult.IsValid)
+                throw new ValidationException(validationResult.Errors);
+
+            var profile = TinyMapper.Map<Profile>(request);
 
             if (request.Avatar != null)
             {
