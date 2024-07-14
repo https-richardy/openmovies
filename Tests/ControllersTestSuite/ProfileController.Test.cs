@@ -114,4 +114,51 @@ public sealed class ProfileControllerTest
 
         _mediatorMock.Verify(mediator => mediator.Send(It.IsAny<ProfilesRetrievalRequest>(), It.IsAny<CancellationToken>()), Times.Once);
     }
+
+    [Fact(DisplayName = "Given a valid profile selection request, should return 200 OK with authentication response")]
+    public async Task GivenValidProfileSelectionRequest_ShouldReturnOkWithAuthenticationResponse()
+    {
+        var responseData = new AuthenticationResponse { Token = "mocked.jwt.token" };
+
+        var response = _fixture.Build<Response<AuthenticationResponse>>()
+            .With(request => request.Data, responseData)
+            .With(request => request.StatusCode, StatusCodes.Status200OK)
+            .With(request => request.Message, "Profile successfully selected.")
+            .Create();
+
+        _mediatorMock.Setup(mediator => mediator.Send(It.IsAny<ProfileSelectionRequest>(), It.IsAny<CancellationToken>()))
+                     .ReturnsAsync(response);
+
+        var result = await _controller.SelectProfileAsync(1);
+
+        var objectResult = Assert.IsType<ObjectResult>(result);
+        var actualResponse = Assert.IsType<Response<AuthenticationResponse>>(objectResult.Value);
+
+        Assert.Equal(StatusCodes.Status200OK, objectResult.StatusCode);
+        Assert.Equal(response, objectResult.Value);
+        Assert.Equal(expected: objectResult.Value, actual: actualResponse);
+
+        _mediatorMock.Verify(mediator => mediator.Send(It.IsAny<ProfileSelectionRequest>(), It.IsAny<CancellationToken>()), Times.Once);
+    }
+
+    [Fact(DisplayName = "Given an invalid profile selection request, should return 404 Not Found")]
+    public async Task GivenInvalidProfileSelectionRequest_ShouldReturnNotFound()
+    {
+        var response = _fixture.Build<Response<AuthenticationResponse>>()
+            .With(request => request.StatusCode, StatusCodes.Status404NotFound)
+            .With(request => request.Message, "Profile not found.")
+            .Create();
+
+        _mediatorMock.Setup(mediator => mediator.Send(It.IsAny<ProfileSelectionRequest>(), It.IsAny<CancellationToken>()))
+                     .ReturnsAsync(response);
+
+        var result = await _controller.SelectProfileAsync(99);
+
+        var objectResult = Assert.IsType<ObjectResult>(result);
+
+        Assert.Equal(StatusCodes.Status404NotFound, objectResult.StatusCode);
+        Assert.Equal(response, objectResult.Value);
+
+        _mediatorMock.Verify(mediator => mediator.Send(It.IsAny<ProfileSelectionRequest>(), It.IsAny<CancellationToken>()), Times.Once);
+    }
 }
