@@ -44,7 +44,7 @@ public sealed class ProfileManager(
 
         await userManager.UpdateAsync(user);
 
-        logger.LogInformation("user profile `{userId}` with ID: `{profile}` successfully updated.", userId, profileId);
+        logger.LogInformation("user profile `{userId}` with ID: `{profile}` successfully deleted.", userId, profileId);
         return OperationResult.Success(message: "Profile deleted successfully.");
     }
 
