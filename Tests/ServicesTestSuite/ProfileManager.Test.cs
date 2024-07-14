@@ -137,6 +137,10 @@ public sealed class ProfileManagerTests
         _userManagerMock.Setup(userManager => userManager.FindByIdAsync(userId))
             .ReturnsAsync(user);
 
+        _profileRepositoryMock
+            .Setup(repository => repository.GetUserProfileByIdAsync(user, profileId))
+            .ReturnsAsync(profile);
+
         _profileRepositoryMock.Setup(profileManager => profileManager.DeleteAsync(profile))
             .ReturnsAsync(OperationResult.Success("Profile deleted successfully."));
 
@@ -183,6 +187,10 @@ public sealed class ProfileManagerTests
 
         _userManagerMock.Setup(userManager => userManager.FindByIdAsync(userId))
             .ReturnsAsync(user);
+
+        _profileRepositoryMock
+            .Setup(repository => repository.GetUserProfileByIdAsync(user, profileId))
+            .ReturnsAsync(profile);
 
         _profileRepositoryMock.Setup(repository => repository.DeleteAsync(profile))
             .ReturnsAsync(OperationResult.Failure("Repository error"));
