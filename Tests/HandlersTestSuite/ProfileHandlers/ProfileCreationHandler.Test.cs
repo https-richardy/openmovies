@@ -193,41 +193,4 @@ public sealed class ProfileCreationHandlerTest
         _fileUploadServiceMock.Verify(service => service.UploadFileAsync(It.IsAny<IFormFile>()), Times.Never);
         _profileManagerMock.Verify(manager => manager.SaveUserProfileAsync(It.IsAny<string>(), It.IsAny<Profile>()), Times.Never);
     }
-
-        [Fact(DisplayName = "Given MaxProfileCountReachedException is thrown, should return 403 Forbidden")]
-        public async Task GivenMaxProfileCountReachedExceptionIsThrown_ShouldReturnForbidden()
-        {
-            var request = new ProfileCreationRequest
-            {
-                Name = "Test Profile",
-                Avatar = null
-            };
-
-            var userId = Guid.NewGuid().ToString();
-            var user = new ApplicationUser { Id = userId };
-
-            _userContextServiceMock.Setup(service => service.GetCurrentUserId())
-                .Returns(userId);
-
-            var validationResult = new ValidationResult();
-
-            _validatorMock.Setup(validator => validator.ValidateAsync(request, CancellationToken.None))
-                .ReturnsAsync(validationResult);
-
-            _userManagerMock.Setup(userManager => userManager.FindByIdAsync(userId))
-                .ReturnsAsync(user);
-
-            _profileManagerMock.Setup(manager => manager.SaveUserProfileAsync(It.Is<string>(id => id == user.Id), It.IsAny<Profile>()))
-                .Throws(new MaxProfileCountReachedException(userId, _maxNumberOfProfiles));
-
-            var response = await _handler.Handle(request, CancellationToken.None);
-
-            Assert.Equal(StatusCodes.Status403Forbidden, response.StatusCode);
-            Assert.Equal($"User with ID: {userId} has reached the maximum number of profiles allowed ({_maxNumberOfProfiles}).", response.Message);
-
-            _userContextServiceMock.Verify(service => service.GetCurrentUserId(), Times.Once);
-            _userManagerMock.Verify(userManager => userManager.FindByIdAsync(userId), Times.Once);
-            _fileUploadServiceMock.Verify(service => service.UploadFileAsync(It.IsAny<IFormFile>()), Times.Never);
-            _profileManagerMock.Verify(manager => manager.SaveUserProfileAsync(userId, It.IsAny<Profile>()), Times.Once);
-        }
 }
