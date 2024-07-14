@@ -42,6 +42,14 @@ public static class MappingExtension
             config.Ignore(target => target.Avatar);
         });
 
+
+        TinyMapper.Bind<Profile, ProfileInformation>(config =>
+        {
+            config.Bind(target: target => target.Id, source: source => source.Id);
+            config.Bind(target: target => target.DisplayName, source: source => source.Name);
+            config.Bind(target: target => target.Avatar, source: source => source.Avatar);
+        });
+
         #endregion
     }
 }
