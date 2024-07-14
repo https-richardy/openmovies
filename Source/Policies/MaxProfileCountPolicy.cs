@@ -26,7 +26,7 @@ public sealed class MaxProfileCountPolicy(
     {
         var user = await userManager.FindByIdAsync(userId);
         if (user is null)
-            throw new MaxProfileCountReachedException(userId, _maxNumberOfProfilesPerAccount);
+            throw new UserNotFoundException(userId);
 
         var profiles = await profileRepository.GetUserProfilesAsync(user);
 
