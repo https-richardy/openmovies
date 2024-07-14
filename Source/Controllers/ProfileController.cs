@@ -4,6 +4,16 @@ namespace OpenMovies.WebApi.Controllers;
 [Route("api/profiles")]
 public sealed class ProfileController(IMediator mediator) : ControllerBase
 {
+    [HttpPost("select/{profileId}")]
+    [Authorize(Roles = "Common")]
+    public async Task<IActionResult> SelectProfileAsync([FromRoute] int profileId)
+    {
+        var request = new ProfileSelectionRequest { ProfileId = profileId };
+        var response = await mediator.Send(request);
+
+        return StatusCode(response.StatusCode, response);
+    }
+
     [HttpGet]
     [Authorize(Roles = "Common")]
     public async Task<IActionResult> GetUserProfilesAsync()
