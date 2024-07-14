@@ -41,4 +41,16 @@ public sealed class ProfileController(IMediator mediator) : ControllerBase
         var response = await mediator.Send(request);
         return StatusCode(response.StatusCode, response);
     }
+
+    [HttpDelete("{profileId}")]
+    [Authorize(Roles = "Common")]
+    public async Task<IActionResult> DeleteProfileAsync(int profileId)
+    {
+        var response = await mediator.Send(new ProfileDeletionRequest
+        {
+            ProfileId = profileId
+        });
+
+        return StatusCode(response.StatusCode, response);
+    }
 }
