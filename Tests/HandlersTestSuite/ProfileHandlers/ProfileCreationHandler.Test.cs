@@ -10,8 +10,6 @@ public sealed class ProfileCreationHandlerTest
     private readonly IFixture _fixture;
     private readonly IServiceCollection _services;
     private readonly IRequestHandler<ProfileCreationRequest, Response> _handler;
-    private readonly int _maxNumberOfProfiles = 4;
-
 
     public ProfileCreationHandlerTest()
     {
