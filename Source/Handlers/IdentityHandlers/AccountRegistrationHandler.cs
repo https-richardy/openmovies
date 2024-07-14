@@ -24,10 +24,14 @@ public sealed class AccountRegistrationHandler(
 
         var result = await userManager.CreateAsync(user, request.Password);
         if (!result.Succeeded)
+        {
+            var emailError = result.Errors.FirstOrDefault(error => error.Code == "DuplicateEmail");
+
             return new Response(
-                statusCode: StatusCodes.Status400BadRequest,
-                message: "Failed to create user."
+                statusCode: StatusCodes.Status409Conflict,
+                message: "A user with this email address already exists."
             );
+        }
 
         if (!await roleManager.RoleExistsAsync("Common"))
             await roleManager.CreateAsync(new IdentityRole("Common"));
