@@ -1,62 +1,26 @@
-using System.Text.Json.Serialization;
-using Microsoft.AspNetCore.Identity;
-using Microsoft.EntityFrameworkCore;
-using OpenMovies.Data;
-using OpenMovies.Repositories;
-using OpenMovies.Services;
-using OpenMovies.Extensions;
+namespace OpenMovies.WebApi;
 
-var builder = WebApplication.CreateBuilder(args);
-var configuration = builder.Configuration;
-
-builder.Services.AddControllers()
-    .AddJsonOptions(options =>
+internal static class Program
+{
+    private static void Main(string[] args)
     {
-        /* 
-            The following line is added to prevent issues related to circular references
-            during JSON serialization. It instructs the JsonSerializer to ignore cycles.
-        */
-        options.JsonSerializerOptions.ReferenceHandler = ReferenceHandler.IgnoreCycles;
-    });
+        var builder = WebApplication.CreateBuilder(args);
+        var configuration = builder.Configuration;
 
-builder.Services.AddEndpointsApiExplorer();
-builder.Services.AddSwaggerGen();
+        builder.Services.ConfigureServices(configuration);
 
-builder.Services.AddDbContext<AppDbContext>(options =>
-{
-    options.UseSqlite(configuration.GetConnectionString("Default"));
-});
+        var app = builder.Build();
 
-builder.Services.AddIdentity<IdentityUser, IdentityRole>()
-    .AddEntityFrameworkStores<AppDbContext>()
-    .AddDefaultTokenProviders();
+        if (app.Environment.IsDevelopment())
+        {
+            app.UseSwagger();
+            app.UseSwaggerUI();
+            app.Bootstrap();
+        }
 
-builder.Services.AddBearerJwt(configuration);
+        app.ConfigureHttpPipeline();
 
-builder.Services.AddScoped<IMovieRepository, MovieRepository>();
-builder.Services.AddScoped<IDirectorRepository, DirectorRepository>();
-builder.Services.AddScoped<ICategoryRepository, CategoryRepository>();
-
-builder.Services.AddScoped<IMovieService, MovieService>();
-builder.Services.AddScoped<IDirectorService, DirectorService>();
-builder.Services.AddScoped<ICategoryService, CategoryService>();
-
-var app = builder.Build();
-
-if (app.Environment.IsDevelopment())
-{
-    app.UseSwagger();
-    app.UseSwaggerUI();
+        app.MapControllers();
+        app.Run();
+    }
 }
-
-app.UseCors(x => x.AllowAnyOrigin().AllowAnyHeader());
-
-app.UseHttpsRedirection();
-
-app.UseAuthorization();
-
-app.MapControllers();
-
-app.UseStaticFiles();
-
-app.Run();

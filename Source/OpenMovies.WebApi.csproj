@@ -1,0 +1,47 @@
+<Project Sdk="Microsoft.NET.Sdk.Web">
+
+  <PropertyGroup>
+    <SqliteDbPath>Data/database.sqlite</SqliteDbPath>
+  </PropertyGroup>
+
+  <PropertyGroup>
+    <TargetFramework>net8.0</TargetFramework>
+    <Nullable>enable</Nullable>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <InvariantGlobalization>true</InvariantGlobalization>
+    <!--
+      Disabling CS8618 warnings due to need to use object initializers
+      (https://learn.microsoft.com/en-us/dotnet/csharp/programming-guide/classes-and-structs/object-and-collection-initializers).
+      Many classes require an empty constructor to work correctly with EF Core, as described in
+      https://learn.microsoft.com/pt-br/ef/core/modeling/constructors.
+     -->
+    <NoWarn>CS8618</NoWarn>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="FluentValidation" Version="11.8.1" />
+    <PackageReference Include="MediatR" Version="12.2.0" />
+    <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="8.0.0" />
+    <PackageReference Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore" Version="8.0.0" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="8.0.0">
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+      <PrivateAssets>all</PrivateAssets>
+    </PackageReference>
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Sqlite" Version="8.0.0" />
+    <PackageReference Include="Swashbuckle.AspNetCore" Version="6.4.0" />
+    <PackageReference Include="TinyMapper" Version="3.0.3" />
+  </ItemGroup>
+
+
+  <Target Name="CopySqliteDatabase" BeforeTargets="Build">
+    <ItemGroup>
+      <ExistingSqliteDatabase Condition="Exists('$(SqliteDbPath)')" Include="$(SqliteDbPath)" />
+    </ItemGroup>
+
+    <Copy Condition="@(ExistingSqliteDatabase->Count()) > 0" 
+          SourceFiles="@(ExistingSqliteDatabase)" 
+          DestinationFolder="$(OutputPath)" 
+          SkipUnchangedFiles="true" />
+  </Target>
+
+</Project>

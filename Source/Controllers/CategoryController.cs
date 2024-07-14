@@ -1,92 +1,54 @@
-using FluentValidation;
-using Microsoft.AspNetCore.Mvc;
-using OpenMovies.DTOs;
-using OpenMovies.Models;
-using OpenMovies.Services;
-
-namespace OpenMovies.Controllers;
+namespace OpenMovies.WebApi.Controllers;
 
 [ApiController]
 [Route("api/categories")]
-public class CategoryController : ControllerBase
+public sealed class CategoryController(IMediator mediator) : ControllerBase
 {
-    private readonly ICategoryService _categoryService;
-
-    public CategoryController(ICategoryService categoryService)
-    {
-        _categoryService = categoryService;
-    }
-
     [HttpGet]
-    public async Task<IActionResult> GetAll()
+    public async Task<IActionResult> GetCategoriesAsync()
     {
-        var categories = await _categoryService.GetAllCategories();
-        return Ok(categories);
+        var response = await mediator.Send(new GetCategoriesRequest());
+        return StatusCode(response.StatusCode, response);
     }
 
-    [HttpGet("{id}")]
-    public async Task<IActionResult> GetById(int id)
+    [HttpGet("{categoryId}")]
+    public async Task<IActionResult> GetCategoryByIdAsync(int categoryId)
     {
-        try
+        var response = await mediator.Send(new CategoryRetrievalRequest
         {
-            var retrievedCategory = await _categoryService.GetCategoryById(id);
-            return Ok(retrievedCategory);
-        }
-        catch (InvalidOperationException ex)
-        {
-            return NotFound(new { message = ex.Message });
-        }
+            CategoryId = categoryId
+        });
+
+        return StatusCode(response.StatusCode, response);
     }
 
     [HttpPost]
-    public async Task<IActionResult> Create(CategoryDTO data)
+    [Authorize(Roles = "Administrator")]
+    public async Task<IActionResult> CreateCategoryAsync(CategoryCreationRequest request)
     {
-        try
-        {
-            var category = new Category(data.Name);
-            await _categoryService.CreateCategory(category);
-
-            return StatusCode(201, category);
-        }
-        catch (ValidationException ex)
-        {
-            return BadRequest(new { errors = ex.Errors });
-        }
-        catch (InvalidOperationException ex)
-        {
-            return Conflict(new { message = ex.Message });
-        }
+        var response = await mediator.Send(request);
+        return StatusCode(response.StatusCode, response);
     }
 
-    [HttpPut("{id}")]
-    public async Task<IActionResult> Update(int id, CategoryDTO data)
+    [HttpPut("{categoryId}")]
+    [Authorize(Roles = "Administrator")]
+    public async Task<IActionResult> UpdateCategoryAsync(CategoryUpdateRequest request, [FromRoute] int categoryId)
     {
-        try
-        {
-            var existingCategory = await _categoryService.GetCategoryById(id);
-            existingCategory.Name = data.Name;
+        request.CategoryId = categoryId;
 
-            await _categoryService.UpdateCategory(existingCategory);
-
-            return NoContent();
-        }
-        catch (ValidationException ex)
-        {
-            return BadRequest(new { errors = ex.Errors });
-        }
+        var response = await mediator.Send(request);
+        return StatusCode(response.StatusCode, response);
     }
 
-    [HttpDelete("{id}")]
-    public async Task<IActionResult> Delete(int id)
+    [HttpDelete("{categoryId}")]
+    [Authorize(Roles = "Administrator")]
+    public async Task<IActionResult> DeleteCategoryAsync([FromRoute] int categoryId)
     {
-        try
+        var response = await mediator.Send(new CategoryDeletionRequest
         {
-            await _categoryService.DeleteCategory(id);
-            return NoContent();
-        }
-        catch (InvalidOperationException ex)
-        {
-            return NotFound(new { message = ex.Message });
-        }
+            CategoryId = categoryId
+        });
+
+        return StatusCode(response.StatusCode, response);
     }
 }
