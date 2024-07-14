@@ -42,6 +42,7 @@ public static class MediatorExtension
         services.AddScoped<IRequestHandler<ProfilesRetrievalRequest, Response<IEnumerable<ProfileInformation>>>, ProfilesRetrievalHandler>();
         services.AddScoped<IRequestHandler<ProfileCreationRequest, Response>, ProfileCreationHandler>();
         services.AddScoped<IRequestHandler<ProfileEditingRequest, Response>, ProfileEditingHandler>();
+        services.AddScoped<IRequestHandler<ProfileDeletionRequest, Response>, ProfileDeletionHandler>();
         services.AddScoped<IRequestHandler<ProfileSelectionRequest, Response<AuthenticationResponse>>, ProfileSelectionHandler>();
 
         #endregion
