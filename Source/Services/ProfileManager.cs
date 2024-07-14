@@ -34,7 +34,7 @@ public sealed class ProfileManager(
     {
         var user = await GetUserByIdAsync(userId);
 
-        var profile = user.Profiles.FirstOrDefault(profile => profile.Id == profileId);
+        var profile = await profileRepository.GetUserProfileByIdAsync(user, profileId);
         if (profile is null)
             return OperationResult.Failure("Profile not found.");
 
