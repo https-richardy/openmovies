@@ -161,4 +161,47 @@ public sealed class ProfileControllerTest
 
         _mediatorMock.Verify(mediator => mediator.Send(It.IsAny<ProfileSelectionRequest>(), It.IsAny<CancellationToken>()), Times.Once);
     }
+
+    [Fact(DisplayName = "DeleteProfileAsync should return correct status code and response")]
+    public async Task DeleteProfileAsync_ShouldReturnCorrectStatusCodeAndResponse()
+    {
+        var profileId = 1;
+        var deletionRequest = new ProfileDeletionRequest { ProfileId = profileId };
+        var expectedResult = new Response { StatusCode = StatusCodes.Status200OK, Message = "Profile deleted successfully." };
+
+        _mediatorMock
+            .Setup(mediator => mediator.Send(deletionRequest, default))
+            .ReturnsAsync(expectedResult);
+
+        var result = await _controller.DeleteProfileAsync(profileId);
+
+        var statusCode = (result as ObjectResult)?.StatusCode;
+        var response = (result as ObjectResult)?.Value as Response;
+
+        Assert.NotNull(result);
+        Assert.Equal(StatusCodes.Status200OK, statusCode);
+        Assert.Equal(expectedResult.Message, response?.Message);
+    }
+
+    [Fact(DisplayName = "Given an invalid profile id to delete, should return 404 Not Found")]
+    public async Task GivenInvalidProfileIdToDelete_ShouldReturnNotFound()
+    {
+        var profileId = 99;
+
+        var deletionRequest = new ProfileDeletionRequest { ProfileId = profileId };
+        var expectedResult = new Response { StatusCode = StatusCodes.Status404NotFound, Message = "Profile not found." };
+
+        _mediatorMock
+            .Setup(mediator => mediator.Send(deletionRequest, default))
+            .ReturnsAsync(expectedResult);
+
+        var result = await _controller.DeleteProfileAsync(profileId);
+
+        var statusCode = (result as ObjectResult)?.StatusCode;
+        var response = (result as ObjectResult)?.Value as Response;
+
+        Assert.NotNull(result);
+        Assert.Equal(StatusCodes.Status404NotFound, statusCode);
+        Assert.Equal(expectedResult.Message, response?.Message);
+    }
 }
