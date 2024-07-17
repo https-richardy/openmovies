@@ -11,6 +11,8 @@ public interface IUserContextService
     /// <returns>The user ID, or null if the user is not authenticated.</returns>
     string? GetCurrentUserId();
 
+    int GetCurrentActiveProfileId();
+
     /// <summary>
     /// Gets the ClaimsPrincipal object of the currently authenticated user.
     /// </summary>
