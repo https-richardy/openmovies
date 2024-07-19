@@ -8,6 +8,8 @@ public sealed class Movie : Entity
     public int ReleaseYear { get; set; }
     public string VideoSource { get; set; }
     public int DurationInMinutes { get; set; }
+
+    public AgeClassification Classification { get; set; }
     public Category Category { get; set; }
 
     public Movie()
