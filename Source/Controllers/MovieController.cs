@@ -5,6 +5,7 @@ namespace OpenMovies.WebApi.Controllers;
 public sealed class MovieController(IMediator mediator) : ControllerBase
 {
     [HttpGet]
+    [Authorize(Roles = "Common, Administrator")]
     public async Task<IActionResult> GetMoviesAsync([FromQuery] MovieRetrievalRequest request)
     {
         var response = await mediator.Send(request);
@@ -12,6 +13,7 @@ public sealed class MovieController(IMediator mediator) : ControllerBase
     }
 
     [HttpGet("{movieId}")]
+    [Authorize(Roles = "Common, Administrator")]
     public async Task<IActionResult> GetMovieAsync(int movieId)
     {
         var response = await mediator.Send(new MovieDetailsRequest
